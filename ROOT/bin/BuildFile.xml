@@ -1,0 +1,8 @@
+<bin name="SkimET" file="etau_skimmer.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>
+<bin name="SkimMT" file="mutau_skimmer.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>
