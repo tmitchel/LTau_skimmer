@@ -71,7 +71,15 @@ sig_samples = {
 
 }
 
-data_samples = {
+el_data_samples = {
+    'datasE-B'     : ['data_SingleElectron_Run2017B-31Mar2018', '0'],
+    'datasE-C'     : ['data_SingleElectron_Run2017C-31Mar2018', '0'],
+    'datasE-D'     : ['data_SingleElectron_Run2017D-31Mar2018', '0'],
+    'datasE-E'     : ['data_SingleElectron_Run2017E-31Mar2018', '0'],
+    'datasE-F'     : ['data_SingleElectron_Run2017F-31Mar2018', '0'],
+}
+
+mu_data_samples = {
     'datasMu-B'     : ['data_SingleMuon_Run2017B-31Mar2018', '0'],
     'datasMu-C'     : ['data_SingleMuon_Run2017C-31Mar2018', '0'],
     'datasMu-D'     : ['data_SingleMuon_Run2017D-31Mar2018', '0'],
@@ -79,12 +87,20 @@ data_samples = {
     'datasMu-F'     : ['data_SingleMuon_Run2017F-31Mar2018', '0'],
 }
 
-embedded_samples = {
-  'embed-B' : ['embedded_EmbeddingRun2017B_MuTauFinalState', '0'],
-  'embed-C' : ['embedded_EmbeddingRun2017C_MuTauFinalState', '0'],
-  'embed-D' : ['embedded_EmbeddingRun2017D_MuTauFinalState', '0'],
-  'embed-E' : ['embedded_EmbeddingRun2017E_MuTauFinalState', '0'],
-  'embed-F' : ['embedded_EmbeddingRun2017F_MuTauFinalState', '0'],
+el_embedded_samples = {
+  'embedEl-B' : ['embedded_EmbeddingRun2017B_ElTauFinalState', '0'],
+  'embedEl-C' : ['embedded_EmbeddingRun2017C_ElTauFinalState', '0'],
+  'embedEl-D' : ['embedded_EmbeddingRun2017D_ElTauFinalState', '0'],
+  'embedEl-E' : ['embedded_EmbeddingRun2017E_ElTauFinalState', '0'],
+  'embedEl-F' : ['embedded_EmbeddingRun2017F_ElTauFinalState', '0'],
+}
+
+mu_embedded_samples = {
+  'embedMu-B' : ['embedded_EmbeddingRun2017B_MuTauFinalState', '0'],
+  'embedMu-C' : ['embedded_EmbeddingRun2017C_MuTauFinalState', '0'],
+  'embedMu-D' : ['embedded_EmbeddingRun2017D_MuTauFinalState', '0'],
+  'embedMu-E' : ['embedded_EmbeddingRun2017E_MuTauFinalState', '0'],
+  'embedMu-F' : ['embedded_EmbeddingRun2017F_MuTauFinalState', '0'],
 }
 
 prefix = args.prefix
@@ -101,11 +117,17 @@ if args.job == 'sig':
   samples = sig_samples
   pref = sig_pref
 elif args.job == 'data':
-  samples = data_samples
   pref = data_pref
+  if args.lepton == 'mt':
+    samples = mu_data_samples
+  elif args.lepton == 'et':
+    samples = el_data_samples
 elif args.job == 'embed':
-  samples = embedded_samples
   pref = embed_pref
+  if args.lepton == 'mt':
+    samples = mu_embedded_samples
+  elif args.lepton == 'et':
+    samples = el_embedded_samples
 
 if args.lepton == 'mt':
   lep = 'MT'
@@ -115,4 +137,4 @@ elif args.lepton == 'et':
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
-  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s' % (sample, pref+path, prefix, jobType, recoil, lep), shell=True)
+  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s2017' % (sample, pref+path, prefix, jobType, recoil, lep), shell=True)
