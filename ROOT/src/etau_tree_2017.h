@@ -20,8 +20,8 @@ public:
   // Selection variables
   Float_t ePt, eEta, ePhi, eMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, eMatchesEle27Filter, eMatchesEle27Path, Ele27WPTightPass, eMatchesEle32Filter, eMatchesEle32Path, Ele32WPTightPass, eMatchesEle35Filter, eMatchesEle35Path,
           Ele35WPTightPass, eMatchesEle24Tau30Filter, eMatchesEle24Tau30Path, Ele24Tau30Pass, tMatchesEle24Tau30Path, tMatchesEle24Tau30Filter, ePVDZ, ePVDXY, eMVANoisoWP90, ePassesConversionVeto, eMissingHits, tPVDZ, 
-          tByVLooseIsolationMVArun2v1DBoldDMwLT, tDecayModeFinding, tCharge, 
-          tAgainstMuonLoose3, tAgainstElectronTightMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, eIsoDB03, tByIsolationMVArun2v1DBoldDMwLTraw;
+          tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, 
+          tAgainstMuonLoose3, tAgainstElectronTightMVA6,  muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, eIsoDB03, tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw;
 
   // Constructed while running
   UInt_t run, lumi;
@@ -33,9 +33,10 @@ public:
 
   // Tau Isolation
   Float_t tByLooseIsolationMVArun2v1DBoldDMwLT, tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT;
+  Float_t tRerunMVArun2v2DBoldDMwLTLoose, tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, tRerunMVArun2v2DBoldDMwLTVTight, tRerunMVArun2v2DBoldDMwLTVVTight;
 
   // Jets
-  Float_t jpt_1, jeta_1, jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bflavor_1, bpt_2, beta_2, bphi_2, bcsv_2, bflavor_2, bjetDeepCSVVeto20Tight, bjetDeepCSVVeto30Loose, bjetDeepCSVVeto30Medium, bjetDeepCSVVeto30Tight, topQuarkPt1, topQuarkPt2;
+  Float_t vbfMassWoNoisyJets, jpt_1, jeta_1, jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bflavor_1, bpt_2, beta_2, bphi_2, bcsv_2, bflavor_2, bjetDeepCSVVeto20Tight, bjetDeepCSVVeto30Loose, bjetDeepCSVVeto30Medium, bjetDeepCSVVeto30Tight, topQuarkPt1, topQuarkPt2;
 
   // Gen Ino
   Float_t tZTTGenPt, tZTTGenPhi, tZTTGenEta, tZTTGenDR, tGenDecayMode, tGenEnergy, tGenEta, tGenJetEta, tGenJetPt, tGenMotherEnergy, tGenMotherEta, tGenMotherPdgId, tGenMotherPhi, tGenMotherPt, tGenPdgId, tGenPhi, tGenPt, tGenStatus, 
@@ -137,6 +138,8 @@ recoil(rec)
   original->SetBranchAddress("tDecayModeFinding", &tDecayModeFinding);
   original->SetBranchAddress("tAgainstMuonLoose3", &tAgainstMuonLoose3);
   original->SetBranchAddress("tAgainstElectronTightMVA6", &tAgainstElectronTightMVA6);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &tRerunMVArun2v2DBoldDMwLTraw);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVLoose", &tRerunMVArun2v2DBoldDMwLTVLoose);
   original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &tByVLooseIsolationMVArun2v1DBoldDMwLT);
 
@@ -238,7 +241,7 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
     else  continue;
 
-    if (tByVLooseIsolationMVArun2v1DBoldDMwLT && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
+    if (tRerunMVArun2v2DBoldDMwLTVLoose && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
     else  continue;
 
     if (tAgainstMuonLoose3 > 0.5 && tAgainstElectronTightMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
@@ -257,12 +260,12 @@ void etau_tree::do_skimming(TH1F* cutflow) {
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
       eleCandidate = std::make_pair(ePt, eIsoDB03);
-      tauCandidate  = std::make_pair(tPt,  tByIsolationMVArun2v1DBoldDMwLTraw);
+      tauCandidate  = std::make_pair(tPt,  tRerunMVArun2v2DBoldDMwLTraw);
     } 
     else { // not a new event
 
       std::pair<float, float> currEleCandidate(ePt, eIsoDB03);
-      std::pair<float, float> currTauCandidate(tPt, tByIsolationMVArun2v1DBoldDMwLTraw);
+      std::pair<float, float> currTauCandidate(tPt, tRerunMVArun2v2DBoldDMwLTraw);
 
       // clause 1, select the pair that has most isolated tau lepton 1
       if (currEleCandidate.second - eleCandidate.second  > 0.0001 ) best_evt = ievt;
@@ -578,6 +581,7 @@ void etau_tree::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
+  tree->Branch("vbfMassWoNoisyJets", &vbfMassWoNoisyJets, "vbfMassWoNoisyJets/F");
 
   tree->Branch("eMatchesEle27Filter"     , &eMatchesEle27Filter     , "eMatchesEle27Filter/F");
   tree->Branch("eMatchesEle32Filter"     , &eMatchesEle32Filter     , "eMatchesEle32Filter/F");
@@ -636,11 +640,16 @@ void etau_tree::set_branches() {
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
 
-  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2"  , &tByLooseIsolationMVArun2v1DBoldDMwLT  , "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2" , &tByMediumIsolationMVArun2v1DBoldDMwLT , "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT  , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2"  , &tByLooseIsolationMVArun2v1DBoldDMwLT     , "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2" , &tByMediumIsolationMVArun2v1DBoldDMwLT    , "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT     , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT    , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT   , "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose           , "tRerunMVArun2v2DBoldDMwLTLoose/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium          , "tRerunMVArun2v2DBoldDMwLTMedium/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight           , "tRerunMVArun2v2DBoldDMwLTTight/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight          , "tRerunMVArun2v2DBoldDMwLTVTight/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight         , "tRerunMVArun2v2DBoldDMwLTVVTight/F");
 
   tree->Branch("rho"        , &rho        , "rho/F");
   tree->Branch("metcov00"   , &metcov00   , "metcov00/F");
@@ -936,6 +945,7 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("genM", &genM);
   original->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
   original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
+  original->SetBranchAddress("vbfMassWoNoisyJets", &vbfMassWoNoisyJets);
 
   // electron branches
   original->SetBranchAddress("eMVANoisoWP80", &eMVANoisoWP80);
@@ -949,6 +959,11 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &tByTightIsolationMVArun2v1DBoldDMwLT);
   original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &tByVTightIsolationMVArun2v1DBoldDMwLT);
   original->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &tByVVTightIsolationMVArun2v1DBoldDMwLT);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight);
 
   // jet branches
   original->SetBranchAddress("jetVeto20WoNoisyJets", &jetVeto20);
