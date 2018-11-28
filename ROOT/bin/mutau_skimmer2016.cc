@@ -13,11 +13,8 @@
 #include "TNamed.h"
 
 // user includes
-#include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
+#include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/CLParser.h"
-#include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
-
-using json = nlohmann::json;
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
@@ -46,11 +43,7 @@ int main(int argc, char *argv[]) {
   if (job_type == "embed")
     isEmbed = true;
 
-  // open the JSON file
-  std::ifstream ntupleMap("CMSSW_9_4_0/bin/slc6_amd64_gcc630/fileMap.json");
-  json j;
-
-  RecoilCorrector recoilPFMetCorrector("HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root");
+  RecoilCorrector recoilPFMetCorrector("HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root");
   TH1F *nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
   TH1F* cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
 
@@ -70,24 +63,9 @@ int main(int argc, char *argv[]) {
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
   events += skimmed_tree->GetEntries();
 
-  // read the file stream into our json object
-  ntupleMap >> j;
-  std::string originalName = "Not Found";
-  std::string tmpName = open_file->GetName();
-  auto searchName = tmpName.substr(10);
-  for (json::iterator it = j.begin(); it != j.end(); ++it) {
-    for (auto ntuple : it.value()) {
-      if (std::string(ntuple).find(searchName) != std::string::npos) {
-        originalName = it.key();
-      }
-    }
-  }
-
   open_file->Close();
   fout->cd();
-  TNamed dbName("MiniAOD_name", originalName.c_str());
   nevents->Write();
-  dbName.Write();
   cutflow->Write();
   skimmed_tree->Write();
   fout->Close();
