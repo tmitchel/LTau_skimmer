@@ -18,10 +18,12 @@ public:
   Int_t Run, Lumi, recoil;
 
   // Selection variables
-  Float_t mPt, mEta, mPhi, mMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter, tMatchesIsoMu20Tau27Path,
-      mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass, IsoMu24Pass, mPVDZ, mPVDXY, tPVDZ,
-      tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose, mValidFraction, mSegmentCompatibility, mPFIDMedium,
-      tAgainstMuonTight3, tAgainstElectronVLooseMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04, tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR;
+  Float_t mPt, mEta, mPhi, mMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, mPVDZ, mPVDXY, tPVDZ, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path, 
+          mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass, 
+          singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter, 
+          tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose, 
+          mValidFraction, mSegmentCompatibility, mPFIDMedium, tAgainstMuonTight3, tAgainstElectronVLooseMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04, 
+          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR;
 
   // Constructed while running
   UInt_t run, lumi;
@@ -81,6 +83,10 @@ public:
 
   // 2016 Placeholder
   Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2;
+
+  // 2017 Placeholder
+  Float_t mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter, tMatchesIsoMu20Tau27Path,
+          mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass, IsoMu24Pass;
           
 
   // Member functions
@@ -146,18 +152,24 @@ recoil(rec)
   original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &tByVLooseIsolationMVArun2v1DBoldDMwLT);
 
-  // 2017 triggers
-  original->SetBranchAddress("mMatchesIsoMu20Tau27Filter", &mMatchesIsoMu20Tau27Filter);
-  original->SetBranchAddress("mMatchesIsoMu20Tau27Path", &mMatchesIsoMu20Tau27Path);
-  original->SetBranchAddress("mMatchesIsoMu24Filter", &mMatchesIsoMu24Filter);
-  original->SetBranchAddress("mMatchesIsoMu24Path", &mMatchesIsoMu24Path);
-  original->SetBranchAddress("mMatchesIsoMu27Filter", &mMatchesIsoMu27Filter);
-  original->SetBranchAddress("mMatchesIsoMu27Path", &mMatchesIsoMu27Path);
-  original->SetBranchAddress("Mu20Tau27Pass", &Mu20Tau27Pass);
-  original->SetBranchAddress("IsoMu27Pass", &IsoMu27Pass);
-  original->SetBranchAddress("IsoMu24Pass", &IsoMu24Pass);
-  original->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
-  original->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
+  // 2016 triggers
+  original->SetBranchAddress("mMatchesIsoMu22eta2p1Path", &mMatchesIsoMu22eta2p1Path);
+  original->SetBranchAddress("mMatchesIsoTkMu22eta2p1Path", &mMatchesIsoTkMu22eta2p1Path);
+  original->SetBranchAddress("mMatchesIsoMu22Path", &mMatchesIsoMu22Path);
+  original->SetBranchAddress("mMatchesIsoTkMu22Path", &mMatchesIsoTkMu22Path);
+  original->SetBranchAddress("mMatchesMu19Tau20sL1Path", &mMatchesMu19Tau20sL1Path);
+  original->SetBranchAddress("mIsoMu22eta2p1Filter", &mIsoMu22eta2p1Filter);
+  original->SetBranchAddress("mIsoTkMu22eta2p1Filter", &mIsoTkMu22eta2p1Filter);
+  original->SetBranchAddress("mIsoMu22Filter", &mIsoMu22Filter);
+  original->SetBranchAddress("mIsoTkMu22Filter", &mIsoTkMu22Filter);
+  original->SetBranchAddress("mMatchesMu19Tau20sL1Filter", &mMatchesMu19Tau20sL1Filter);
+  original->SetBranchAddress("singleIsoMu22eta2p1Pass", &singleIsoMu22eta2p1Pass);
+  original->SetBranchAddress("singleIsoTkMu22eta2p1Pass", &singleIsoTkMu22eta2p1Pass);
+  original->SetBranchAddress("singleIsoMu22Pass", &singleIsoMu22Pass);
+  original->SetBranchAddress("singleIsoTkMu22Pass", &singleIsoTkMu22Pass);
+  original->SetBranchAddress("singleMu19eta2p1LooseTau20singleL1Pass", &singleMu19eta2p1LooseTau20singleL1Pass);
+  original->SetBranchAddress("tMatchesMu19Tau20sL1Path", &tMatchesMu19Tau20sL1Path);
+  original->SetBranchAddress("tMatchesMu19Tau20sL1Filter", &tMatchesMu19Tau20sL1Filter);
 
   // other
   original->SetBranchAddress("dimuonVeto", &dimuonVeto);
@@ -204,13 +216,15 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     float mu_pt_min(20./1.05), tau_pt_min(20.);
 
     cutflow->Fill(1., 1.);
-    // apply event selection 
-   
-    auto Mu24 = IsoMu24Pass && mMatchesIsoMu24Path && mMatchesIsoMu24Filter;
-    auto Mu27 = IsoMu27Pass && mMatchesIsoMu27Path && mMatchesIsoMu27Filter;
-    auto Cross = Mu20Tau27Pass && mMatchesIsoMu20Tau27Filter && mMatchesIsoMu20Tau27Path && tMatchesIsoMu20Tau27Filter && tMatchesIsoMu20Tau27Path ;
+    // apply event selection
 
-    if (Mu24 || Mu27 || Cross) cutflow->Fill(2., 1.);
+    auto IsoMu22eta2p1    = mMatchesIsoMu22eta2p1Path && mIsoMu22eta2p1Filter && singleIsoMu22eta2p1Pass;
+    auto IsoTkMu22eta2p1  = mMatchesIsoTkMu22eta2p1Path && mIsoTkMu22eta2p1Filter && singleIsoTkMu22eta2p1Pass;
+    auto IsoMu22          = mMatchesIsoMu22Path && mIsoMu22Filter && singleIsoMu22Pass;
+    auto IsoTkMu22        = mMatchesIsoTkMu22Path && mIsoTkMu22Filter && singleIsoTkMu22Pass;
+    auto Cross            = mMatchesMu19Tau20sL1Path && mMatchesMu19Tau20sL1Filter && tMatchesMu19Tau20sL1Path && tMatchesMu19Tau20sL1Filter && singleMu19eta2p1LooseTau20singleL1Pass;
+
+    if (IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) cutflow->Fill(2., 1.);
     else  continue;
 
     if (mPt > mu_pt_min && fabs(mEta) < 2.4 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.); // electron kinematic selection
@@ -565,6 +579,23 @@ void mutau_tree::set_branches() {
   tree->Branch("IsoMu24Pass", &IsoMu24Pass, "IsoMu24Pass/F");
   tree->Branch("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter, "tMatchesIsoMu20Tau27Filter/F");
   tree->Branch("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path, "tMatchesIsoMu20Tau27Path/F");
+  tree->Branch("matchIsoMu22eta2p1_1", &mMatchesIsoMu22eta2p1Path);
+  tree->Branch("matchIsoTkMu22eta2p1_1", &mMatchesIsoTkMu22eta2p1Path);
+  tree->Branch("matchIsoMu22_1", &mMatchesIsoMu22Path);
+  tree->Branch("matchIsoTkMu22_1", &mMatchesIsoTkMu22Path);
+  tree->Branch("matchIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Path);
+  tree->Branch("filterIsoMu22eta2p1_1", &mIsoMu22eta2p1Filter);
+  tree->Branch("filterIsoTkMu22eta2p1_1", &mIsoTkMu22eta2p1Filter);
+  tree->Branch("filterIsoMu22_1", &mIsoMu22Filter);
+  tree->Branch("filterIsoTkMu22_1", &mIsoTkMu22Filter);
+  tree->Branch("filterIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Filter);
+  tree->Branch("passIsoMu22eta2p1", &singleIsoMu22eta2p1Pass);
+  tree->Branch("passIsoTkMu22eta2p1", &singleIsoTkMu22eta2p1Pass);
+  tree->Branch("passIsoMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoTkMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoMu19Tau20", &singleMu19eta2p1LooseTau20singleL1Pass);
+  tree->Branch("matchIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Path);
+  tree->Branch("filterIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Filter);
 
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
