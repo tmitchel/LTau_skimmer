@@ -20,7 +20,7 @@ public:
   // Selection variables
   Float_t ePt, eEta, ePhi, eMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, eMatchesEle27Filter, eMatchesEle27Path, Ele27WPTightPass, eMatchesEle32Filter, eMatchesEle32Path, Ele32WPTightPass, eMatchesEle35Filter, eMatchesEle35Path,
           Ele35WPTightPass, eMatchesEle24Tau30Filter, eMatchesEle24Tau30Path, Ele24Tau30Pass, tMatchesEle24Tau30Path, tMatchesEle24Tau30Filter, ePVDZ, ePVDXY, eMVANonTrigWP80, eMVANoisoWP90, ePassesConversionVeto, eMissingHits, tPVDZ, 
-          tByVLooseIsolationMVArun2v1DBoldDMwLT, tDecayModeFinding, tCharge, 
+          tByVLooseIsolationMVArun2v1DBoldDMwLT, tDecayModeFinding, tCharge, e_t_DR,
           tAgainstMuonLoose3, tAgainstElectronTightMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, eIsoDB03, tByIsolationMVArun2v1DBoldDMwLTraw;
 
   // Constructed while running
@@ -151,6 +151,7 @@ recoil(rec)
   original->SetBranchAddress("dielectronVeto", &dielectronVeto);
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
+  original->SetBranchAddress("e_t_DR",&e_t_DR);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -231,7 +232,10 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     else  continue;
 
     if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(9., 1.); // vetos
-    else continue;
+    else  continue;
+
+    if (e_t_DR > 0.5) cutflow->Fill(10., 1.);
+    else  continue;
 
     // implement new sorting per 
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
