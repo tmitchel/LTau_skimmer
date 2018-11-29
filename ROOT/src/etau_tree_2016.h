@@ -77,6 +77,8 @@ public:
           vbfMass_JetRelativeStatHFDown, vbfMass_JetRelativeStatHFUp, vbfMass_JetSinglePionECALDown, vbfMass_JetSinglePionECALUp, vbfMass_JetSinglePionHCALDown, vbfMass_JetSinglePionHCALUp, vbfMass_JetTimePtEtaDown,
           vbfMass_JetTimePtEtaUp, vbfMass_JetTotalDown, vbfMass_JetTotalUp;
 
+  Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
+
   Float_t jetVeto30_JetAbsoluteFlavMapDown, jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteScaleUp;
 
   // 2016 Placeholder
@@ -499,6 +501,15 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     met_px=MET.Px();
     met_py=MET.Py();
 
+    met_JESUp   = MET_JESUp.Pt();
+    met_JESDown = MET_JESDown.Pt();
+    met_UESUp   = MET_UESUp.Pt();
+    met_UESDown = MET_UESDown.Pt();
+    metphi_JESUp = MET_JESUp.Phi();
+    metphi_JESDown = MET_JESDown.Phi();
+    metphi_UESUp = MET_UESUp.Phi();
+    metphi_UESDown = MET_UESDown.Phi();
+
     m_1 = ele.M();
     px_1 = ele.Px();
     py_1 = ele.Py();
@@ -705,6 +716,15 @@ void etau_tree::set_branches() {
   tree->Branch("Flag_goodVertices"                      , &Flag_goodVertices                      , "Flag_goodVertices/F");
 
   // Systematics
+  tree->Branch("met_JESUp", &met_JESUp, "met_JESUp/F");
+  tree->Branch("met_JESDown", &met_JESDown, "met_JESDown/F");
+  tree->Branch("met_UESUp", &met_UESUp, "met_UESUp/F");
+  tree->Branch("met_UESDown", &met_UESDown, "met_UESDown/F");
+  tree->Branch("metphi_JESUp", &metphi_JESUp, "metphi_JESUp/F");
+  tree->Branch("metphi_JESDown", &metphi_JESDown, "metphi_JESDown/F");
+  tree->Branch("metphi_UESUp", &metphi_UESUp, "metphi_UESUp/F");
+  tree->Branch("metphi_UESDown", &metphi_UESDown, "metphi_UESDown/F");
+
   tree->Branch("pfmetcorr_ex_UESUp"                       , &pfmetcorr_ex_UESUp                       , "pfmetcorr_ex_UESUp/F");
   tree->Branch("pfmetcorr_ey_UESUp"                       , &pfmetcorr_ey_UESUp                       , "pfmetcorr_ey_UESUp/F");
   tree->Branch("pfmetcorr_ex_UESDown"                     , &pfmetcorr_ex_UESDown                     , "pfmetcorr_ex_UESDown/F");
