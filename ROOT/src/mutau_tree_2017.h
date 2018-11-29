@@ -84,8 +84,8 @@ public:
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
 
   // 2016 Placeholder
-  Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2;
-          
+  Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path,
+      mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass;
 
   // Member functions
   mutau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
@@ -608,6 +608,23 @@ void mutau_tree::set_branches() {
   tree->Branch("IsoMu24Pass", &IsoMu24Pass, "IsoMu24Pass/F");
   tree->Branch("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter, "tMatchesIsoMu20Tau27Filter/F");
   tree->Branch("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path, "tMatchesIsoMu20Tau27Path/F");
+  tree->Branch("matchIsoMu22eta2p1_1", &mMatchesIsoMu22eta2p1Path);
+  tree->Branch("matchIsoTkMu22eta2p1_1", &mMatchesIsoTkMu22eta2p1Path);
+  tree->Branch("matchIsoMu22_1", &mMatchesIsoMu22Path);
+  tree->Branch("matchIsoTkMu22_1", &mMatchesIsoTkMu22Path);
+  tree->Branch("matchIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Path);
+  tree->Branch("filterIsoMu22eta2p1_1", &mIsoMu22eta2p1Filter);
+  tree->Branch("filterIsoTkMu22eta2p1_1", &mIsoTkMu22eta2p1Filter);
+  tree->Branch("filterIsoMu22_1", &mIsoMu22Filter);
+  tree->Branch("filterIsoTkMu22_1", &mIsoTkMu22Filter);
+  tree->Branch("filterIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Filter);
+  tree->Branch("passIsoMu22eta2p1", &singleIsoMu22eta2p1Pass);
+  tree->Branch("passIsoTkMu22eta2p1", &singleIsoTkMu22eta2p1Pass);
+  tree->Branch("passIsoMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoTkMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoMu19Tau20", &singleMu19eta2p1LooseTau20singleL1Pass);
+  tree->Branch("matchIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Path);
+  tree->Branch("filterIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Filter);
 
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
@@ -649,6 +666,7 @@ void mutau_tree::set_branches() {
   tree->Branch("iso_2", &tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
+  tree->Branch("id_m_medium_1", &mPFIDMedium, "id_m_medium_1/F");
 
   tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2"  , &tByLooseIsolationMVArun2v1DBoldDMwLT  , "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2" , &tByMediumIsolationMVArun2v1DBoldDMwLT , "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
