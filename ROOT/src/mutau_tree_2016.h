@@ -599,7 +599,7 @@ void mutau_tree::set_branches() {
   tree->Branch("filterIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Filter);
   tree->Branch("passIsoMu22eta2p1", &singleIsoMu22eta2p1Pass);
   tree->Branch("passIsoTkMu22eta2p1", &singleIsoTkMu22eta2p1Pass);
-  tree->Branch("passIsoMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoMu22", &singleIsoMu22Pass);
   tree->Branch("passIsoTkMu22", &singleIsoTkMu22Pass);
   tree->Branch("passIsoMu19Tau20", &singleMu19eta2p1LooseTau20singleL1Pass);
   tree->Branch("matchIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Path);

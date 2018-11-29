@@ -85,7 +85,8 @@ public:
 
   // 2016 Placeholder
   Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path,
-      mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass;
+      mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass,
+      singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter;
 
   // Member functions
   mutau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
@@ -620,7 +621,7 @@ void mutau_tree::set_branches() {
   tree->Branch("filterIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Filter);
   tree->Branch("passIsoMu22eta2p1", &singleIsoMu22eta2p1Pass);
   tree->Branch("passIsoTkMu22eta2p1", &singleIsoTkMu22eta2p1Pass);
-  tree->Branch("passIsoMu22", &singleIsoTkMu22Pass);
+  tree->Branch("passIsoMu22", &singleIsoMu22Pass);
   tree->Branch("passIsoTkMu22", &singleIsoTkMu22Pass);
   tree->Branch("passIsoMu19Tau20", &singleMu19eta2p1LooseTau20singleL1Pass);
   tree->Branch("matchIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Path);
