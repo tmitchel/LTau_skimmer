@@ -646,7 +646,7 @@ void mutau_tree::set_branches() {
   tree->Branch("pz_2" , &pz_2 , "pz_2/F");
   tree->Branch("dZ_2" , &tPVDZ , "dZ_2/F");
   tree->Branch("q_2"  , &tCharge, "q_2/F");
-  tree->Branch("iso_2", &tByIsolationMVArun2v1DBoldDMwLTraw, "iso_2/F");
+  tree->Branch("iso_2", &tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
 
@@ -655,6 +655,7 @@ void mutau_tree::set_branches() {
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT  , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose"        , &tRerunMVArun2v2DBoldDMwLTVLoose          , "tRerunMVArun2v2DBoldDMwLTVLoose/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose           , "tRerunMVArun2v2DBoldDMwLTLoose/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium          , "tRerunMVArun2v2DBoldDMwLTMedium/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight           , "tRerunMVArun2v2DBoldDMwLTTight/F");

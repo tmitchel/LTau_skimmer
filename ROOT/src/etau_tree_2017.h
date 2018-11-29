@@ -84,8 +84,7 @@ public:
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
 
   // 2016 Placeholder
-  Float_t amcatNLO_weight, matchEle25, filterEle25, passEle25, tAgainstElectronVLooseMVA6, tAgainstMuonTight3, decayModeFindingNewDMs_2;
-          
+  Float_t amcatNLO_weight, eMatchesSingleE25Tight, eMatchesEle25TightFilter, singleE25eta2p1TightPass, eMatchesEle25eta2p1TightPath, tAgainstElectronVLooseMVA6, tAgainstMuonTight3, decayModeFindingNewDMs_2;
 
   // Member functions
   etau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
@@ -647,7 +646,7 @@ void etau_tree::set_branches() {
   tree->Branch("pz_2" , &pz_2 , "pz_2/F");
   tree->Branch("dZ_2" , &tPVDZ , "dZ_2/F");
   tree->Branch("q_2"  , &tCharge, "q_2/F");
-  tree->Branch("iso_2", &tByIsolationMVArun2v1DBoldDMwLTraw, "iso_2/F");
+  tree->Branch("iso_2", &tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
 
@@ -656,6 +655,7 @@ void etau_tree::set_branches() {
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT     , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT    , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT   , "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose"        , &tRerunMVArun2v2DBoldDMwLTVLoose          , "tRerunMVArun2v2DBoldDMwLTVLoose/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose           , "tRerunMVArun2v2DBoldDMwLTLoose/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium          , "tRerunMVArun2v2DBoldDMwLTMedium/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight           , "tRerunMVArun2v2DBoldDMwLTTight/F");
@@ -933,16 +933,15 @@ void etau_tree::set_branches() {
 
   // 2016 placeholders
   tree->Branch("amcatNLO_weight", &amcatNLO_weight, "amcatNLO_weight/F");
-  tree->Branch("matchEle25", &matchEle25, "matchEle25/F");
-  tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
-  tree->Branch("passEle25", &passEle25, "passEle25/F");
+  tree->Branch("eMatchesSingleE25Tight", &eMatchesSingleE25Tight, "eMatchesSingleE25Tight/F");
+  tree->Branch("eMatchesEle25TightFilter", &eMatchesEle25TightFilter, "eMatchesEle25TightFilter/F");
+  tree->Branch("singleE25eta2p1TightPass", &singleE25eta2p1TightPass, "singleE25eta2p1TightPass/F");
   tree->Branch("againstElectronTightMVA6_2", &tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
   tree->Branch("againstElectronVLooseMVA6_2", &tAgainstElectronVLooseMVA6, "againstElectronVLooseMVA6_2/F");
   tree->Branch("againstMuonTight3_2", &tAgainstMuonTight3, "againstMuonTight3_2/F");
   tree->Branch("againstMuonLoose3_2", &tAgainstMuonLoose3, "againstMuonLoose3_2/F");
   tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &decayModeFindingNewDMs_2, "decayModeFindingNewDMs_2/F");
-
 
   // input branches
   
