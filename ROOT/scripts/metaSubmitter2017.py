@@ -110,4 +110,4 @@ for sample in sorted(samples.keys()):
   path = samples[sample][0]
   if 'ggHtoTauTau125' in sample:
     pref = ggH_pref
-  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s' % (sample, pref+path, prefix, jobType, recoil), shell=True)
+  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s2017' % (sample, pref+path, prefix, jobType, recoil), shell=True)

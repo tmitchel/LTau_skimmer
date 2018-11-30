@@ -6,7 +6,11 @@
   <use name="rootcore"/>
   <use name="root"/>
 </bin>
-<bin name="SkimMT2017" file="mutau_skimmer.cc">
+<bin name="SkimMT2016" file="mutau_skimmer2016.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>
+<bin name="SkimMT2017" file="mutau_skimmer2017.cc">
   <use name="rootcore"/>
   <use name="root"/>
 </bin>

@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 
 parser = ArgumentParser(description="run on a directory containing directories containing the skimmed ntuples")
 parser.add_argument('-p', '--prefix', action = 'store', help = 'name to prefix all directories')
+parser.add_argument('-l', '--lepton', action = 'store', help = 'which lepton (mt or et)')
 parser.add_argument('-j', '--job', action = 'store', help = 'job type')
 args = parser.parse_args()
 
@@ -67,7 +68,7 @@ sig_samples = {
   "ZHTauTau125"     : ["ZHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", '0'],
 }
 
-data_samples = {
+el_data_samples = {
     "datasE-B"     : ["data_SingleElectron_Run2016B_v1", '0'],
     "datasE-B_ext1": ["data_SingleElectron_Run2016B_v2", '0'],
     "datasE-C"     : ["data_SingleElectron_Run2016C", '0'],
@@ -79,14 +80,36 @@ data_samples = {
     "datasE-H_ext1": ["data_SingleElectron_Run2016H_v3", '0'],
 }
 
-embedded_samples = {
-  'embed-B' : ['EmbeddingRun2016B-v2', '0'],
-  'embed-C' : ['EmbeddingRun2016C-v2', '0'],
-  'embed-D' : ['EmbeddingRun2016D-v2', '0'],
-  'embed-E' : ['EmbeddingRun2016E-v2', '0'],
-  'embed-F' : ['EmbeddingRun2016F-v2', '0'],
-  'embed-G' : ['EmbeddingRun2016G-v2', '0'],
-  'embed-H' : ['EmbeddingRun2016H-v2', '0'],
+mu_data_samples = {
+    "datasMu-B"     : ["data_SingleMuon_Run2015B_v1", '0'],
+    "datasMu-B_ext1": ["data_SingleMuon_Run2016B_v2", '0'],
+    "datasMu-C"     : ["data_SingleMuon_Run2016C", '0'],
+    "datasMu-D"     : ["data_SingleMuon_Run2016D", '0'],
+    "datasMu-E"     : ["data_SingleMuon_Run2016E", '0'],
+    "datasMu-F"     : ["data_SingleMuon_Run2016F", '0'],
+    "datasMu-G"     : ["data_SingleMuon_Run2016G", '0'],
+    "datasMu-H"     : ["data_SingleMuon_Run2016H_v2", '0'],
+    "datasMu-H_ext1": ["data_SingleMuon_Run2016H_v3", '0'],
+}
+
+el_embedded_samples = {
+  'embedEl-B' : ['EmbeddingRun2016B-v2', '0'],
+  'embedEl-C' : ['EmbeddingRun2016C-v2', '0'],
+  'embedEl-D' : ['EmbeddingRun2016D-v2', '0'],
+  'embedEl-E' : ['EmbeddingRun2016E-v2', '0'],
+  'embedEl-F' : ['EmbeddingRun2016F-v2', '0'],
+  'embedEl-G' : ['EmbeddingRun2016G-v2', '0'],
+  'embedEl-H' : ['EmbeddingRun2016H-v2', '0'],
+}
+
+mu_embedded_samples = {
+  'embedMu-B' : ['EmbeddingRun2016B-v2', '0'],
+  'embedMu-C' : ['EmbeddingRun2016C-v2', '0'],
+  'embedMu-D' : ['EmbeddingRun2016D-v2', '0'],
+  'embedMu-E' : ['EmbeddingRun2016E-v2', '0'],
+  'embedMu-F' : ['EmbeddingRun2016F-v2', '0'],
+  'embedMu-G' : ['EmbeddingRun2016G-v2', '0'],
+  'embedMu-H' : ['EmbeddingRun2016H-v2', '0'],
 }
 
 prefix = args.prefix
@@ -95,24 +118,37 @@ jobType = args.job
 bkg_pref = "/hdfs/store/user/ndev/LFV_feb18_mc/"
 sig_pref = "/hdfs/store/user/truggles/SMHTT_signals_may30/"
 data_pref = "/hdfs/store/user/ndev/LFV_reminiaod_feb18/"
-embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v5/'
+el_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v5/'
+mu_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_mt_v5/'
 ggH_pref = '/hdfs/store/user/truggles/SM-HTT_HTXS_ggH_aug31_v1/'
 
 samples = bkg_samples
 pref = bkg_pref
 if args.job == 'sig':
-  samples = sig_samples
   pref = sig_pref
+  samples = sig_samples
 elif args.job == 'data':
-  samples = data_samples
   pref = data_pref
+  if args.lepton == 'mt':
+    samples = mu_data_samples
+  elif args.lepton == 'et':
+    samples = el_data_samples
 elif args.job == 'embed':
-  samples = embedded_samples
-  pref = embed_pref
+  if args.lepton == 'mt':
+    samples = mu_embedded_samples
+    pref = mu_embed_pref
+  elif args.lepton == 'et':
+    samples = el_embedded_samples
+    pref = el_embed_pref
+
+if args.lepton == 'mt':
+  lep = 'MT'
+elif args.lepton == 'et':
+  lep = 'ET'
 
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
   if 'ggHtoTauTau125' in sample:
     pref = ggH_pref
-  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s2016' % (sample, pref+path, prefix, jobType, recoil, 'ET'), shell=True)
+  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s2016' % (sample, pref+path, prefix, jobType, recoil, lep), shell=True)
