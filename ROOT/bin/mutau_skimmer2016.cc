@@ -1,3 +1,5 @@
+// Copyright 2018 Tyler Mitchell
+
 // general includes
 #include <dirent.h>
 #include <sys/types.h>

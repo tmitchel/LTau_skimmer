@@ -1,3 +1,5 @@
+// Copyright 2018 Tyler Mitchell
+
 // general includes
 #include <dirent.h>
 #include <sys/types.h>
@@ -15,7 +17,7 @@
 // user includes
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/CLParser.h"
-#include "ltau_skimmer/json/single_include/nlohmann/json.hpp" 
+#include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
