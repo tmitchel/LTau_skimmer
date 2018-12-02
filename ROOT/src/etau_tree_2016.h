@@ -21,7 +21,7 @@ public:
   Float_t ePt, eEta, ePhi, eMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, eMatchesEle27Filter, eMatchesEle27Path, Ele27WPTightPass, eMatchesEle32Filter, eMatchesEle32Path, Ele32WPTightPass, eMatchesEle35Filter, eMatchesEle35Path,
           Ele35WPTightPass, eMatchesEle24Tau30Filter, eMatchesEle24Tau30Path, Ele24Tau30Pass, tMatchesEle24Tau30Path, tMatchesEle24Tau30Filter, ePVDZ, ePVDXY, eMVANonTrigWP80, eMVANoisoWP90, ePassesConversionVeto, eMissingHits, tPVDZ, 
           tByVLooseIsolationMVArun2v1DBoldDMwLT, tDecayModeFinding, tCharge, e_t_DR,
-          tAgainstMuonLoose3, tAgainstElectronTightMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, eIsoDB03, tByIsolationMVArun2v1DBoldDMwLTraw;
+          tAgainstMuonLoose3, tAgainstElectronTightMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, eIsoDB03, tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v1DBoldDMwLTVLoose;
 
   // Constructed while running
   UInt_t run, lumi;
@@ -141,6 +141,7 @@ recoil(rec)
   original->SetBranchAddress("tAgainstElectronTightMVA6", &tAgainstElectronTightMVA6);
   original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &tByVLooseIsolationMVArun2v1DBoldDMwLT);
+  original->SetBranchAddress("tRerunMVArun2v1DBoldDMwLTVLoose", &tRerunMVArun2v1DBoldDMwLTVLoose);
 
   // 2016 triggers
   original->SetBranchAddress("singleE25eta2p1TightPass", &singleE25eta2p1TightPass);
@@ -179,7 +180,7 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
 
     // apply TES
-    if (isMC && !isEmbed) {
+    if (isMC) {
       if (tZTTGenMatching == 5) {
         if (tDecayMode == 0) {
           tau *= 0.982;
@@ -227,7 +228,7 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
     else  continue;
 
-    if (tByVLooseIsolationMVArun2v1DBoldDMwLT && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
+    if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose) && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
     else  continue;
 
     if (tAgainstMuonLoose3 > 0.5 && tAgainstElectronTightMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
@@ -456,47 +457,56 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     MET_JESUp.SetPxPyPzE(pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, 0, sqrt(pfmetcorr_ex_JESUp * pfmetcorr_ex_JESUp + pfmetcorr_ey_JESUp * pfmetcorr_ey_JESUp));
     MET_JESDown.SetPxPyPzE(pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown, 0, sqrt(pfmetcorr_ex_JESDown * pfmetcorr_ex_JESDown + pfmetcorr_ey_JESDown * pfmetcorr_ey_JESDown));
 
-    if (isMC && !isEmbed) {
+    if (isMC) {
       // met correction due to tau energy scale
       if (tZTTGenMatching == 5) {
         if (tDecayMode == 0) {
-          MET = MET + tau - 1.007*tau;
-          MET_JESUp=MET_JESUp+tau-1.007*tau;
-          MET_JESDown=MET_JESDown+tau-1.007*tau;
-          MET_UESUp=MET_UESUp+tau-1.007*tau;
-          MET_UESDown=MET_UESDown+tau-1.007*tau;
-          tau *= 1.007;
+          MET = MET + tau - 0.982*tau;
+          MET_JESUp=MET_JESUp+tau-0.982*tau;
+          MET_JESDown=MET_JESDown+tau-0.982*tau;
+          MET_UESUp=MET_UESUp+tau-0.982*tau;
+          MET_UESDown=MET_UESDown+tau-0.982*tau;
+          tau *= 0.982;
         } else if (tDecayMode == 1) {
-          MET= MET + tau - 0.998*tau;
+          MET= MET + tau - 1.010*tau;
+          MET_JESUp=MET_JESUp+tau-1.010*tau;
+          MET_JESDown=MET_JESDown+tau-1.010*tau;
+          MET_UESUp=MET_UESUp+tau-1.010*tau;
+          MET_UESDown=MET_UESDown+tau-1.010*tau;
+          tau *= 1.010;
+        } else if (tDecayMode == 10) {
+          MET = MET + tau - 1.004*tau;
+          MET_JESUp=MET_JESUp+tau-1.004*tau;
+          MET_JESDown=MET_JESDown+tau-1.004*tau;
+          MET_UESUp=MET_UESUp+tau-1.004*tau;
+          MET_UESDown=MET_UESDown+tau-1.004*tau;
+          tau *= 1.004;
+        }
+      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
+        if (tDecayMode == 1) {
+          MET=MET+tau-1.095*tau;
+          MET_JESUp=MET_JESUp+tau-1.095*tau;
+          MET_JESDown=MET_JESDown+tau-1.095*tau;
+          MET_UESUp=MET_UESUp+tau-1.095*tau;
+          MET_UESDown=MET_UESDown+tau-1.095*tau;
+          tau *= 1.095;
+        } 
+      } else if (tZTTGenMatching == 2 || tZTTGenMatching == 4) {
+        if (tDecayMode == 0) {
+          MET=MET+tau-0.998*tau;
           MET_JESUp=MET_JESUp+tau-0.998*tau;
           MET_JESDown=MET_JESDown+tau-0.998*tau;
           MET_UESUp=MET_UESUp+tau-0.998*tau;
           MET_UESDown=MET_UESDown+tau-0.998*tau;
           tau *= 0.998;
-        } else if (tDecayMode == 10) {
-          MET = MET + tau - 1.001*tau;
-          MET_JESUp=MET_JESUp+tau-1.001*tau;
-          MET_JESDown=MET_JESDown+tau-1.001*tau;
-          MET_UESUp=MET_UESUp+tau-1.001*tau;
-          MET_UESDown=MET_UESDown+tau-1.001*tau;
-          tau *= 1.001;
-        }
-      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
-        if (tDecayMode == 0) {
-          MET=MET+tau-1.003*tau;
-          MET_JESUp=MET_JESUp+tau-1.003*tau;
-          MET_JESDown=MET_JESDown+tau-1.003*tau;
-          MET_UESUp=MET_UESUp+tau-1.003*tau;
-          MET_UESDown=MET_UESDown+tau-1.003*tau;
-          tau *= 1.003;
         } else if (tDecayMode == 1) {
-          MET=MET+tau-1.036*tau;
-          MET_JESUp=MET_JESUp+tau-1.036*tau;
-          MET_JESDown=MET_JESDown+tau-1.036*tau;
-          MET_UESUp=MET_UESUp+tau-1.036*tau;
-          MET_UESDown=MET_UESDown+tau-1.036*tau;
-          tau *= 1.036;
-        } 
+          MET=MET+tau-1.015*tau;
+          MET_JESUp=MET_JESUp+tau-1.015*tau;
+          MET_JESDown=MET_JESDown+tau-1.015*tau;
+          MET_UESUp=MET_UESUp+tau-1.015*tau;
+          MET_UESDown=MET_UESDown+tau-1.015*tau;
+          tau *= 1.015;
+        }
       }
     }
 

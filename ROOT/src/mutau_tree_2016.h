@@ -23,7 +23,7 @@ public:
           singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter, 
           tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose, 
           mValidFraction, mSegmentCompatibility, mPFIDMedium, tAgainstMuonTight3, tAgainstElectronVLooseMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04, 
-          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR;
+          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose;
 
   // Constructed while running
   UInt_t run, lumi;
@@ -203,7 +203,7 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
 
     // apply TES
-    if (isMC && !isEmbed) {
+    if (isMC) {
       if (tZTTGenMatching == 5) {
         if (tDecayMode == 0) {
           tau *= 0.982;
@@ -241,7 +241,7 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
     else  continue;
 
-    if (tByVLooseIsolationMVArun2v1DBoldDMwLT && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
+    if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose)  && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
     else  continue;
 
     if (tAgainstMuonTight3 > 0.5 && tAgainstElectronVLooseMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
@@ -470,7 +470,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     MET_JESUp.SetPxPyPzE(pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, 0, sqrt(pfmetcorr_ex_JESUp * pfmetcorr_ex_JESUp + pfmetcorr_ey_JESUp * pfmetcorr_ey_JESUp));
     MET_JESDown.SetPxPyPzE(pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown, 0, sqrt(pfmetcorr_ex_JESDown * pfmetcorr_ex_JESDown + pfmetcorr_ey_JESDown * pfmetcorr_ey_JESDown));
 
-    if (isMC && !isEmbed) {
+    if (isMC) {
       // met correction due to tau energy scale
       if (tZTTGenMatching == 5) {
         if (tDecayMode == 0) {

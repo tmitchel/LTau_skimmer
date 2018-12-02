@@ -81,7 +81,7 @@ el_data_samples = {
 }
 
 mu_data_samples = {
-    "datasMu-B"     : ["data_SingleMuon_Run2015B_v1", '0'],
+    "datasMu-B"     : ["data_SingleMuon_Run2016B_v1", '0'],
     "datasMu-B_ext1": ["data_SingleMuon_Run2016B_v2", '0'],
     "datasMu-C"     : ["data_SingleMuon_Run2016C", '0'],
     "datasMu-D"     : ["data_SingleMuon_Run2016D", '0'],
