@@ -24,7 +24,7 @@ class mutau_tree {
   Int_t Run, Lumi, recoil;
 
   // Selection Variables.
-  // Float_t
+  Float_t mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mValidFraction, mSegmentCompatibility, tRerunMVArun2v2DBoldDMwLTVVLoose, tDecayModeFinding;
 
   // Intermediate Variables. (Missing trigweight_2, idisoweight_2)
   Float_t muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, dimuonVeto, mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter,
@@ -81,7 +81,43 @@ original(Original),
 isMC(IsMC),
 isEmbed(IsEmbed),
 recoil(rec) {
+  original->SetBranchAddress("mPt", &mPt);
+  original->SetBranchAddress("mEta", &mEta);
+  original->SetBranchAddress("mPhi", &mPhi);
+  original->SetBranchAddress("mMass", &mMass);
+  original->SetBranchAddress("mPVDZ", &mPVDZ);
+  original->SetBranchAddress("mPVDXY", &mPVDXY);
+  original->SetBranchAddress("tPt", &tPt);
+  original->SetBranchAddress("tEta", &tEta);
+  original->SetBranchAddress("tPhi", &tPhi);
+  original->SetBranchAddress("tMass", &tMass);
+  original->SetBranchAddress("tCharge", &tCharge);
+  original->SetBranchAddress("tPVDZ", &tPVDZ);
+  original->SetBranchAddress("tPVDXY", &tPVDXY);
+  original->SetBranchAddress("mIsGlobal", &mIsGlobal);
+  original->SetBranchAddress("mNormalizedChi2", &mNormalizedChi2);
+  original->SetBranchAddress("mChi2LocalPosition", &mChi2LocalPosition);
+  original->SetBranchAddress("mTrkKink", &mTrkKink);
+  original->SetBranchAddress("mPFIDLoose", &mPFIDLoose);
+  original->SetBranchAddress("mPFIDMedium", &mPFIDMedium);
+  original->SetBranchAddress("mValidFraction", &mValidFraction);
+  original->SetBranchAddress("mSegmentCompatibility", &mSegmentCompatibility);
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVLoose", &tRerunMVArun2v2DBoldDMwLTVVLoose);
+
   original->SetBranchAddress("tDecayMode", &tDecayMode);
+  original->SetBranchAddress("tDecayModeFinding", &tDecayModeFinding);
+  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
+  original->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
+  original->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
+  original->SetBranchAddress("mMatchesIsoMu20Tau27Filter", &mMatchesIsoMu20Tau27Filter);
+  original->SetBranchAddress("mMatchesIsoMu20Tau27Path", &mMatchesIsoMu20Tau27Path);
+  original->SetBranchAddress("mMatchesIsoMu24Filter", &mMatchesIsoMu24Filter);
+  original->SetBranchAddress("mMatchesIsoMu24Path", &mMatchesIsoMu24Path);
+  original->SetBranchAddress("mMatchesIsoMu27Filter", &mMatchesIsoMu27Filter);
+  original->SetBranchAddress("mMatchesIsoMu27Path", &mMatchesIsoMu27Path);
+  original->SetBranchAddress("Mu20Tau27Pass", &Mu20Tau27Pass);
+  original->SetBranchAddress("IsoMu27Pass", &IsoMu27Pass);
+  original->SetBranchAddress("IsoMu24Pass", &IsoMu24Pass);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -134,8 +170,6 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float mu_pt_min(21.), tau_pt_min(23.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 
@@ -146,7 +180,7 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     if (Mu24 || Mu27 || Cross) cutflow->Fill(2., 1.);
     else  continue;
 
-    if (mPt > mu_pt_min && fabs(mEta) < 2.1 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.);  // electron kinematic selection
+    if (mPt > 21. && fabs(mEta) < 2.1 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.);  // electron kinematic selection
     else  continue;
 
     bool goodglob = mIsGlobal  && mNormalizedChi2 < 3  && mChi2LocalPosition < 12 && mTrkKink < 20;
@@ -158,15 +192,14 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     if (isMC || isEmbed || isMedium) cutflow->Fill(5., 1.);  // muon quality selection
     else  continue;
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.);  // tau kinematic selection
+    if (tau.Pt() > 20. && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.);  // tau kinematic selection
     else  continue;
 
-    if (tRerunMVArun2v2DBoldDMwLTVLoose && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.);  // tau quality selection
+    if (tRerunMVArun2v2DBoldDMwLTVVLoose && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.);  // tau quality selection
     else  continue;
 
-    if (tAgainstMuonTight3 > 0.5 && tAgainstElectronVLooseMVA6 > 0.5) cutflow->Fill(8., 1.);  // tau against leptons
+    if (mu.DeltaR(tau) > 0.5) cutflow->Fill(8., 1.);
     else  continue;
-
 
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -582,17 +615,6 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("dimuonVeto", &dimuonVeto);
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
-  original->SetBranchAddress("mMatchesIsoMu20Tau27Filter", &mMatchesIsoMu20Tau27Filter);
-  original->SetBranchAddress("mMatchesIsoMu20Tau27Path", &mMatchesIsoMu20Tau27Path);
-  original->SetBranchAddress("mMatchesIsoMu24Filter", &mMatchesIsoMu24Filter);
-  original->SetBranchAddress("mMatchesIsoMu24Path", &mMatchesIsoMu24Path);
-  original->SetBranchAddress("mMatchesIsoMu27Filter", &mMatchesIsoMu27Filter);
-  original->SetBranchAddress("mMatchesIsoMu27Path", &mMatchesIsoMu27Path);
-  original->SetBranchAddress("Mu20Tau27Pass", &Mu20Tau27Pass);
-  original->SetBranchAddress("IsoMu27Pass", &IsoMu27Pass);
-  original->SetBranchAddress("IsoMu24Pass", &IsoMu24Pass);
-  original->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
-  original->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
   original->SetBranchAddress("Flag_BadChargedCandidateFilter", &Flag_BadChargedCandidateFilter);
   original->SetBranchAddress("Flag_BadPFMuonFilter", &Flag_BadPFMuonFilter);
   original->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter);
@@ -605,13 +627,7 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("Flag_globalSuperTightHalo2016Filter", &Flag_globalSuperTightHalo2016Filter);
   original->SetBranchAddress("Flag_globalTightHalo2016Filter", &Flag_globalTightHalo2016Filter);
   original->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices);
-  original->SetBranchAddress("mPt", &mPt);
-  original->SetBranchAddress("mEta", &mEta);
-  original->SetBranchAddress("mPhi", &mPhi);
-  original->SetBranchAddress("mMass", &mMass);
   original->SetBranchAddress("mCharge", &mCharge);
-  original->SetBranchAddress("mPVDZ", &mPVDZ);
-  original->SetBranchAddress("mPVDXY", &mPVDXY);
   original->SetBranchAddress("mRelPFIsoDBDefaultR04", &mRelPFIsoDBDefaultR04);
   original->SetBranchAddress("mZTTGenMatching", &mZTTGenMatching);
   original->SetBranchAddress("raw_pfMetEt", &raw_pfMetEt);
@@ -620,14 +636,6 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("type1_pfMetPhi", &type1_pfMetPhi);
   original->SetBranchAddress("puppiMetEt", &puppiMetEt);
   original->SetBranchAddress("puppiMetPhi", &puppiMetPhi);
-  original->SetBranchAddress("tPt", &tPt);
-  original->SetBranchAddress("tEta", &tEta);
-  original->SetBranchAddress("tPhi", &tPhi);
-  original->SetBranchAddress("tCharge", &tCharge);
-  original->SetBranchAddress("tMass", &tMass);
-  original->SetBranchAddress("tPVDZ", &tPVDZ);
-  original->SetBranchAddress("tPVDXY", &tPVDXY);
-  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
   original->SetBranchAddress("tAgainstElectronVLooseMVA6", &tAgainstElectronVLooseMVA6);
   original->SetBranchAddress("tAgainstElectronLooseMVA6", &tAgainstElectronLooseMVA6);
   original->SetBranchAddress("tAgainstElectronMediumMVA6", &tAgainstElectronMediumMVA6);
@@ -659,8 +667,6 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("jb2csvWoNoisyJets", &bcsv_2);
   original->SetBranchAddress("jb2hadronflavorWoNoisyJets", &jb2hadronflavorWoNoisyJets);
   original->SetBranchAddress("NUP", &NUP);
-  original->SetBranchAddress("mPFIDLoose", &mPFIDLoose);
-  original->SetBranchAddress("mPFIDMedium", &mPFIDMedium);
   original->SetBranchAddress("mPFIDTight", &mPFIDTight);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose", &tRerunMVArun2v2DBoldDMwLTLoose);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium", &tRerunMVArun2v2DBoldDMwLTMedium);
