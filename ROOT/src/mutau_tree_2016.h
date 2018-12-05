@@ -27,7 +27,8 @@ class mutau_tree {
           singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter,
           tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose,
           mValidFraction, mSegmentCompatibility, mPFIDMedium, tAgainstMuonTight3, tAgainstElectronVLooseMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04,
-          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose;
+          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, mMatchesIsoMu22eta2p1, mMatchesIsoTkMu22eta2p1, mMatchesIsoMu22, 
+          mMatchesIsoTkMu22, mMatchesMu19Tau20sL1, tMatchesMu19Tau20sL1, mMatchesSingleMuIsoTk20, mMatchesSingleMuIso20;
 
   // Constructed while running
   UInt_t run, lumi;
@@ -161,6 +162,11 @@ recoil(rec) {
   original->SetBranchAddress("mMatchesIsoMu22Path", &mMatchesIsoMu22Path);
   original->SetBranchAddress("mMatchesIsoTkMu22Path", &mMatchesIsoTkMu22Path);
   original->SetBranchAddress("mMatchesMu19Tau20sL1Path", &mMatchesMu19Tau20sL1Path);
+
+  original->SetBranchAddress("singleIsoMu22Pass", &mMatchesIsoMu22);
+  original->SetBranchAddress("singleIsoTkMu22Pass", &mMatchesIsoTkMu22);
+  original->SetBranchAddress("mMatchesMu19Tau20sL1", &mMatchesMu19Tau20sL1);
+
   original->SetBranchAddress("mIsoMu22eta2p1Filter", &mIsoMu22eta2p1Filter);
   original->SetBranchAddress("mIsoTkMu22eta2p1Filter", &mIsoTkMu22eta2p1Filter);
   original->SetBranchAddress("mIsoMu22Filter", &mIsoMu22Filter);
@@ -225,6 +231,14 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     auto IsoMu22          = mMatchesIsoMu22Path && mIsoMu22Filter && singleIsoMu22Pass;
     auto IsoTkMu22        = mMatchesIsoTkMu22Path && mIsoTkMu22Filter && singleIsoTkMu22Pass;
     auto Cross            = mMatchesMu19Tau20sL1Path && mMatchesMu19Tau20sL1Filter && tMatchesMu19Tau20sL1Path && tMatchesMu19Tau20sL1Filter && singleMu19eta2p1LooseTau20singleL1Pass;
+
+    if (isEmbed) {
+      IsoMu22eta2p1    = singleIsoMu22eta2p1Pass;
+      IsoTkMu22eta2p1  = singleIsoTkMu22eta2p1Pass;
+      IsoMu22          = mMatchesSingleMuIsoTk20 && singleIsoMu22Pass;
+      IsoTkMu22        = mMatchesSingleMuIso20 && singleIsoTkMu22Pass;
+      Cross            = mMatchesMu19Tau20sL1 && singleMu19eta2p1LooseTau20singleL1Pass;
+    }
 
     if (IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) cutflow->Fill(2., 1.);
     else  continue;
