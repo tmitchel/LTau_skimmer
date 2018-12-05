@@ -32,13 +32,13 @@ class mutau_tree {
       IsoMu24Pass, Flag_BadChargedCandidateFilter, Flag_BadPFMuonFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_HBHENoiseIsoFilter,
       Flag_badMuons, Flag_duplicateMuons, Flag_ecalBadCalibFilter, Flag_eeBadScFilter, Flag_globalSuperTightHalo2016Filter, Flag_globalTightHalo2016Filter,
       Flag_goodVertices, mPt, mPhi, mEta, mMass, mCharge, mPVDXY, mPVDZ, mRelPFIsoDBDefaultR04, mZTTGenMatching, tPt, tEta, tPhi, tMass, tCharge, tPVDXY, tPVDZ, tZTTGenMatching,
-      tDecayMode, type1_pfMetEt, type1_pfMetPhi, puppiMetEt,
+      tDecayMode, type1_pfMetEt, type1_pfMetPhi, raw_pfMetEt, raw_pfMetPhi, puppiMetEt,
       puppiMetPhi, tAgainstElectronVLooseMVA6, tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6,
       tAgainstMuonLoose3, tAgainstMuonTight3, tRerunMVArun2v2DBoldDMwLTraw, vbfMassWoNoisyJets, jetVeto20WoNoisyJets, jetVeto30WoNoisyJets, bjetDeepCSVVeto20MediumWoNoisyJets,
       j1ptWoNoisyJets, j1etaWoNoisyJets, j1phiWoNoisyJets, j1csvWoNoisyJets, j2ptWoNoisyJets, j2etaWoNoisyJets, j2phiWoNoisyJets, j2csvWoNoisyJets,
       jb1ptWoNoisyJets, jb1etaWoNoisyJets, jb1phiWoNoisyJets, jb1csvWoNoisyJets, jb1hadronflavorWoNoisyJets, jb2ptWoNoisyJets, jb2etaWoNoisyJets,
       jb2phiWoNoisyJets, jb2csvWoNoisyJets, jb2hadronflavorWoNoisyJets, mPFIDLoose, mPFIDMedium, mPFIDTight, tRerunMVArun2v2DBoldDMwLTLoose,
-      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU;
+      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU, genPx, genpY, vispX, vispY;
 
   // Output Variables.
   ULong64_t evt;
@@ -237,6 +237,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // TLorentzVector ele, tau;
     mu.SetPtEtaPhiM(mPt, mEta, mPhi, mMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    rawPfMET.SetPtEtaPhi(raw_pfMetEt, 0, raw_pfMetPhi, 0);
     pfMET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
     mvaMET.SetPtEtaPhiM(0, 0, 0, 0);
     puppiMET.SetPtEtaPhiM(puppiMetEt, 0, puppiMetPhi, 0);
@@ -250,8 +251,8 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           vispX,                     // generator visible Z/W/Higgs px (float)
           vispY,                     // generator visible Z/W/Higgs py (float)
           jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,              // corrected type I pf met px (float)
-          pfmetcorr_ey);             // corrected type I pf met py (float)
+          rawPfMET.Px(),             // corrected type I pf met px (float)
+          rawPfMET.Py());            // corrected type I pf met py (float)
     } else if (recoil == 2) {
       recoilPFMetCorrector.CorrectByMeanResolution(
           pfMET.Px(),                // uncorrected type I pf met px (float)
@@ -261,8 +262,8 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           vispX,                     // generator visible Z/W/Higgs px (float)
           vispY,                     // generator visible Z/W/Higgs py (float)
           jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,              // corrected type I pf met px (float)
-          pfmetcorr_ey);             // corrected type I pf met py (float)
+          rawPfMET.Px(),             // corrected type I pf met px (float)
+          rawPfMET.Py());            // corrected type I pf met py (float)
     }
 
     pfMET.SetPxPyPzE(pfMET.Px(), pfMET.Py(), 0, sqrt(pfMET.Px() * pfMET.Px() + pfMET.Py() * pfMET.Py()));
@@ -611,6 +612,8 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("mPVDXY", &mPVDXY);
   original->SetBranchAddress("mRelPFIsoDBDefaultR04", &mRelPFIsoDBDefaultR04);
   original->SetBranchAddress("mZTTGenMatching", &mZTTGenMatching);
+  original->SetBranchAddress("raw_pfMetEt", &raw_pfMetEt);
+  original->SetBranchAddress("raw_pfMetPhi", &raw_pfMetPhi);
   original->SetBranchAddress("type1_pfMetEt", &type1_pfMetEt);
   original->SetBranchAddress("type1_pfMetPhi", &type1_pfMetPhi);
   original->SetBranchAddress("puppiMetEt", &puppiMetEt);
@@ -668,6 +671,11 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("nvtx", &nvtx);
   original->SetBranchAddress("nTruePU", &nTruePU);
   original->SetBranchAddress("rho", &rho);
+
+  original->SetBranchAddress("genpX", &genpX);
+  original->SetBranchAddress("genpY", &genpY);
+  original->SetBranchAddress("vispX", &vispX);
+  original->SetBranchAddress("vispY", &vispY);
 }
 
 #endif  // ROOT_SRC_MUTAU_TREE_2017_H_
