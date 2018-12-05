@@ -38,7 +38,7 @@ class mutau_tree {
       j1ptWoNoisyJets, j1etaWoNoisyJets, j1phiWoNoisyJets, j1csvWoNoisyJets, j2ptWoNoisyJets, j2etaWoNoisyJets, j2phiWoNoisyJets, j2csvWoNoisyJets,
       jb1ptWoNoisyJets, jb1etaWoNoisyJets, jb1phiWoNoisyJets, jb1csvWoNoisyJets, jb1hadronflavorWoNoisyJets, jb2ptWoNoisyJets, jb2etaWoNoisyJets,
       jb2phiWoNoisyJets, jb2csvWoNoisyJets, jb2hadronflavorWoNoisyJets, mPFIDLoose, mPFIDMedium, mPFIDTight, tRerunMVArun2v2DBoldDMwLTLoose,
-      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU, genpX, genpY, vispX, vispY;
+      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU, genpX, genpY, vispX, vispY, pfmetcorr_ex, pfmetcorr_ey;
 
   // Output Variables.
   ULong64_t evt;
@@ -239,31 +239,33 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
     rawPfMET.SetPtEtaPhi(raw_pfMetEt, 0, raw_pfMetPhi, 0);
     pfMET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
+    pfmetcorr_ex = pfMET.Px();
+    pfmetcorr_ey = pfMET.Py();
     mvaMET.SetPtEtaPhiM(0, 0, 0, 0);
     puppiMET.SetPtEtaPhiM(puppiMetEt, 0, puppiMetPhi, 0);
 
     if (recoil == 1) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          pfMET.Px(),                // uncorrected type I pf met px (float)
-          pfMET.Py(),                // uncorrected type I pf met py (float)
+          rawPfMET.Px(),             // uncorrected type I pf met px (float)
+          rawPfMET.Py(),             // uncorrected type I pf met py (float)
           genpX,                     // generator Z/W/Higgs px (float)
           genpY,                     // generator Z/W/Higgs py (float)
           vispX,                     // generator visible Z/W/Higgs px (float)
           vispY,                     // generator visible Z/W/Higgs py (float)
           jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          rawPfMET.Px(),             // corrected type I pf met px (float)
-          rawPfMET.Py());            // corrected type I pf met py (float)
+          pfmetcorr_ex,              // corrected type I pf met px (float)
+          pfmetcorr_ey);             // corrected type I pf met py (float)
     } else if (recoil == 2) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          pfMET.Px(),                // uncorrected type I pf met px (float)
-          pfMET.Py(),                // uncorrected type I pf met py (float)
+          rawPfMET.Px(),             // uncorrected type I pf met px (float)
+          rawPfMET.Py(),             // uncorrected type I pf met py (float)
           genpX,                     // generator Z/W/Higgs px (float)
           genpY,                     // generator Z/W/Higgs py (float)
           vispX,                     // generator visible Z/W/Higgs px (float)
           vispY,                     // generator visible Z/W/Higgs py (float)
           jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          rawPfMET.Px(),             // corrected type I pf met px (float)
-          rawPfMET.Py());            // corrected type I pf met py (float)
+          pfmetcorr_ex,              // corrected type I pf met px (float)
+          pfmetcorr_ey);             // corrected type I pf met py (float)
     }
 
     pfMET.SetPxPyPzE(pfMET.Px(), pfMET.Py(), 0, sqrt(pfMET.Px() * pfMET.Px() + pfMET.Py() * pfMET.Py()));
