@@ -434,39 +434,6 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     npu = nTruePU;
     // rho (straight from tree)
 
-    TLorentzVector h = ele + tau;
-    TLorentzVector jet1;
-    if (jetVeto20 > 0 && j1pt > 0)
-      jet1.SetPtEtaPhiM(j1pt, j1eta, j1phi, 0);
-    TLorentzVector jet2;
-    if (jetVeto20 > 1 && j2pt > 0)
-      jet2.SetPtEtaPhiM(j2pt, j2eta, j2phi, 0);
-    TLorentzVector dijet = jet1 + jet2;
-
-    higgs_pT = (ele + tau + pfMET).Pt();
-    hjj_pT = (ele + tau + pfMET + jet1 + jet2).Pt();
-    MT = sqrt(pow(pt_1 + met, 2) + pow(px_1 + met_px, 2) + pow(py_1 + met_py, 2));
-
-    if (jetVeto20 > 1) {
-      jdeta = vbfDeta;
-      jdphi = vbfDphi;
-      dijetphi = dijet.Phi();
-      hdijetphi = h.DeltaPhi(dijet);
-      visjeteta = h.Eta() - dijet.Eta();
-      mjj = vbfMassWoNoisyJets;
-      njetingap20 = vbfJetVeto20;
-      njetingap = vbfJetVeto30;
-    } else {
-      jdeta = -10000;
-      dijetpt = -10000;
-      dijetphi = -10000;
-      hdijetphi = -10000;
-      visjeteta = -10000;
-      mjj = -10000;
-      njetingap20 = -10000;
-      njetingap = -100000;
-    }
-
     tree->Fill();
   }
   return tree;
@@ -687,7 +654,6 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("jb2phiWoNoisyJets", &bphi_2);
   original->SetBranchAddress("jb2csvWoNoisyJets", &bcsv_2);
   original->SetBranchAddress("jb2hadronflavorWoNoisyJets", &bflavor_2);
-
   original->SetBranchAddress("NUP", &NUP);
   original->SetBranchAddress("mPFIDLoose"), &mPFIDLoose;
   original->SetBranchAddress("mPFIDMedium"), &mPFIDMedium;
@@ -703,93 +669,6 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("nvtx", &nvtx);
   original->SetBranchAddress("nTruePU", &nTruePU);
   original->SetBranchAddress("rho", &rho);
-
-  original->SetBranchAddress("mIsGlobal", &mIsGlobal);
-  original->SetBranchAddress("mNormalizedChi2", &mNormalizedChi2);
-  original->SetBranchAddress("mChi2LocalPosition", &mChi2LocalPosition);
-  original->SetBranchAddress("mTrkKink", &mTrkKink);
-  original->SetBranchAddress("mValidFraction", &mValidFraction);
-  original->SetBranchAddress("mSegmentCompatibility", &mSegmentCompatibility);
-
-  // tau variables
-  original->SetBranchAddress("tDecayMode", &tDecayMode);
-  original->SetBranchAddress("tDecayModeFinding", &tDecayModeFinding);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVLoose", &tRerunMVArun2v2DBoldDMwLTVLoose);
-  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
-  original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &tByVLooseIsolationMVArun2v1DBoldDMwLT);
-
-  // 2017 triggers
-
-  // other
-
-  // event info
-  original->SetBranchAddress("genpX", &genpX);
-  original->SetBranchAddress("genpY", &genpY);
-  original->SetBranchAddress("vispX", &vispX);
-  original->SetBranchAddress("vispY", &vispY);
-  original->SetBranchAddress("GenWeight", &GenWeight);
-  original->SetBranchAddress("numGenJets", &numGenJets);
-  original->SetBranchAddress("genpT", &genpT);
-  original->SetBranchAddress("genEta", &genEta);
-  original->SetBranchAddress("genM", &genM);
-  original->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
-  original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
-
-  // electron branches
-
-  // tau branches
-  original->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &tByLooseIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &tByMediumIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &tByTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &tByVTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &tByVVTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight);
-
-  // jet branches
-
-
-  original->SetBranchAddress("bjetDeepCSVVeto20Tight", &bjetDeepCSVVeto20Tight);
-  original->SetBranchAddress("bjetDeepCSVVeto30Loose", &bjetDeepCSVVeto30Loose);
-  original->SetBranchAddress("bjetDeepCSVVeto30Medium", &bjetDeepCSVVeto30Medium);
-  original->SetBranchAddress("bjetDeepCSVVeto30Tight", &bjetDeepCSVVeto30Tight);
-
-  original->SetBranchAddress("topQuarkPt1", &topQuarkPt1);
-  original->SetBranchAddress("topQuarkPt2", &topQuarkPt2);
-
-  original->SetBranchAddress("tZTTGenPt", &tZTTGenPt);
-  original->SetBranchAddress("tZTTGenPhi", &tZTTGenPhi);
-  original->SetBranchAddress("tZTTGenEta", &tZTTGenEta);
-  original->SetBranchAddress("tZTTGenDR", &tZTTGenDR);
-  original->SetBranchAddress("tGenDecayMode", &tGenDecayMode);
-  original->SetBranchAddress("tGenEnergy", &tGenEnergy);
-  original->SetBranchAddress("tGenEta", &tGenEta);
-  original->SetBranchAddress("tGenJetEta", &tGenJetEta);
-  original->SetBranchAddress("tGenJetPt", &tGenJetPt);
-  original->SetBranchAddress("tGenMotherEnergy", &tGenMotherEnergy);
-  original->SetBranchAddress("tGenMotherEta", &tGenMotherEta);
-  original->SetBranchAddress("tGenMotherPdgId", &tGenMotherPdgId);
-  original->SetBranchAddress("tGenMotherPhi", &tGenMotherPhi);
-  original->SetBranchAddress("tGenMotherPt", &tGenMotherPt);
-  original->SetBranchAddress("tGenPdgId", &tGenPdgId);
-  original->SetBranchAddress("tGenPhi", &tGenPhi);
-  original->SetBranchAddress("tGenPt", &tGenPt);
-  original->SetBranchAddress("tGenStatus", &tGenStatus);
-  original->SetBranchAddress("mGenCharge", &mGenCharge);
-  original->SetBranchAddress("mGenDirectPromptTauDecayFinalState", &mGenDirectPromptTauDecayFinalState);
-  original->SetBranchAddress("mGenEnergy", &mGenEnergy);
-  original->SetBranchAddress("mGenEta", &mGenEta);
-  original->SetBranchAddress("mGenIsPrompt", &mGenIsPrompt);
-  original->SetBranchAddress("mGenMotherPdgId", &mGenMotherPdgId);
-  original->SetBranchAddress("mGenParticle", &mGenParticle);
-  original->SetBranchAddress("mGenPdgId", &mGenPdgId);
-  original->SetBranchAddress("mGenPhi", &mGenPhi);
-  original->SetBranchAddress("mGenPrompt", &mGenPrompt);
-  original->SetBranchAddress("mGenPromptTauDecay", &mGenPromptTauDecay);
-  original->SetBranchAddress("mGenPt", &mGenPt);
-  original->SetBranchAddress("mGenTauDecay", &mGenTauDecay);
-  original->SetBranchAddress("mGenVZ", &mGenVZ);
-  original->SetBranchAddress("mGenVtxPVMatch", &mGenVtxPVMatch);
 }
 
 #endif  // ROOT_SRC_MUTAU_TREE_2017_H_
