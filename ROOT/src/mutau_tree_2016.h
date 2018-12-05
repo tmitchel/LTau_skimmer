@@ -938,7 +938,6 @@ void mutau_tree::set_branches() {
 
   // input branches
   // event info
-  original->SetBranchAddress("evt", &evt);
   original->SetBranchAddress("run", &Run);
   original->SetBranchAddress("lumi", &Lumi);
   original->SetBranchAddress("rho", &rho);
