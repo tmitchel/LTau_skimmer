@@ -17,7 +17,7 @@ class mutau_tree {
   TTree *tree, *original;
   bool isMC, isEmbed;
   std::vector<Int_t> good_events;
-  TLorentzVector mu, tau, pfMET, mvaMET, puppiMET;
+  TLorentzVector mu, tau, pfMET, mvaMET, puppiMET, rawPfMET;
 
  public:
   // Member variables
@@ -27,7 +27,7 @@ class mutau_tree {
   // Float_t
 
   // Intermediate Variables. (Missing trigweight_2, idisoweight_2)
-  Float_t muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter,
+  Float_t muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dielectronVeto, dimuonVeto, mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter,
       tMatchesIsoMu20Tau27Path, mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass,
       IsoMu24Pass, Flag_BadChargedCandidateFilter, Flag_BadPFMuonFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_HBHENoiseIsoFilter,
       Flag_badMuons, Flag_duplicateMuons, Flag_ecalBadCalibFilter, Flag_eeBadScFilter, Flag_globalSuperTightHalo2016Filter, Flag_globalTightHalo2016Filter,
@@ -38,7 +38,7 @@ class mutau_tree {
       j1ptWoNoisyJets, j1etaWoNoisyJets, j1phiWoNoisyJets, j1csvWoNoisyJets, j2ptWoNoisyJets, j2etaWoNoisyJets, j2phiWoNoisyJets, j2csvWoNoisyJets,
       jb1ptWoNoisyJets, jb1etaWoNoisyJets, jb1phiWoNoisyJets, jb1csvWoNoisyJets, jb1hadronflavorWoNoisyJets, jb2ptWoNoisyJets, jb2etaWoNoisyJets,
       jb2phiWoNoisyJets, jb2csvWoNoisyJets, jb2hadronflavorWoNoisyJets, mPFIDLoose, mPFIDMedium, mPFIDTight, tRerunMVArun2v2DBoldDMwLTLoose,
-      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU, genPx, genpY, vispX, vispY;
+      tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, nvtx, nTruePU, genpX, genpY, vispX, vispY;
 
   // Output Variables.
   ULong64_t evt;
@@ -361,7 +361,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     pzetavis = ((mu.Px() + tau.Px()) * TMath::Cos(mu.Phi()) + TMath::Cos(tau.Phi()) + TMath::Sin(mu.Phi()) + TMath::Cos(tau.Phi()) * (mu.Py() + tau.Py()))
               / (TMath::Sqrt(TMath::Power(TMath::Cos(mu.Phi()) + TMath::Cos(tau.Phi()), 2) +
                             TMath::Power(TMath::Sin(mu.Phi()) + TMath::Sin(tau.Phi()), 2)));
-    pzetamiss = (pfMET.Px() * (TMath::Cos(mu.Phi()) + TMath::Cos(tau.Phi())) + pfMet.Py() * (TMath::Sin(mu.Phi()) + TMath::Sin(tau.Phi())))
+    pzetamiss = (pfMET.Px() * (TMath::Cos(mu.Phi()) + TMath::Cos(tau.Phi())) + pfMET.Py() * (TMath::Sin(mu.Phi()) + TMath::Sin(tau.Phi())))
               / (TMath::Sqrt(TMath::Power(TMath::Cos(mu.Phi()) + TMath::Cos(tau.Phi()), 2) +
                             TMath::Power(TMath::Sin(mu.Phi()) + TMath::Sin(tau.Phi()), 2)));
     pfpzetamiss = 0;
