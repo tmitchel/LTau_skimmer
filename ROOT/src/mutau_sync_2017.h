@@ -31,7 +31,8 @@ class mutau_tree {
       tMatchesIsoMu20Tau27Path, mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass,
       IsoMu24Pass, Flag_BadChargedCandidateFilter, Flag_BadPFMuonFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_HBHENoiseIsoFilter,
       Flag_badMuons, Flag_duplicateMuons, Flag_ecalBadCalibFilter, Flag_eeBadScFilter, Flag_globalSuperTightHalo2016Filter, Flag_globalTightHalo2016Filter,
-      Flag_goodVertices, mPt, mPhi, mEta, mMass, mCharge, mPVDXY, mPVDZ, mRelPFIsoDBDefaultR04, mZTTGenMatching, tPt, tEta, tPhi, tMass, tCharge, tPVDXY, tPVDZ, type1_pfMetEt, type1_pfMetPhi, puppiMetEt,
+      Flag_goodVertices, mPt, mPhi, mEta, mMass, mCharge, mPVDXY, mPVDZ, mRelPFIsoDBDefaultR04, mZTTGenMatching, tPt, tEta, tPhi, tMass, tCharge, tPVDXY, tPVDZ, tZTTGenMatching,
+      tDecayMode, type1_pfMetEt, type1_pfMetPhi, puppiMetEt,
       puppiMetPhi, tAgainstElectronVLooseMVA6, tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6,
       tAgainstMuonLoose3, tAgainstMuonTight3, tRerunMVArun2v2DBoldDMwLTraw, vbfMassWoNoisyJets, jetVeto20WoNoisyJets, jetVeto30WoNoisyJets, bjetDeepCSVVeto20MediumWoNoisyJets,
       j1ptWoNoisyJets, j1etaWoNoisyJets, j1phiWoNoisyJets, j1csvWoNoisyJets, j2ptWoNoisyJets, j2etaWoNoisyJets, j2phiWoNoisyJets, j2csvWoNoisyJets,
@@ -50,8 +51,8 @@ class mutau_tree {
       trigweight_2, idisoweight_2, pt_tt, mt_tot, m_vis, m_sv, mt_sv, met, metphi, puppimet, puppimetphi, pzetavis, pzetamiss, pfpzetamiss, puppipzetamiss,
       metcov00, metcov01, metcov10, metcov11, mjj, jdeta, njetingap, njetingap20, jdphi, dijetpt, dijetphi, ptvis, nbtag, njets, njetspt20, jpt_1, jeta_1,
       jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bpt_2, beta_2, bphi_2, bcsv_2, puweight, NUP, weight, id_m_loose_1,
-      id_m_medium_1, id_m_tight_1, id_m_loose_2, id_m_medium_2, id_m_tight_2, pt_sv, eta_sv, phi_sv, met_sv, jpfid_1, jpuid_1, jpfid_2, jpuid_2, jpfid_2,
-      jpuid_2, bpfid_1, bpuid_1, bpfid_2, bpuid_2, npv, npu, rho;
+      id_m_medium_1, id_m_tight_1, id_m_loose_2, id_m_medium_2, id_m_tight_2, pt_sv, eta_sv, phi_sv, met_sv, jpfid_1, jpuid_1, jpfid_2, jpuid_2, bpfid_1,
+      bpuid_1, bpfid_2, bpuid_2, npv, npu, rho;
 
 
 
@@ -79,7 +80,9 @@ tree(itree),
 original(Original),
 isMC(IsMC),
 isEmbed(IsEmbed),
-recoil(rec) {}
+recoil(rec) {
+  original->SetBranchAddress("tDecayMode", &tDecayMode);
+}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -164,8 +167,6 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
     if (tAgainstMuonTight3 > 0.5 && tAgainstElectronVLooseMVA6 > 0.5) cutflow->Fill(8., 1.);  // tau against leptons
     else  continue;
 
-    if (muVetoZTTp001dxyzR0 < 2 && eVetoZTTp001dxyzR0 == 0 && dimuonVeto == 0) cutflow->Fill(9., 1.);  // vetos
-    else  continue;
 
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -229,8 +230,8 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     extramuon_veto = muVetoZTTp001dxyzR0 > 0;
     dilepton_veto = dimuonVeto > 0;
     // triggers
-    flagFilter = (Flag_BadChargedCandidateFilter == 0 && Flag_BadPFMuonFilter == 0 && == 0 Flag_EcalDeadCellTriggerPrimitiveFilter == 0
-                  && Flag_HBHENoiseFilter == 0 && Flag_HBHENoiseIsoFilter == 0 &&  Flag_ecalBadCalibFilter == 0 && Flag_eeBadScFilter == 0
+    flagFilter = (Flag_BadChargedCandidateFilter == 0 && Flag_BadPFMuonFilter == 0 && Flag_EcalDeadCellTriggerPrimitiveFilter == 0
+                  && Flag_HBHENoiseFilter == 0 && Flag_HBHENoiseIsoFilter == 0 && Flag_ecalBadCalibFilter == 0 && Flag_eeBadScFilter == 0
                   && Flag_globalSuperTightHalo2016Filter == 0 && Flag_goodVertices == 0);
 
     // TLorentzVector ele, tau;
@@ -239,31 +240,29 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     pfMET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
     mvaMET.SetPtEtaPhiM(0, 0, 0, 0);
     puppiMET.SetPtEtaPhiM(puppiMetEt, 0, puppiMetPhi, 0);
-    pfmetcorr_ex = pfMET.Px();
-    pfmetcorr_ey = pfMET.Py();
 
     if (recoil == 1) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          pfMET.Px(),            // uncorrected type I pf met px (float)
-          pfMET.Py(),            // uncorrected type I pf met py (float)
-          genpX,               // generator Z/W/Higgs px (float)
-          genpY,               // generator Z/W/Higgs py (float)
-          vispX,               // generator visible Z/W/Higgs px (float)
-          vispY,               // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,       // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,        // corrected type I pf met px (float)
-          pfmetcorr_ey);       // corrected type I pf met py (float)
+          pfMET.Px(),                // uncorrected type I pf met px (float)
+          pfMET.Py(),                // uncorrected type I pf met py (float)
+          genpX,                     // generator Z/W/Higgs px (float)
+          genpY,                     // generator Z/W/Higgs py (float)
+          vispX,                     // generator visible Z/W/Higgs px (float)
+          vispY,                     // generator visible Z/W/Higgs py (float)
+          jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
+          pfmetcorr_ex,              // corrected type I pf met px (float)
+          pfmetcorr_ey);             // corrected type I pf met py (float)
     } else if (recoil == 2) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          pfMET.Px(),            // uncorrected type I pf met px (float)
-          pfMET.Py(),            // uncorrected type I pf met py (float)
-          genpX,               // generator Z/W/Higgs px (float)
-          genpY,               // generator Z/W/Higgs py (float)
-          vispX,               // generator visible Z/W/Higgs px (float)
-          vispY,               // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,       // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,        // corrected type I pf met px (float)
-          pfmetcorr_ey);       // corrected type I pf met py (float)
+          pfMET.Px(),                // uncorrected type I pf met px (float)
+          pfMET.Py(),                // uncorrected type I pf met py (float)
+          genpX,                     // generator Z/W/Higgs px (float)
+          genpY,                     // generator Z/W/Higgs py (float)
+          vispX,                     // generator visible Z/W/Higgs px (float)
+          vispY,                     // generator visible Z/W/Higgs py (float)
+          jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
+          pfmetcorr_ex,              // corrected type I pf met px (float)
+          pfmetcorr_ey);             // corrected type I pf met py (float)
     }
 
     pfMET.SetPxPyPzE(pfMET.Px(), pfMET.Py(), 0, sqrt(pfMET.Px() * pfMET.Px() + pfMET.Py() * pfMET.Py()));
@@ -314,9 +313,9 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     q_1 = mCharge;
     d0_1 = mPVDXY;
     dZ_1 = mPVDZ;
-    mt_1 = TMAth::Sqrt(2 * mu.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - mvaMET.Phi()))));
-    pfmt_1 = TMAth::Sqrt(2 * mu.Pt() * pfMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - pfMET.Phi()))));
-    puppimt_1 = TMAth::Sqrt(2 * mu.Pt() * puppiMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - puppiMET.Phi()))));
+    mt_1 = TMath::Sqrt(2 * mu.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - mvaMET.Phi()))));
+    pfmt_1 = TMath::Sqrt(2 * mu.Pt() * pfMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - pfMET.Phi()))));
+    puppimt_1 = TMath::Sqrt(2 * mu.Pt() * puppiMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi() - puppiMET.Phi()))));
     iso_1 = mRelPFIsoDBDefaultR04;
     gen_match_1 = mZTTGenMatching;
     againstElectronVLooseMVA6_1 = 0;
@@ -336,7 +335,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     q_2 = tCharge;
     d0_2 = tPVDXY;
     dZ_2 = tPVDZ;
-    mt_2 = TMAth::Sqrt(2 * tau.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(tau.Phi() - mvaMET.Phi()))));
+    mt_2 = TMath::Sqrt(2 * tau.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(tau.Phi() - mvaMET.Phi()))));
     iso_2 = tRerunMVArun2v2DBoldDMwLTraw;
     gen_match_2 = tZTTGenMatching;
     againstElectronVLooseMVA6_2 = tAgainstElectronVLooseMVA6;
@@ -348,9 +347,9 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     againstMuonTight3_2 = tAgainstMuonTight3;
     byIsolationMVA3oldDMwLTraw_2 = tRerunMVArun2v2DBoldDMwLTraw;  // tau isolation
     pt_tt = (mu + tau + pfMET).Pt();
-    mt_tot = TMAth::Sqrt(2 * mu.Pt()  * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi()  - mvaMET.Phi())))) +
-             TMAth::Sqrt(2 * tau.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(tau.Phi() - mvaMET.Phi())))) +
-             TMAth::Sqrt(2 * mu.Pt()  * tau.Pt()    * (1 - TMath::Cos(TMath::Abs(mu.Phi()  - tau.Phi()))));
+    mt_tot = TMath::Sqrt(2 * mu.Pt()  * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(mu.Phi()  - mvaMET.Phi())))) +
+             TMath::Sqrt(2 * tau.Pt() * mvaMET.Pt() * (1 - TMath::Cos(TMath::Abs(tau.Phi() - mvaMET.Phi())))) +
+             TMath::Sqrt(2 * mu.Pt()  * tau.Pt()    * (1 - TMath::Cos(TMath::Abs(mu.Phi()  - tau.Phi()))));
     m_vis = (mu + tau).M();
     m_sv = 0;   // calculated later
     mt_sv = 0;  // calculated later
@@ -374,9 +373,9 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // metcov11 (straight from tree)
 
     TLorentzVector jet1, jet2;
-    if (jetVeto20 > 0 && j1ptWoNoisyJets > 0)
+    if (jetVeto20WoNoisyJets > 0 && j1ptWoNoisyJets > 0)
       jet1.SetPtEtaPhiM(j1ptWoNoisyJets, j1etaWoNoisyJets, j1phiWoNoisyJets, 0);
-    if (jetVeto20 > 1 && j2ptWoNoisyJets > 0)
+    if (jetVeto20WoNoisyJets > 1 && j2ptWoNoisyJets > 0)
       jet2.SetPtEtaPhiM(j2ptWoNoisyJets, j2etaWoNoisyJets, j2phiWoNoisyJets, 0);
     TLorentzVector dijet = jet1 + jet2;
 
@@ -633,8 +632,8 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("tAgainstMuonTight3", &tAgainstMuonTight3);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &tRerunMVArun2v2DBoldDMwLTraw);
   original->SetBranchAddress("vbfMassWoNoisyJets", &vbfMassWoNoisyJets);
-  original->SetBranchAddress("jetVeto20WoNoisyJets", &jetVeto20);
-  original->SetBranchAddress("jetVeto30WoNoisyJets", &jetVeto30);
+  original->SetBranchAddress("jetVeto20WoNoisyJets", &jetVeto20WoNoisyJets);
+  original->SetBranchAddress("jetVeto30WoNoisyJets", &jetVeto30WoNoisyJets);
   original->SetBranchAddress("bjetDeepCSVVeto20MediumWoNoisyJets", &bjetDeepCSVVeto20MediumWoNoisyJets);
   original->SetBranchAddress("j1ptWoNoisyJets", &jpt_1);
   original->SetBranchAddress("j1etaWoNoisyJets", &jeta_1);
@@ -648,16 +647,16 @@ void mutau_tree::set_branches() {
   original->SetBranchAddress("jb1etaWoNoisyJets", &beta_1);
   original->SetBranchAddress("jb1phiWoNoisyJets", &bphi_1);
   original->SetBranchAddress("jb1csvWoNoisyJets", &bcsv_1);
-  original->SetBranchAddress("jb1hadronflavorWoNoisyJets", &bflavor_1);
+  original->SetBranchAddress("jb1hadronflavorWoNoisyJets", &jb1hadronflavorWoNoisyJets);
   original->SetBranchAddress("jb2ptWoNoisyJets", &bpt_2);
   original->SetBranchAddress("jb2etaWoNoisyJets", &beta_2);
   original->SetBranchAddress("jb2phiWoNoisyJets", &bphi_2);
   original->SetBranchAddress("jb2csvWoNoisyJets", &bcsv_2);
-  original->SetBranchAddress("jb2hadronflavorWoNoisyJets", &bflavor_2);
+  original->SetBranchAddress("jb2hadronflavorWoNoisyJets", &jb2hadronflavorWoNoisyJets);
   original->SetBranchAddress("NUP", &NUP);
-  original->SetBranchAddress("mPFIDLoose"), &mPFIDLoose;
-  original->SetBranchAddress("mPFIDMedium"), &mPFIDMedium;
-  original->SetBranchAddress("mPFIDTight"), &mPFIDTight;
+  original->SetBranchAddress("mPFIDLoose", &mPFIDLoose);
+  original->SetBranchAddress("mPFIDMedium", &mPFIDMedium);
+  original->SetBranchAddress("mPFIDTight", &mPFIDTight);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose", &tRerunMVArun2v2DBoldDMwLTLoose);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium", &tRerunMVArun2v2DBoldDMwLTMedium);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTTight", &tRerunMVArun2v2DBoldDMwLTTight);
