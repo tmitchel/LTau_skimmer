@@ -2,9 +2,9 @@
 
 // general includes
 #include <dirent.h>
+#include <sys/types.h>
 #include <fstream>
 #include <string>
-#include <sys/types.h>
 #include <vector>
 
 // ROOT includes
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
   if (lepton == "et") {
     treename = "etau_tree";
   } else if (lepton == "mt") {
-    truename = "mutau_tree";
+    treename = "mutau_tree";
   }
 
   std::string recoilname;
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
   nevents->SetBinContent(2, wt_count->Integral());
 
   auto fout = new TFile(ofile.c_str(), "RECREATE");
-  TTree *newtree = new TTree(treename.c_str(), truename.c_str());
+  TTree *newtree = new TTree(treename.c_str(), treename.c_str());
   base_tree *skimmer;
 
   if (lepton == "et") {

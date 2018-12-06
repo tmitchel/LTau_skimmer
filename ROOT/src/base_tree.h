@@ -1,7 +1,10 @@
+#ifndef BASE_TREE_H_
+#define BASE_TREE_H_
 
 #include <vector>
 
 #include "TTree.h"
+#include "TLorentzVector.h"
 #include "RecoilCorrector.h"
 
 class base_tree {
@@ -21,3 +24,5 @@ class base_tree {
     void set_branches();
     TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
+
+#endif
