@@ -14,3 +14,7 @@
   <use name="rootcore"/>
   <use name="root"/>
 </bin>
+<bin name="SyncMT2017" file="mutau_sync2017.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>

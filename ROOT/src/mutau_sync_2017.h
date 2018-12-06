@@ -270,7 +270,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // TLorentzVector ele, tau;
     mu.SetPtEtaPhiM(mPt, mEta, mPhi, mMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
-    rawPfMET.SetPtEtaPhi(raw_pfMetEt, 0, raw_pfMetPhi, 0);
+    rawPfMET.SetPtEtaPhiM(raw_pfMetEt, 0, raw_pfMetPhi, 0);
     pfMET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
     pfmetcorr_ex = pfMET.Px();
     pfmetcorr_ey = pfMET.Py();
