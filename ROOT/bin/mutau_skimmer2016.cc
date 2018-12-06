@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
   auto fout = new TFile(ofile.c_str(), "RECREATE");
 
   TTree *newtree = new TTree("mutau_tree", "mutau_tree");
-  mutau_tree *skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+  mutau_tree2016 *skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
   skimmer->do_skimming(cutflow);
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
   events += skimmed_tree->GetEntries();
