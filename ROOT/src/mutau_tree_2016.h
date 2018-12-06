@@ -8,7 +8,7 @@
 #include "TLorentzVector.h"
 #include "RecoilCorrector.h"
 
-class mutau_tree: public virtual base_tree {
+class mutau_tree2016: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;
@@ -95,8 +95,8 @@ class mutau_tree: public virtual base_tree {
           mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass, IsoMu24Pass;
 
   // Member functions
-  mutau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
-  virtual ~mutau_tree() {}
+  mutau_tree2016(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
+  virtual ~mutau_tree2016() {}
   void do_skimming(TH1F*);
   void set_branches();
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
@@ -113,7 +113,7 @@ class mutau_tree: public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-mutau_tree::mutau_tree(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
+mutau_tree2016::mutau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
 tree(itree),
 original(Original),
 isMC(IsMC),
@@ -192,7 +192,7 @@ recoil(rec) {
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree::do_skimming(TH1F* cutflow) {
+void mutau_tree2016::do_skimming(TH1F* cutflow) {
   // declare variables for sorting
   ULong64_t evt_now(0);
   ULong64_t evt_before(1);
@@ -314,7 +314,7 @@ void mutau_tree::do_skimming(TH1F* cutflow) {
 // Return: The same TTree passed to the constructor and stored  //
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
-TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
+TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   set_branches();  // get all the branches set up
 
   // loop through all events pasing skimming/sorting
@@ -574,7 +574,7 @@ TTree* mutau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //          new name, or used to construct new variables.       //
 //   - Create branches in tree to store any variable we want    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree::set_branches() {
+void mutau_tree2016::set_branches() {
   // output file branches
   tree->Branch("evt", &evt);
   tree->Branch("run" , &run);

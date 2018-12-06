@@ -9,7 +9,7 @@
 #include "RecoilCorrector.h"
 #include "base_tree.h"
 
-class etau_tree: public virtual base_tree {
+class etau_tree2016: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;
@@ -90,8 +90,8 @@ class etau_tree: public virtual base_tree {
 
 
   // Member functions
-  etau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
-  virtual ~etau_tree() {}
+  etau_tree2016(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
+  virtual ~etau_tree2016() {}
   void do_skimming(TH1F*);
   void set_branches();
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
@@ -108,7 +108,7 @@ class etau_tree: public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-etau_tree::etau_tree(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
+etau_tree2016::etau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
 tree(itree),
 original(Original),
 isMC(IsMC),
@@ -164,7 +164,7 @@ recoil(rec) {
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void etau_tree::do_skimming(TH1F* cutflow) {
+void etau_tree2016::do_skimming(TH1F* cutflow) {
   // declare variables for sorting
   ULong64_t evt_now(0);
   ULong64_t evt_before(1);
@@ -289,7 +289,7 @@ void etau_tree::do_skimming(TH1F* cutflow) {
 // Return: The same TTree passed to the constructor and stored  //
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
-TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
+TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   set_branches();  // get all the branches set up
 
   // loop through all events pasing skimming/sorting
@@ -551,7 +551,7 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //          new name, or used to construct new variables.       //
 //   - Create branches in tree to store any variable we want    //
 //////////////////////////////////////////////////////////////////
-void etau_tree::set_branches() {
+void etau_tree2016::set_branches() {
   // output file branches
   tree->Branch("evt", &evt);
   tree->Branch("run" , &run);
