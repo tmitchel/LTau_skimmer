@@ -2,9 +2,11 @@
 #include <vector>
 
 #include "TTree.h"
+#include "RecoilCorrector.h"
 
 class base_tree {
  protected:
+    Int_t recoil;
     TTree *tree, *original;
     bool isMC, isEmbed;
     std::vector<Int_t> good_events;
@@ -12,9 +14,10 @@ class base_tree {
 
  public:
     // Member functions
+    base_tree() {};
     base_tree(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
     virtual ~base_tree() {}
     void do_skimming(TH1F*);
     void set_branches();
     TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
-}
+};

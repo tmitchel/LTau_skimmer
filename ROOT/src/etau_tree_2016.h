@@ -9,7 +9,7 @@
 #include "RecoilCorrector.h"
 #include "base_tree.h"
 
-class etau_tree: public base_tree {
+class etau_tree: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;
