@@ -3,6 +3,7 @@
 // general includes
 #include <dirent.h>
 #include <sys/types.h>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -71,7 +72,7 @@ int main(int argc, char *argv[]) {
   TH1F *cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
 
   auto open_file = new TFile(ifile.c_str(), "READ");
-  auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton+"/final/Ntuple").c_str());
+  auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton+"/final/Ntuple").c_str()));
   auto evt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton+"/eventCount").c_str())->Clone());
   auto wt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton+"/summedWeights").c_str())->Clone());
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]) {
 
   auto fout = new TFile(ofile.c_str(), "RECREATE");
   TTree *newtree = new TTree(treename.c_str(), treename.c_str());
-  base_tree *skimmer;
+  base_tree *skimmer = nullptr;
 
   if (lepton == "et") {
     if (year == "2016") {
@@ -94,6 +95,9 @@ int main(int argc, char *argv[]) {
     } else if (year == "2017") {
       skimmer = new mutau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
     }
+  } else {
+    std::cerr << "bad options, my dude." << std::endl;
+    return -1;
   }
 
   skimmer->do_skimming(cutflow);

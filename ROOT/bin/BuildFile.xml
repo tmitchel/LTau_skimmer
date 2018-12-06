@@ -1,3 +1,8 @@
+
+<bin name="uniSkim" file="universalSkimmer.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>
 <bin name="SkimET2016" file="etau_skimmer2016.cc">
   <use name="rootcore"/>
   <use name="root"/>
