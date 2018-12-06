@@ -14,7 +14,7 @@ class base_tree {
 
  public:
     // Member functions
-    base_tree() {};
+    base_tree() {}
     base_tree(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
     virtual ~base_tree() {}
     void do_skimming(TH1F*);

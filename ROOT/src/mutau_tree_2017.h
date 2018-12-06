@@ -11,7 +11,7 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 
-class mutau_tree {
+class mutau_tree: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;

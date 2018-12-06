@@ -8,7 +8,7 @@
 #include "TLorentzVector.h"
 #include "RecoilCorrector.h"
 
-class etau_tree {
+class etau_tree: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;
