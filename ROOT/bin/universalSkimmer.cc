@@ -22,6 +22,9 @@
 #include "ltau_skimmer/ROOT/src/etau_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
+#include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
@@ -83,17 +86,40 @@ int main(int argc, char *argv[]) {
   TTree *newtree = new TTree(treename.c_str(), treename.c_str());
   base_tree *skimmer = nullptr;
 
-  if (lepton == "et") {
-    if (year == "2016") {
-      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
-    } else if (year == "2017") {
+  if (year == "2017") {
+    if (lepton == "et") {
       skimmer = new etau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
-    }
-  } else if (lepton == "mt") {
-    if (year == "2016") {
-      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
-    } else if (year == "2017") {
+    } else if (lepton == "mt") {
       skimmer = new mutau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
+    } else {
+      std::cerr << "bad options, my dude." << std::endl;
+      return -1;
+    }
+
+    // open the JSON file
+    std::ifstream ntupleMap("CMSSW_9_4_0/bin/slc6_amd64_gcc630/fileMap.json");
+    json j;
+
+    // read the file stream into our json object
+    ntupleMap >> j;
+    std::string originalName = "Not Found";
+    std::string tmpName = open_file->GetName();
+    auto searchName = tmpName.substr(10);
+    for (json::iterator it = j.begin(); it != j.end(); ++it) {
+      for (auto ntuple : it.value()) {
+        if (std::string(ntuple).find(searchName) != std::string::npos) {
+          originalName = it.key();
+        }
+      }
+    }
+  } else if (year == "2016") {
+    if (lepton == "et") {
+      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+    } else if (lepton == "mt") {
+      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+    } else {
+      std::cerr << "bad options, my dude." << std::endl;
+      return -1;
     }
   } else {
     std::cerr << "bad options, my dude." << std::endl;

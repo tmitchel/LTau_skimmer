@@ -130,11 +130,11 @@ elif args.job == 'embed':
     samples = el_embedded_samples
 
 if args.lepton == 'mt':
-  lep = 'MT'
+  lep = 'et'
 elif args.lepton == 'et':
-  lep = 'ET'
+  lep = 'et'
 
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
-  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s2017' % (sample, pref+path, prefix, jobType, recoil, lep), shell=True)
+  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s -y %s' % (sample, pref+path, prefix, jobType, recoil, lep, '2017'), shell=True)

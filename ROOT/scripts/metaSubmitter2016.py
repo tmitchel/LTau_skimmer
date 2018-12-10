@@ -142,13 +142,13 @@ elif args.job == 'embed':
     pref = el_embed_pref
 
 if args.lepton == 'mt':
-  lep = 'MT'
+  lep = 'mt'
 elif args.lepton == 'et':
-  lep = 'ET'
+  lep = 'et'
 
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
   if 'ggHtoTauTau125' in sample:
     pref = ggH_pref
-  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s2016' % (sample, pref+path, prefix, jobType, recoil, lep), shell=True)
+  subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s -y %s' % (sample, pref+path, prefix, jobType, recoil, lep, '2016'), shell=True)
