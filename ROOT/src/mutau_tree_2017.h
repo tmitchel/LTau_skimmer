@@ -188,6 +188,8 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
   int best_evt(-1);
   std::pair<float, float> muCandidate, tauCandidate;
 
+  std::cout << "Starting the skim..." << std::endl;
+
   Int_t nevt = (Int_t)original->GetEntries();
   for (auto ievt = 0; ievt < nevt; ievt++) {
     original->GetEntry(ievt);
@@ -262,6 +264,8 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
     if (muVetoZTTp001dxyzR0 < 2 && eVetoZTTp001dxyzR0 == 0 && dimuonVeto == 0) cutflow->Fill(9., 1.);  // vetos
     else  continue;
 
+    std::cout << "start sorting" << std::endl;
+
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
     if (evt_now != evt_before) {  // new event, save the tau candidates
@@ -310,7 +314,9 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
 TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
+  std::cout << "setting branches..." << std::endl;
   set_branches();  // get all the branches set up
+  std::cout << "branches set." << std::endl;
 
   // loop through all events pasing skimming/sorting
   for (auto& ievt : good_events) {
