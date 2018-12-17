@@ -233,15 +233,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
     auto IsoTkMu22        = mMatchesIsoTkMu22Path && mIsoTkMu22Filter && singleIsoTkMu22Pass;
     auto Cross            = mMatchesMu19Tau20sL1Path && mMatchesMu19Tau20sL1Filter && tMatchesMu19Tau20sL1Path && tMatchesMu19Tau20sL1Filter && singleMu19eta2p1LooseTau20singleL1Pass;
 
-    if (isEmbed) {
-      IsoMu22eta2p1    = singleIsoMu22eta2p1Pass;
-      IsoTkMu22eta2p1  = singleIsoTkMu22eta2p1Pass;
-      IsoMu22          = mMatchesSingleMuIsoTk20 && singleIsoMu22Pass;
-      IsoTkMu22        = mMatchesSingleMuIso20 && singleIsoTkMu22Pass;
-      Cross            = mMatchesMu19Tau20sL1 && singleMu19eta2p1LooseTau20singleL1Pass;
-    }
-
-    if (IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) cutflow->Fill(2., 1.);
+    if (isEmbed || IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) cutflow->Fill(2., 1.);
     else  continue;
 
     if (mPt > mu_pt_min && fabs(mEta) < 2.4 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.);  // electron kinematic selection
