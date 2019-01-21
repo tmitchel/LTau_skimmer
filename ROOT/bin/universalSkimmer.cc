@@ -29,6 +29,7 @@ using json = nlohmann::json;
 static unsigned events(0);
 int main(int argc, char *argv[]) {
   CLParser parser(argc, argv);
+  bool local = parser.Flag("--local");
   std::string year = parser.Option("-y");
   std::string ifile = parser.Option("-i");
   std::string ofile = parser.Option("-o");
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
   }
 
   bool isEmbed(false);
-  if (job_type == "embed") {
+  if (job_type == "embed" || job_type == "embedEl" || job_type == "embedMu") {
     isEmbed = true;
   }
 
@@ -85,6 +86,7 @@ int main(int argc, char *argv[]) {
   auto fout = new TFile(ofile.c_str(), "RECREATE");
   TTree *newtree = new TTree(treename.c_str(), treename.c_str());
   base_tree *skimmer = nullptr;
+  std::string originalName = "Not Found";
 
   if (year == "2017") {
     if (lepton == "et") {
@@ -96,19 +98,23 @@ int main(int argc, char *argv[]) {
       return -1;
     }
 
-    // open the JSON file
-    std::ifstream ntupleMap("CMSSW_9_4_0/bin/slc6_amd64_gcc630/fileMap.json");
-    json j;
+    std::cout << local << std::endl;
 
-    // read the file stream into our json object
-    ntupleMap >> j;
-    std::string originalName = "Not Found";
-    std::string tmpName = open_file->GetName();
-    auto searchName = tmpName.substr(10);
-    for (json::iterator it = j.begin(); it != j.end(); ++it) {
-      for (auto ntuple : it.value()) {
-        if (std::string(ntuple).find(searchName) != std::string::npos) {
-          originalName = it.key();
+    if (!local) {
+      // open the JSON file
+      std::ifstream ntupleMap("CMSSW_9_4_0/bin/slc6_amd64_gcc630/fileMap.json");
+      json j;
+
+      std::cout << "Reading JSON" << std::endl;
+      // read the file stream into our json object
+      ntupleMap >> j;
+      std::string tmpName = open_file->GetName();
+      auto searchName = tmpName.substr(10);
+      for (json::iterator it = j.begin(); it != j.end(); ++it) {
+        for (auto ntuple : it.value()) {
+          if (std::string(ntuple).find(searchName) != std::string::npos) {
+            originalName = it.key();
+          }
         }
       }
     }
@@ -132,6 +138,10 @@ int main(int argc, char *argv[]) {
 
   open_file->Close();
   fout->cd();
+  if (!local) {  
+    TNamed dbName("MiniAOD_name", originalName.c_str());
+    dbName.Write();
+  }
   nevents->Write();
   cutflow->Write();
   skimmed_tree->Write();

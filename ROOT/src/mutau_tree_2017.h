@@ -264,8 +264,6 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
     if (muVetoZTTp001dxyzR0 < 2 && eVetoZTTp001dxyzR0 == 0 && dimuonVeto == 0) cutflow->Fill(9., 1.);  // vetos
     else  continue;
 
-    std::cout << "start sorting" << std::endl;
-
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
     if (evt_now != evt_before) {  // new event, save the tau candidates
