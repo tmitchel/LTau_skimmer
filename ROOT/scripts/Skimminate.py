@@ -16,6 +16,7 @@ def parse_command_line(argv):
     parser.add_argument('-dr','--dryrun',action='store_true',help='Create jobs but dont submit')
     parser.add_argument('-j','--job',action='store',help='job type')
     parser.add_argument('-l','--lepton',action='store',help='which lepton')
+    parser.add_argument('-y','--year',action='store',help='which year')
     parser.add_argument('-r','--recoil',action='store',help='recoil type')
     parser.add_argument('-jn','--jobName',nargs='?',type=str,const='',help='Job Name for condor submission')
     parser.add_argument('-sn','--samplename',nargs='?',type=str,const='',help='Name of samples')
@@ -64,7 +65,7 @@ def main(argv=None):
     # create bash script
     bash_name = '%s/%s.sh' % (dag_dir+'inputs', args.samplename)
     bashScript = "#!/bin/bash\n value=$(<$INPUT)\n echo \"$value\"\n"
-    bashScript += '$CMSSW_BASE/bin/$SCRAM_ARCH/Skim%s -d %s -j %s -r %s -i $value -o \'$OUTPUT\'' % (args.lepton, args.samplename, args.job, args.recoil)
+    bashScript += '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i $value -o \'$OUTPUT\'' % (args.samplename, args.job, args.recoil, args.year, args.lepton)
     bashScript += '\n'
     with open(bash_name,'w') as file:
         file.write(bashScript)

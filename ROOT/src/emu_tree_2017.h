@@ -1,5 +1,8 @@
 // Copyright 2018 Tyler Mitchell
 
+#ifndef ROOT_SRC_EMU_TREE_2017_H_
+#define ROOT_SRC_EMU_TREE_2017_H_
+
 #include "RecoilCorrector.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
@@ -9,12 +12,12 @@
 #include <utility>
 #include <vector>
 
-class mutau_tree2016: public virtual base_tree {
+class emu_tree2017: public virtual base_tree {
  private:
   TTree *tree, *original;
   bool isMC, isEmbed;
   std::vector<Int_t> good_events;
-  TLorentzVector mu, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
+  TLorentzVector mu, ele, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
 
  public:
   // Member variables
@@ -23,13 +26,19 @@ class mutau_tree2016: public virtual base_tree {
   Int_t Run, Lumi, recoil;
 
   // Selection variables
-  Float_t mPt, mEta, mPhi, mMass, tPt, tEta, tPhi, tMass, tZTTGenMatching, tDecayMode, mPVDZ, mPVDXY, tPVDZ, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path,
-          mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass,
-          singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter,
-          tByVLooseIsolationMVArun2v1DBoldDMwLT, tRerunMVArun2v2DBoldDMwLTVLoose, tDecayModeFinding, tCharge, mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose,
-          mValidFraction, mSegmentCompatibility, mPFIDMedium, tAgainstMuonTight3, tAgainstElectronVLooseMVA6, muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04,
-          tByIsolationMVArun2v1DBoldDMwLTraw, tRerunMVArun2v2DBoldDMwLTraw, m_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, mMatchesIsoMu22eta2p1, mMatchesIsoTkMu22eta2p1, mMatchesIsoMu22, 
-          mMatchesIsoTkMu22, mMatchesMu19Tau20sL1, tMatchesMu19Tau20sL1, mMatchesSingleMuIsoTk20, mMatchesSingleMuIso20;
+  Float_t mPt, mEta, mPhi, mMass,  tZTTGenMatching,
+          mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, IsoMu27Pass, IsoMu24Pass, mPVDZ, mPVDXY,
+           mIsGlobal, mNormalizedChi2, mChi2LocalPosition, mTrkKink, mPFIDLoose, mValidFraction, mSegmentCompatibility, mPFIDMedium,
+           muVetoZTTp001dxyzR0, eVetoZTTp001dxyzR0, dimuonVeto, mRelPFIsoDBDefaultR04;
+    
+    
+    Float_t ePt, eEta, ePhi, eMass, eMatchesEle27Filter, eMatchesEle27Path, Ele27WPTightPass, eMatchesEle32Filter, eMatchesEle32Path, Ele32WPTightPass, eMatchesEle35Filter, eMatchesEle35Path,
+    Ele35WPTightPass, ePVDZ, ePVDXY, eMVANoisoWP90, ePassesConversionVeto, eMissingHits,
+    tAgainstMuonLoose3, dielectronVeto, eIsoDB03;
+
+    
+    
+    
 
   // Constructed while running
   UInt_t run, lumi;
@@ -39,20 +48,20 @@ class mutau_tree2016: public virtual base_tree {
           pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
   Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
 
-  // Tau Isolation
-  Float_t tByLooseIsolationMVArun2v1DBoldDMwLT, tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT;
-  Float_t tRerunMVArun2v2DBoldDMwLTLoose, tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, tRerunMVArun2v2DBoldDMwLTVTight, tRerunMVArun2v2DBoldDMwLTVVTight;
 
   // Jets
-  Float_t vbfMass, jpt_1, jeta_1, jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bflavor_1, bpt_2, beta_2, bphi_2, bcsv_2, bflavor_2, bjetDeepCSVVeto20Tight, bjetDeepCSVVeto30Loose, bjetDeepCSVVeto30Medium, bjetDeepCSVVeto30Tight, topQuarkPt1, topQuarkPt2;
+  Float_t vbfMassWoNoisyJets, jpt_1, jeta_1, jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bflavor_1, bpt_2, beta_2, bphi_2, bcsv_2, bflavor_2, bjetDeepCSVVeto20Tight, bjetDeepCSVVeto30Loose, bjetDeepCSVVeto30Medium, bjetDeepCSVVeto30Tight, topQuarkPt1, topQuarkPt2;
 
   // Gen Ino
-  Float_t tZTTGenPt, tZTTGenPhi, tZTTGenEta, tZTTGenDR, tGenDecayMode, tGenEnergy, tGenEta, tGenJetEta, tGenJetPt, tGenMotherEnergy, tGenMotherEta, tGenMotherPdgId, tGenMotherPhi, tGenMotherPt, tGenPdgId, tGenPhi, tGenPt, tGenStatus,
-          mGenCharge, mGenDirectPromptTauDecayFinalState, mGenEnergy, mGenEta, mGenIsPrompt, mGenMotherPdgId, mGenParticle, mGenPdgId, mGenPhi, mGenPrompt, mGenPromptTauDecay, mGenPt, mGenTauDecay, mGenVZ, mGenVtxPVMatch;
+  Float_t   mGenCharge, mGenEnergy, mGenEta, mGenIsPrompt, mGenMotherPdgId, mGenParticle, mGenPdgId, mGenPhi, mGenPrompt, mGenPt, mGenVZ, mGenVtxPVMatch;
+    
+   Float_t  eGenCharge, eGenEnergy, eGenEta, eGenIsPrompt, eGenMotherPdgId, eGenParticle, eGenPdgId, eGenPhi, eGenPrompt, eGenPt, eGenVZ, eGenVtxPVMatch;
+
+    
 
   // Others
   Float_t rho, metcov00, metcov01, metcov10, metcov11, NUP, genM, genpT, genEta, numGenJets, nTruePU, nvtx, mZTTGenMatching, mCharge, GenWeight, metSig, metcov00_v2, metcov01_v2, metcov10_v2, metcov11_v2, Rivet_higgsPt, Rivet_nJets30,
-  type1_pfMetEt, type1_pfMetPhi, bjetDeepCSVVeto20Medium;
+  type1_pfMetEt, type1_pfMetPhi, bjetDeepCSVVeto20MediumWoNoisyJets;
 
   // Others Uncertainty
   Float_t type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPhi_UnclusteredEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnDown,
@@ -64,8 +73,9 @@ class mutau_tree2016: public virtual base_tree {
           Flag_globalSuperTightHalo2016Filter, Flag_globalTightHalo2016Filter, Flag_goodVertices;
 
   // Systematics
-  Float_t jetVeto30_JetEta0to3Down, jetVeto30_JetEta0to3Up, jetVeto30_JetEta0to5Down, jetVeto30_JetEta0to5Up, jetVeto30_JetEta3to5Down, jetVeto30_JetEta3to5Up,
-          jetVeto30_JetAbsoluteFlavMapDown, jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteScaleUp,
+  Float_t jetVeto30WoNoisyJets_JetEta0to3Down, jetVeto30WoNoisyJets_JetEta0to3Up, jetVeto30WoNoisyJets_JetEta0to5Down, jetVeto30WoNoisyJets_JetEta0to5Up, jetVeto30WoNoisyJets_JetEta3to5Down, jetVeto30WoNoisyJets_JetEta3to5Up,
+          jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets, jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets, jetVeto30WoNoisyJets_JetRelativeSampleDown, jetVeto30WoNoisyJets_JetRelativeSampleUp, jetVeto30WoNoisyJets_JetTotalDown,
+          jetVeto30WoNoisyJets_JetTotalUp, jetVeto30_JetAbsoluteFlavMapDown, jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteScaleUp,
           jetVeto30_JetAbsoluteStatDown, jetVeto30_JetAbsoluteStatUp, jetVeto30_JetClosureDown, jetVeto30_JetClosureUp, jetVeto30_JetEnDown, jetVeto30_JetFlavorQCDDown, jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationDown,
           jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCDown, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBDown, jetVeto30_JetPileUpPtBBUp, jetVeto30_JetPileUpPtEC1Down, jetVeto30_JetPileUpPtEC1Up, jetVeto30_JetPileUpPtEC2Down,
           jetVeto30_JetPileUpPtEC2Up, jetVeto30_JetPileUpPtHFDown, jetVeto30_JetPileUpPtHFUp, jetVeto30_JetPileUpPtRefDown, jetVeto30_JetPileUpPtRefUp, jetVeto30_JetRelativeBalDown, jetVeto30_JetRelativeBalUp, jetVeto30_JetRelativeFSRDown,
@@ -75,8 +85,9 @@ class mutau_tree2016: public virtual base_tree {
           jetVeto30_JetRelativeStatHFDown, jetVeto30_JetRelativeStatHFUp, jetVeto30_JetSinglePionECALDown, jetVeto30_JetSinglePionECALUp, jetVeto30_JetSinglePionHCALDown, jetVeto30_JetSinglePionHCALUp, jetVeto30_JetTimePtEtaDown,
           jetVeto30_JetTimePtEtaUp, jetVeto30_JetTotalDown, jetVeto30_JetTotalUp;
 
-  Float_t vbfMass_JetEta0to3Down, vbfMass_JetEta0to3Up, vbfMass_JetEta0to5Down, vbfMass_JetEta0to5Up, vbfMass_JetEta3to5Down, vbfMass_JetEta3to5Up,
-          vbfMass_JetAbsoluteFlavMapDown, vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasDown, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleDown, vbfMass_JetAbsoluteScaleUp,
+  Float_t vbfMassWoNoisyJets_JetEta0to3Down, vbfMassWoNoisyJets_JetEta0to3Up, vbfMassWoNoisyJets_JetEta0to5Down, vbfMassWoNoisyJets_JetEta0to5Up, vbfMassWoNoisyJets_JetEta3to5Down, vbfMassWoNoisyJets_JetEta3to5Up,
+          vbfMassWoNoisyJets_JetRelativeSampleDown, vbfMassWoNoisyJets_JetRelativeSampleUp, vbfMassWoNoisyJets_JetTotalDown,
+          vbfMassWoNoisyJets_JetTotalUp, vbfMass_JetAbsoluteFlavMapDown, vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasDown, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleDown, vbfMass_JetAbsoluteScaleUp,
           vbfMass_JetAbsoluteStatDown, vbfMass_JetAbsoluteStatUp, vbfMass_JetClosureDown, vbfMass_JetClosureUp, vbfMass_JetFlavorQCDDown, vbfMass_JetFlavorQCDUp, vbfMass_JetFragmentationDown,
           vbfMass_JetFragmentationUp, vbfMass_JetPileUpDataMCDown, vbfMass_JetPileUpDataMCUp, vbfMass_JetPileUpPtBBDown, vbfMass_JetPileUpPtBBUp, vbfMass_JetPileUpPtEC1Down, vbfMass_JetPileUpPtEC1Up, vbfMass_JetPileUpPtEC2Down,
           vbfMass_JetPileUpPtEC2Up, vbfMass_JetPileUpPtHFDown, vbfMass_JetPileUpPtHFUp, vbfMass_JetPileUpPtRefDown, vbfMass_JetPileUpPtRefUp, vbfMass_JetRelativeBalDown, vbfMass_JetRelativeBalUp, vbfMass_JetRelativeFSRDown,
@@ -88,16 +99,13 @@ class mutau_tree2016: public virtual base_tree {
 
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
 
-  // 2016 Placeholder
-  Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2;
-
-  // 2017 Placeholder
-  Float_t mMatchesIsoMu20Tau27Filter, mMatchesIsoMu20Tau27Path, tMatchesIsoMu20Tau27Filter, tMatchesIsoMu20Tau27Path,
-          mMatchesIsoMu24Filter, mMatchesIsoMu24Path, mMatchesIsoMu27Filter, mMatchesIsoMu27Path, Mu20Tau27Pass, IsoMu27Pass, IsoMu24Pass;
+//  // 2016 Placeholder
+  Float_t amcatNLO_weight, tAgainstElectronTightMVA6, , decayModeFindingNewDMs_2, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path,      mMatchesIsoTkMu22Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, singleIsoMu22eta2p1Pass,
+      singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass;
 
   // Member functions
-  mutau_tree2016(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
-  virtual ~mutau_tree2016() {}
+  emu_tree2017(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
+  virtual ~emu_tree2017() {}
   void do_skimming(TH1F*);
   void set_branches();
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
@@ -114,7 +122,7 @@ class mutau_tree2016: public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-mutau_tree2016::mutau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
+emu_tree2017::emu_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
 tree(itree),
 original(Original),
 isMC(IsMC),
@@ -140,52 +148,36 @@ recoil(rec) {
   original->SetBranchAddress("mSegmentCompatibility", &mSegmentCompatibility);
   original->SetBranchAddress("mPFIDMedium", &mPFIDMedium);
 
-  // tau variables
-  original->SetBranchAddress("tPt", &tPt);
-  original->SetBranchAddress("tEta", &tEta);
-  original->SetBranchAddress("tPhi", &tPhi);
-  original->SetBranchAddress("tMass", &tMass);
-  original->SetBranchAddress("tPVDZ", &tPVDZ);
-  original->SetBranchAddress("tCharge", &tCharge);
-  original->SetBranchAddress("tDecayMode", &tDecayMode);
-  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
-  original->SetBranchAddress("tDecayModeFinding", &tDecayModeFinding);
-  original->SetBranchAddress("tAgainstMuonTight3", &tAgainstMuonTight3);
-  original->SetBranchAddress("tAgainstElectronVLooseMVA6", &tAgainstElectronVLooseMVA6);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &tRerunMVArun2v2DBoldDMwLTraw);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVLoose", &tRerunMVArun2v2DBoldDMwLTVLoose);
-  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
-  original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &tByVLooseIsolationMVArun2v1DBoldDMwLT);
+    // electron variables
+    original->SetBranchAddress("ePt", &ePt);
+    original->SetBranchAddress("eEta", &eEta);
+    original->SetBranchAddress("ePhi", &ePhi);
+    original->SetBranchAddress("eMass", &eMass);
+    original->SetBranchAddress("ePVDZ", &ePVDZ);
+    original->SetBranchAddress("ePVDXY", &ePVDXY);
+    original->SetBranchAddress("eIsoDB03", &eIsoDB03);
+    original->SetBranchAddress("eMissingHits", &eMissingHits);
+    original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
+    original->SetBranchAddress("eMVANoisoWP90", &eMVANoisoWP90);
+    
 
-  // 2016 triggers
-  original->SetBranchAddress("mMatchesIsoMu22eta2p1Path", &mMatchesIsoMu22eta2p1Path);
-  original->SetBranchAddress("mMatchesIsoTkMu22eta2p1Path", &mMatchesIsoTkMu22eta2p1Path);
-  original->SetBranchAddress("mMatchesIsoMu22Path", &mMatchesIsoMu22Path);
-  original->SetBranchAddress("mMatchesIsoTkMu22Path", &mMatchesIsoTkMu22Path);
-  original->SetBranchAddress("mMatchesMu19Tau20sL1Path", &mMatchesMu19Tau20sL1Path);
-
-  original->SetBranchAddress("singleIsoMu22Pass", &mMatchesIsoMu22);
-  original->SetBranchAddress("singleIsoTkMu22Pass", &mMatchesIsoTkMu22);
-  original->SetBranchAddress("mMatchesMu19Tau20sL1", &mMatchesMu19Tau20sL1);
-
-  original->SetBranchAddress("mIsoMu22eta2p1Filter", &mIsoMu22eta2p1Filter);
-  original->SetBranchAddress("mIsoTkMu22eta2p1Filter", &mIsoTkMu22eta2p1Filter);
-  original->SetBranchAddress("mIsoMu22Filter", &mIsoMu22Filter);
-  original->SetBranchAddress("mIsoTkMu22Filter", &mIsoTkMu22Filter);
-  original->SetBranchAddress("mMatchesMu19Tau20sL1Filter", &mMatchesMu19Tau20sL1Filter);
-  original->SetBranchAddress("singleIsoMu22eta2p1Pass", &singleIsoMu22eta2p1Pass);
-  original->SetBranchAddress("singleIsoTkMu22eta2p1Pass", &singleIsoTkMu22eta2p1Pass);
-  original->SetBranchAddress("singleIsoMu22Pass", &singleIsoMu22Pass);
-  original->SetBranchAddress("singleIsoTkMu22Pass", &singleIsoTkMu22Pass);
-  original->SetBranchAddress("singleMu19eta2p1LooseTau20singleL1Pass", &singleMu19eta2p1LooseTau20singleL1Pass);
-  original->SetBranchAddress("tMatchesMu19Tau20sL1Path", &tMatchesMu19Tau20sL1Path);
-  original->SetBranchAddress("tMatchesMu19Tau20sL1Filter", &tMatchesMu19Tau20sL1Filter);
+  // 2017 triggers
+//  original->SetBranchAddress("mMatchesIsoMu20Tau27Filter", &mMatchesIsoMu20Tau27Filter);
+//  original->SetBranchAddress("mMatchesIsoMu20Tau27Path", &mMatchesIsoMu20Tau27Path);
+  original->SetBranchAddress("mMatchesIsoMu24Filter", &mMatchesIsoMu24Filter);
+  original->SetBranchAddress("mMatchesIsoMu24Path", &mMatchesIsoMu24Path);
+  original->SetBranchAddress("mMatchesIsoMu27Filter", &mMatchesIsoMu27Filter);
+  original->SetBranchAddress("mMatchesIsoMu27Path", &mMatchesIsoMu27Path);
+//  original->SetBranchAddress("Mu20Tau27Pass", &Mu20Tau27Pass);
+  original->SetBranchAddress("IsoMu27Pass", &IsoMu27Pass);
+  original->SetBranchAddress("IsoMu24Pass", &IsoMu24Pass);
+//  original->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
+//  original->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
 
   // other
   original->SetBranchAddress("dimuonVeto", &dimuonVeto);
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
-  original->SetBranchAddress("m_t_DR", &m_t_DR);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -193,105 +185,116 @@ recoil(rec) {
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree2016::do_skimming(TH1F* cutflow) {
+void emu_tree2017::do_skimming(TH1F* cutflow) {
   // declare variables for sorting
   ULong64_t evt_now(0);
   ULong64_t evt_before(1);
   int best_evt(-1);
-  std::pair<float, float> muCandidate, tauCandidate;
+  std::pair<float, float> muCandidate, eleCandidate;
 
   Int_t nevt = (Int_t)original->GetEntries();
   for (auto ievt = 0; ievt < nevt; ievt++) {
     original->GetEntry(ievt);
     evt_now = evt;
 
-    // TLorentzVector ele, tau;
+    // TLorentzVector ele, mu;
     mu.SetPtEtaPhiM(mPt, mEta, mPhi, mMass);
-    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
 
-    // apply TES
-    if (isMC) {
-      if (tZTTGenMatching == 5) {
-        if (tDecayMode == 0) {
-          tau *= 0.982;
-        } else if (tDecayMode == 1) {
-          tau *= 1.010;
-        } else if (tDecayMode == 10) {
-          tau *= 1.004;
-        }
-      }
-    }
 
-    float mu_pt_min(20./1.05), tau_pt_min(20.);
+
+    float mu_pt_min(21.), el_pt_min(25.);
 
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto IsoMu22eta2p1    = mMatchesIsoMu22eta2p1Path && mIsoMu22eta2p1Filter && singleIsoMu22eta2p1Pass;
-    auto IsoTkMu22eta2p1  = mMatchesIsoTkMu22eta2p1Path && mIsoTkMu22eta2p1Filter && singleIsoTkMu22eta2p1Pass;
-    auto IsoMu22          = mMatchesIsoMu22Path && mIsoMu22Filter && singleIsoMu22Pass;
-    auto IsoTkMu22        = mMatchesIsoTkMu22Path && mIsoTkMu22Filter && singleIsoTkMu22Pass;
-    auto Cross            = mMatchesMu19Tau20sL1Path && mMatchesMu19Tau20sL1Filter && tMatchesMu19Tau20sL1Path && tMatchesMu19Tau20sL1Filter && singleMu19eta2p1LooseTau20singleL1Pass;
+    auto Mu24 = IsoMu24Pass && mMatchesIsoMu24Path && mMatchesIsoMu24Filter;
+    auto Mu27 = IsoMu27Pass && mMatchesIsoMu27Path && mMatchesIsoMu27Filter;
+//    auto Cross = Mu20Tau27Pass && mMatchesIsoMu20Tau27Filter && mMatchesIsoMu20Tau27Path && tMatchesIsoMu20Tau27Filter && tMatchesIsoMu20Tau27Path;
+      
+//      auto Ele27 = eMatchesEle27Filter && eMatchesEle27Path && Ele27WPTightPass;
+//      auto Ele32 = eMatchesEle32Filter && eMatchesEle32Path && Ele32WPTightPass;
+//      auto Ele35 = eMatchesEle35Filter && eMatchesEle35Path && Ele35WPTightPass;
+//      auto Cross =  eMatchesEle24Tau30Filter && eMatchesEle24Tau30Path && Ele24Tau30Pass && tMatchesEle24Tau30Path && tMatchesEle24Tau30Filter;
 
-    if (isEmbed || IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) cutflow->Fill(2., 1.);
+      
+//    if (Mu24 || Mu27 || Cross) cutflow->Fill(2., 1.);
+    if (Mu24 || Mu27 ) cutflow->Fill(2., 1.);
     else  continue;
 
-    if (mPt > mu_pt_min && fabs(mEta) < 2.4 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.);  // electron kinematic selection
+    if (mPt > mu_pt_min && fabs(mEta) < 2.1 && fabs(mPVDZ) < 0.2 && fabs(mPVDXY) < 0.045) cutflow->Fill(3., 1.);  // electron kinematic selection
     else  continue;
 
     bool goodglob = mIsGlobal  && mNormalizedChi2 < 3  && mChi2LocalPosition < 12 && mTrkKink < 20;
     bool isMedium = mPFIDLoose && mValidFraction> 0.49 && mSegmentCompatibility > (goodglob ? 0.303 : 0.451);
 
-    if (mPFIDMedium || isMedium) cutflow->Fill(4., 1.);  // muon quality selection
+    if (mPFIDMedium) cutflow->Fill(4., 1.);  // muon quality selection
     else  continue;
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.);  // tau kinematic selection
+    if (isMC || isEmbed || isMedium) cutflow->Fill(5., 1.);  // muon quality selection
     else  continue;
 
-    if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose)  && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.);  // tau quality selection
-    else  continue;
+        
+        if (ePt > el_pt_min && fabs(eEta) < 2.1 && fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(6., 1.);  // electron kinematic selection
+        else  continue;
+        
+        if (eMVANoisoWP90 && ePassesConversionVeto && eMissingHits < 2) cutflow->Fill(7., 1.);  // electron quality selection
+        else  continue;
 
-    if (tAgainstMuonTight3 > 0.5 && tAgainstElectronVLooseMVA6 > 0.5) cutflow->Fill(8., 1.);  // tau against leptons
-    else  continue;
+        
+        
+//    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.);  // tau kinematic selection
+//    else  continue;
+//
+//    if (tRerunMVArun2v2DBoldDMwLTVLoose && tDecayModeFinding > 0 && fabs(tCharge) < 2) cutflow->Fill(7., 1.);  // tau quality selection
+//    else  continue;
+//
+//    if (tAgainstMuonTight3 > 0.5 && tAgainstElectronVLooseMVA6 > 0.5) cutflow->Fill(8., 1.);  // tau against leptons
+//    else  continue;
 
-    if (muVetoZTTp001dxyzR0 < 2 && eVetoZTTp001dxyzR0 == 0 && dimuonVeto == 0) cutflow->Fill(9., 1.);  // vetos
-    else  continue;
-
-    if (m_t_DR > 0.5) cutflow->Fill(10., 1.);
-    else  continue;
+    
+        //FIXME
+//        if (muVetoZTTp001dxyzR0 < 2 && eVetoZTTp001dxyzR0 == 0 && dimuonVeto == 0) cutflow->Fill(9., 1.);  // vetos
+//    else  continue;
 
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
     if (evt_now != evt_before) {  // new event, save the tau candidates
-      //   since it is new event, do we have the best entry to save? If yes, save it!
+      // since it is new event, do we have the best entry to save? If yes, save it!
       if ( best_evt > -1  )
         good_events.push_back(best_evt);
 
-      //  this is a new event, so the first tau pair is the best! :)
+      //  this is a new event, so the first tau pair is the best! :
       best_evt = ievt;
       muCandidate = std::make_pair(mPt, mRelPFIsoDBDefaultR04);
-      tauCandidate  = std::make_pair(tPt,  tByIsolationMVArun2v1DBoldDMwLTraw);
-    } else {  // not a new event
-      std::pair<float, float> currEleCandidate(mPt, mRelPFIsoDBDefaultR04);
-      std::pair<float, float> currTauCandidate(tPt, tByIsolationMVArun2v1DBoldDMwLTraw);
+      eleCandidate = std::make_pair(ePt, eIsoDB03);
+    }
+//      tauCandidate  = std::make_pair(tPt,  tRerunMVArun2v2DBoldDMwLTraw);
 
-      // clause 1, select the pair that has most isolated tau lepton 1
-      if (currEleCandidate.second - muCandidate.second  > 0.0001 ) best_evt = ievt;
-
-      // check if the first tau is the same, and if so - move to clause 2
-      if ( fabs(currEleCandidate.second - muCandidate.second)  <  0.0001 ) {
-        // pick up  the pair with the highest pT of the first candidate
-        if (currEleCandidate.first - muCandidate.first > 0.0001 ) best_evt = ievt;
-        if ( fabs(currEleCandidate.first -muCandidate.first) < 0.0001 ) {
-          // same pT, same iso, move to clause 3
-          if (currTauCandidate.second - tauCandidate.second > 0.0001 ) best_evt = ievt;
-          if ( fabs(currTauCandidate.second - tauCandidate.second) < 0.0001 ) {
-            // same iso - pick the pair with the highest pT
-            if ( currTauCandidate.first - tauCandidate.first  > 0.0001 ) best_evt = ievt;
-          }  // tau2 has the same isolation
-        }  // tau1 has the same pT
-      }  // tau1 has the same isolation
-    }  // not a new event
+        // **** FIXME *****
+        
+        //    } else {  // not a new event
+//      std::pair<float, float> currEleCandidate(mPt, mRelPFIsoDBDefaultR04);
+//       std::pair<float, float> currEleCandidate(ePt, eIsoDB03);
+////      std::pair<float, float> currTauCandidate(tPt, tRerunMVArun2v2DBoldDMwLTraw);
+//
+//      // clause 1, select the pair that has most isolated tau lepton 1
+//      if (currEleCandidate.second - muCandidate.second  > 0.0001 ) best_evt = ievt;
+//
+//      // check if the first tau is the same, and if so - move to clause 2
+//      if ( fabs(currEleCandidate.second - muCandidate.second)  <  0.0001 ) {
+//        // pick up  the pair with the highest pT of the first candidate
+//        if (currEleCandidate.first - muCandidate.first > 0.0001 ) best_evt = ievt;
+//        if ( fabs(currEleCandidate.first -muCandidate.first) < 0.0001 ) {
+//          // same pT, same iso, move to clause 3
+//          if (currTauCandidate.second - tauCandidate.second > 0.0001 ) best_evt = ievt;
+//          if ( fabs(currTauCandidate.second - tauCandidate.second) < 0.0001 ) {
+//            // same iso - pick the pair with the highest pT
+//            if ( currTauCandidate.first - tauCandidate.first  > 0.0001 ) best_evt = ievt;
+//          }  // tau2 has the same isolation
+//        }  // tau1 has the same pT
+//      }  // tau1 has the same isolation
+//    }  // not a new event
     evt_before = evt_now;
   }
   if (best_evt > -1)
@@ -307,7 +310,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
 // Return: The same TTree passed to the constructor and stored  //
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
-TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
+TTree* emu_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   set_branches();  // get all the branches set up
 
   // loop through all events pasing skimming/sorting
@@ -320,12 +323,12 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = mZTTGenMatching;
     gen_match_2 = tZTTGenMatching;
     njets = jetVeto30;
-    nbtag = bjetDeepCSVVeto20Medium;
+    nbtag = bjetDeepCSVVeto20MediumWoNoisyJets;
     njetspt20 = jetVeto20;
 
     // TLorentzVector ele, tau;
     mu.SetPtEtaPhiM(mPt, mEta, mPhi, mMass);
-    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
 
     met_px = type1_pfMetEt * cos(type1_pfMetPhi);
     met_py = type1_pfMetEt * sin(type1_pfMetPhi);
@@ -336,7 +339,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     // TLorentzVector ele, tau;
     mu.SetPtEtaPhiM(mPt, mEta, mPhi, mMass);
-    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
     MET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
     MET_UESUp.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnUp, 0, type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
     MET_UESDown.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnDown, 0, type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
@@ -356,15 +359,15 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     if (recoil == 1) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          MET.Px(),              // uncorrected type I pf met px (float)
-          MET.Py(),              // uncorrected type I pf met py (float)
-          genpX,                 // generator Z/W/Higgs px (float)
-          genpY,                 // generator Z/W/Higgs py (float)
-          vispX,                 // generator visible Z/W/Higgs px (float)
-          vispY,                 // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,         // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,          // corrected type I pf met px (float)
-          pfmetcorr_ey);         // corrected type I pf met py (float)
+          MET.Px(),            // uncorrected type I pf met px (float)
+          MET.Py(),            // uncorrected type I pf met py (float)
+          genpX,               // generator Z/W/Higgs px (float)
+          genpY,               // generator Z/W/Higgs py (float)
+          vispX,               // generator visible Z/W/Higgs px (float)
+          vispY,               // generator visible Z/W/Higgs py (float)
+          jetVeto30 + 1,       // number of jets (hadronic jet multiplicity) (int)
+          pfmetcorr_ex,        // corrected type I pf met px (float)
+          pfmetcorr_ey);       // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESUp.Px(),       // uncorrected type I pf met px (float)
@@ -412,15 +415,15 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     } else if (recoil == 2) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          MET.Px(),       // uncorrected type I pf met px (float)
-          MET.Py(),       // uncorrected type I pf met py (float)
-          genpX,          // generator Z/W/Higgs px (float)
-          genpY,          // generator Z/W/Higgs py (float)
-          vispX,          // generator visible Z/W/Higgs px (float)
-          vispY,          // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,   // corrected type I pf met px (float)
-          pfmetcorr_ey);  // corrected type I pf met py (float)
+          MET.Px(),            // uncorrected type I pf met px (float)
+          MET.Py(),            // uncorrected type I pf met py (float)
+          genpX,               // generator Z/W/Higgs px (float)
+          genpY,               // generator Z/W/Higgs py (float)
+          vispX,               // generator visible Z/W/Higgs px (float)
+          vispY,               // generator visible Z/W/Higgs py (float)
+          jetVeto30 + 1,       // number of jets (hadronic jet multiplicity) (int)
+          pfmetcorr_ex,        // corrected type I pf met px (float)
+          pfmetcorr_ey);       // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESUp.Px(),       // uncorrected type I pf met px (float)
@@ -473,56 +476,6 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     MET_JESUp.SetPxPyPzE(pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, 0, sqrt(pfmetcorr_ex_JESUp * pfmetcorr_ex_JESUp + pfmetcorr_ey_JESUp * pfmetcorr_ey_JESUp));
     MET_JESDown.SetPxPyPzE(pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown, 0, sqrt(pfmetcorr_ex_JESDown * pfmetcorr_ex_JESDown + pfmetcorr_ey_JESDown * pfmetcorr_ey_JESDown));
 
-    if (isMC) {
-      // met correction due to tau energy scale
-      if (tZTTGenMatching == 5) {
-        if (tDecayMode == 0) {
-          MET = MET + tau - 0.982*tau;
-          MET_JESUp = MET_JESUp+tau-0.982*tau;
-          MET_JESDown = MET_JESDown+tau-0.982*tau;
-          MET_UESUp = MET_UESUp+tau-0.982*tau;
-          MET_UESDown = MET_UESDown+tau-0.982*tau;
-          tau *= 0.982;
-        } else if (tDecayMode == 1) {
-          MET = MET + tau - 1.010*tau;
-          MET_JESUp = MET_JESUp+tau-1.010*tau;
-          MET_JESDown = MET_JESDown+tau-1.010*tau;
-          MET_UESUp = MET_UESUp+tau-1.010*tau;
-          MET_UESDown = MET_UESDown+tau-1.010*tau;
-          tau *= 1.010;
-        } else if (tDecayMode == 10) {
-          MET = MET + tau - 1.004*tau;
-          MET_JESUp = MET_JESUp+tau-1.004*tau;
-          MET_JESDown = MET_JESDown+tau-1.004*tau;
-          MET_UESUp = MET_UESUp+tau-1.004*tau;
-          MET_UESDown = MET_UESDown+tau-1.004*tau;
-          tau *= 1.004;
-        }
-      } else if (tZTTGenMatching == 2 || tZTTGenMatching == 4) {
-        if (tDecayMode == 0) {
-          MET = MET+tau-0.998*tau;
-          MET_JESUp = MET_JESUp+tau-0.998*tau;
-          MET_JESDown = MET_JESDown+tau-0.998*tau;
-          MET_UESUp = MET_UESUp+tau-0.998*tau;
-          MET_UESDown = MET_UESDown+tau-0.998*tau;
-          tau *= 0.998;
-        } else if (tDecayMode == 1) {
-          MET = MET+tau-1.015*tau;
-          MET_JESUp = MET_JESUp+tau-1.015*tau;
-          MET_JESDown = MET_JESDown+tau-1.015*tau;
-          MET_UESUp = MET_UESUp+tau-1.015*tau;
-          MET_UESDown = MET_UESDown+tau-1.015*tau;
-          tau *= 1.015;
-        }
-      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
-        MET = MET + tau - 1.095 * tau;
-        MET_JESUp = MET_JESUp + tau - 1.095 * tau;
-        MET_JESDown = MET_JESDown + tau - 1.095 * tau;
-        MET_UESUp = MET_UESUp + tau - 1.095 * tau;
-        MET_UESDown = MET_UESDown + tau - 1.095 * tau;
-        tau *= 1.095;
-      }
-    }
 
     met = MET.Pt();
     metphi = MET.Phi();
@@ -546,14 +499,16 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     pt_1 = mu.Pt();
     phi_1 = mu.Phi();
     eta_1 = mu.Eta();
-    m_2 = tau.M();
-    px_2 = tau.Px();
-    py_2 = tau.Py();
-    pz_2 = tau.Pz();
-    e_2 = tau.E();
-    pt_2 = tau.Pt();
-    phi_2 = tau.Phi();
-    eta_2 = tau.Eta();
+      
+      m_2 = ele.M();
+      px_2 = ele.Px();
+      py_2 = ele.Py();
+      pz_2 = ele.Pz();
+      e_2 = ele.E();
+      pt_2 = ele.Pt();
+      phi_2 = ele.Phi();
+      eta_2 = ele.Eta();
+      
 
     tree->Fill();
   }
@@ -567,7 +522,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //          new name, or used to construct new variables.       //
 //   - Create branches in tree to store any variable we want    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree2016::set_branches() {
+void emu_tree2017::set_branches() {
   // output file branches
   tree->Branch("evt", &evt);
   tree->Branch("run" , &run);
@@ -577,36 +532,43 @@ void mutau_tree2016::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
-  tree->Branch("vbfMass", &vbfMass, "vbfMass/F");
+  tree->Branch("vbfMassWoNoisyJets", &vbfMassWoNoisyJets, "vbfMassWoNoisyJets/F");
 
-  tree->Branch("mMatchesIsoMu20Tau27Path", &mMatchesIsoMu20Tau27Path, "mMatchesIsoMu20Tau27Path/F");
+  
   tree->Branch("mMatchesIsoMu24Filter", &mMatchesIsoMu24Filter, "mMatchesIsoMu24Filter/F");
   tree->Branch("mMatchesIsoMu24Path", &mMatchesIsoMu24Path, "mMatchesIsoMu24Path/F");
   tree->Branch("mMatchesIsoMu27Filter", &mMatchesIsoMu27Filter, "mMatchesIsoMu27Filter/F");
   tree->Branch("mMatchesIsoMu27Path", &mMatchesIsoMu27Path, "mMatchesIsoMu27Path/F");
-  tree->Branch("Mu20Tau27Pass", &Mu20Tau27Pass, "Mu20Tau27Pass/F");
   tree->Branch("IsoMu27Pass", &IsoMu27Pass, "IsoMu27Pass/F");
   tree->Branch("IsoMu24Pass", &IsoMu24Pass, "IsoMu24Pass/F");
-  tree->Branch("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter, "tMatchesIsoMu20Tau27Filter/F");
-  tree->Branch("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path, "tMatchesIsoMu20Tau27Path/F");
+  
   tree->Branch("matchIsoMu22eta2p1_1", &mMatchesIsoMu22eta2p1Path);
   tree->Branch("matchIsoTkMu22eta2p1_1", &mMatchesIsoTkMu22eta2p1Path);
   tree->Branch("matchIsoMu22_1", &mMatchesIsoMu22Path);
   tree->Branch("matchIsoTkMu22_1", &mMatchesIsoTkMu22Path);
-  tree->Branch("matchIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Path);
   tree->Branch("filterIsoMu22eta2p1_1", &mIsoMu22eta2p1Filter);
   tree->Branch("filterIsoTkMu22eta2p1_1", &mIsoTkMu22eta2p1Filter);
   tree->Branch("filterIsoMu22_1", &mIsoMu22Filter);
   tree->Branch("filterIsoTkMu22_1", &mIsoTkMu22Filter);
-  tree->Branch("filterIsoMu19Tau20_1", &mMatchesMu19Tau20sL1Filter);
   tree->Branch("passIsoMu22eta2p1", &singleIsoMu22eta2p1Pass);
   tree->Branch("passIsoTkMu22eta2p1", &singleIsoTkMu22eta2p1Pass);
   tree->Branch("passIsoMu22", &singleIsoMu22Pass);
   tree->Branch("passIsoTkMu22", &singleIsoTkMu22Pass);
-  tree->Branch("passIsoMu19Tau20", &singleMu19eta2p1LooseTau20singleL1Pass);
-  tree->Branch("matchIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Path);
-  tree->Branch("filterIsoMu19Tau20_2", &tMatchesMu19Tau20sL1Filter);
 
+    tree->Branch("eMatchesEle27Filter"     , &eMatchesEle27Filter     , "eMatchesEle27Filter/F");
+    tree->Branch("eMatchesEle32Filter"     , &eMatchesEle32Filter     , "eMatchesEle32Filter/F");
+    tree->Branch("eMatchesEle35Filter"     , &eMatchesEle35Filter     , "eMatchesEle35Filter/F");
+    tree->Branch("eMatchesEle27Path"       , &eMatchesEle27Path       , "eMatchesEle27Path/F");
+    tree->Branch("eMatchesEle32Path"       , &eMatchesEle32Path       , "eMatchesEle32Path/F");
+    tree->Branch("eMatchesEle35Path"       , &eMatchesEle35Path       , "eMatchesEle35Path/F");
+    tree->Branch("Ele27WPTightPass"        , &Ele27WPTightPass        , "Ele27WPTightPass/F");
+    tree->Branch("Ele32WPTightPass"        , &Ele32WPTightPass        , "Ele32WPTightPass/F");
+    tree->Branch("Ele35WPTightPass"        , &Ele35WPTightPass        , "Ele35WPTightPass/F");
+    
+    
+    
+    
+    
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
   tree->Branch("extraelec_veto", &extraelec_veto, "extraelec_veto/F");
@@ -634,8 +596,6 @@ void mutau_tree2016::set_branches() {
   tree->Branch("d0_1" , &mPVDXY, "d0_1/F");
   tree->Branch("q_1"  , &mCharge, "q_1/F");
   tree->Branch("iso_1", &mRelPFIsoDBDefaultR04, "iso_1/F");
-  tree->Branch("id_m_medium_1", &mPFIDMedium, "id_m_medium_1/F");
-
   tree->Branch("pt_2" , &pt_2 , "pt_2/F");
   tree->Branch("eta_2", &eta_2, "eta_2/F");
   tree->Branch("phi_2", &phi_2, "phi_2/F");
@@ -646,20 +606,22 @@ void mutau_tree2016::set_branches() {
   tree->Branch("pz_2" , &pz_2 , "pz_2/F");
   tree->Branch("dZ_2" , &tPVDZ , "dZ_2/F");
   tree->Branch("q_2"  , &tCharge, "q_2/F");
-  tree->Branch("iso_2", &tByIsolationMVArun2v1DBoldDMwLTraw, "iso_2/F");
-  tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
+  tree->Branch("iso_2", &tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
+//  tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
+  tree->Branch("id_m_medium_1", &mPFIDMedium, "id_m_medium_1/F");
 
-  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2"  , &tByLooseIsolationMVArun2v1DBoldDMwLT  , "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2" , &tByMediumIsolationMVArun2v1DBoldDMwLT , "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT  , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose           , "tRerunMVArun2v2DBoldDMwLTLoose/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium          , "tRerunMVArun2v2DBoldDMwLTMedium/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight           , "tRerunMVArun2v2DBoldDMwLTTight/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight          , "tRerunMVArun2v2DBoldDMwLTVTight/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight         , "tRerunMVArun2v2DBoldDMwLTVVTight/F");
+//  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2"  , &tByLooseIsolationMVArun2v1DBoldDMwLT  , "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
+//  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2" , &tByMediumIsolationMVArun2v1DBoldDMwLT , "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
+//  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2"  , &tByTightIsolationMVArun2v1DBoldDMwLT  , "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
+//  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2" , &tByVTightIsolationMVArun2v1DBoldDMwLT , "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+//  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose"        , &tRerunMVArun2v2DBoldDMwLTVLoose          , "tRerunMVArun2v2DBoldDMwLTVLoose/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose           , "tRerunMVArun2v2DBoldDMwLTLoose/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium          , "tRerunMVArun2v2DBoldDMwLTMedium/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight           , "tRerunMVArun2v2DBoldDMwLTTight/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight          , "tRerunMVArun2v2DBoldDMwLTVTight/F");
+//  tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight         , "tRerunMVArun2v2DBoldDMwLTVVTight/F");
 
   tree->Branch("rho"        , &rho        , "rho/F");
   tree->Branch("metcov00"   , &metcov00   , "metcov00/F");
@@ -709,26 +671,25 @@ void mutau_tree2016::set_branches() {
   tree->Branch("topQuarkPt1", &topQuarkPt1, "topQuarkPt1/F");
   tree->Branch("topQuarkPt2", &topQuarkPt2, "topQuarkPt2/F");
 
-  tree->Branch("tZTTGenPt", &tZTTGenPt, "tZTTGenPt/F");
-  tree->Branch("tZTTGenPhi", &tZTTGenPhi, "tZTTGenPhi/F");
-  tree->Branch("tZTTGenEta", &tZTTGenEta, "tZTTGenEta/F");
-  tree->Branch("tZTTGenDR", &tZTTGenDR, "tZTTGenDR/F");
-  tree->Branch("tGenDecayMode", &tGenDecayMode, "tGenDecayMode/F");
-  tree->Branch("tGenEnergy", &tGenEnergy, "tGenEnergy/F");
-  tree->Branch("tGenEta", &tGenEta, "tGenEta/F");
-  tree->Branch("tGenJetEta", &tGenJetEta, "tGenJetEta/F");
-  tree->Branch("tGenJetPt", &tGenJetPt, "tGenJetPt/F");
-  tree->Branch("tGenMotherEnergy", &tGenMotherEnergy, "tGenMotherEnergy/F");
-  tree->Branch("tGenMotherEta", &tGenMotherEta, "tGenMotherEta/F");
-  tree->Branch("tGenMotherPdgId", &tGenMotherPdgId, "tGenMotherPdgId/F");
-  tree->Branch("tGenMotherPhi", &tGenMotherPhi, "tGenMotherPhi/F");
-  tree->Branch("tGenMotherPt", &tGenMotherPt, "tGenMotherPt/F");
-  tree->Branch("tGenPdgId", &tGenPdgId, "tGenPdgId/F");
-  tree->Branch("tGenPhi", &tGenPhi, "tGenPhi/F");
-  tree->Branch("tGenPt", &tGenPt, "tGenPt/F");
-  tree->Branch("tGenStatus", &tGenStatus, "tGenStatus/F");
+//  tree->Branch("tZTTGenPt", &tZTTGenPt, "tZTTGenPt/F");
+//  tree->Branch("tZTTGenPhi", &tZTTGenPhi, "tZTTGenPhi/F");
+//  tree->Branch("tZTTGenEta", &tZTTGenEta, "tZTTGenEta/F");
+//  tree->Branch("tZTTGenDR", &tZTTGenDR, "tZTTGenDR/F");
+//  tree->Branch("tGenDecayMode", &tGenDecayMode, "tGenDecayMode/F");
+//  tree->Branch("tGenEnergy", &tGenEnergy, "tGenEnergy/F");
+//  tree->Branch("tGenEta", &tGenEta, "tGenEta/F");
+//  tree->Branch("tGenJetEta", &tGenJetEta, "tGenJetEta/F");
+//  tree->Branch("tGenJetPt", &tGenJetPt, "tGenJetPt/F");
+//  tree->Branch("tGenMotherEnergy", &tGenMotherEnergy, "tGenMotherEnergy/F");
+//  tree->Branch("tGenMotherEta", &tGenMotherEta, "tGenMotherEta/F");
+//  tree->Branch("tGenMotherPdgId", &tGenMotherPdgId, "tGenMotherPdgId/F");
+//  tree->Branch("tGenMotherPhi", &tGenMotherPhi, "tGenMotherPhi/F");
+//  tree->Branch("tGenMotherPt", &tGenMotherPt, "tGenMotherPt/F");
+//  tree->Branch("tGenPdgId", &tGenPdgId, "tGenPdgId/F");
+//  tree->Branch("tGenPhi", &tGenPhi, "tGenPhi/F");
+//  tree->Branch("tGenPt", &tGenPt, "tGenPt/F");
+//  tree->Branch("tGenStatus", &tGenStatus, "tGenStatus/F");
   tree->Branch("mGenCharge", &mGenCharge, "mGenCharge/F");
-  tree->Branch("mGenDirectPromptTauDecayFinalState", &mGenDirectPromptTauDecayFinalState, "mGenDirectPromptTauDecayFinalState/F");
   tree->Branch("mGenEnergy", &mGenEnergy, "mGenEnergy/F");
   tree->Branch("mGenEta", &mGenEta, "mGenEta/F");
   tree->Branch("mGenIsPrompt", &mGenIsPrompt, "mGenIsPrompt/F");
@@ -737,9 +698,7 @@ void mutau_tree2016::set_branches() {
   tree->Branch("mGenPdgId", &mGenPdgId, "mGenPdgId/F");
   tree->Branch("mGenPhi", &mGenPhi, "mGenPhi/F");
   tree->Branch("mGenPrompt", &mGenPrompt, "mGenPrompt/F");
-  tree->Branch("mGenPromptTauDecay", &mGenPromptTauDecay, "mGenPromptTauDecay/F");
   tree->Branch("mGenPt", &mGenPt, "mGenPt/F");
-  tree->Branch("mGenTauDecay", &mGenTauDecay, "mGenTauDecay/F");
   tree->Branch("mGenVZ", &mGenVZ, "mGenVZ/F");
   tree->Branch("mGenVtxPVMatch", &mGenVtxPVMatch, "mGenVtxPVMatch/F");
 
@@ -784,12 +743,18 @@ void mutau_tree2016::set_branches() {
   tree->Branch("type1_pfMet_shiftedPt_JetEnDown"          , &type1_pfMet_shiftedPt_JetEnDown          , "type1_pfMet_shiftedPt_JetEnDown/F");
   tree->Branch("type1_pfMet_shiftedPhi_JetEnDown"         , &type1_pfMet_shiftedPhi_JetEnDown         , "type1_pfMet_shiftedPhi_JetEnDown/F");
 
-  tree->Branch("jetVeto30_JetEta0to3Down", &jetVeto30_JetEta0to3Down, "jetVeto30_JetEta0to3Down/F");
-  tree->Branch("jetVeto30_JetEta0to3Up", &jetVeto30_JetEta0to3Up);
-  tree->Branch("jetVeto30_JetEta0to5Down", &jetVeto30_JetEta0to5Down);
-  tree->Branch("jetVeto30_JetEta0to5Up", &jetVeto30_JetEta0to5Up);
-  tree->Branch("jetVeto30_JetEta3to5Down", &jetVeto30_JetEta3to5Down);
-  tree->Branch("jetVeto30_JetEta3to5Up", &jetVeto30_JetEta3to5Up);
+  tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Down", &jetVeto30WoNoisyJets_JetEta0to3Down, "jetVeto30WoNoisyJets_JetEta0to3Down/F");
+  tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Up", &jetVeto30WoNoisyJets_JetEta0to3Up);
+  tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Down", &jetVeto30WoNoisyJets_JetEta0to5Down);
+  tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Up", &jetVeto30WoNoisyJets_JetEta0to5Up);
+  tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Down", &jetVeto30WoNoisyJets_JetEta3to5Down);
+  tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Up", &jetVeto30WoNoisyJets_JetEta3to5Up);
+  tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets", &jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets);
+  tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets", &jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets);
+  tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleDown", &jetVeto30WoNoisyJets_JetRelativeSampleDown);
+  tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleUp", &jetVeto30WoNoisyJets_JetRelativeSampleUp);
+  tree->Branch("jetVeto30WoNoisyJets_JetTotalDown", &jetVeto30WoNoisyJets_JetTotalDown);
+  tree->Branch("jetVeto30WoNoisyJets_JetTotalUp", &jetVeto30WoNoisyJets_JetTotalUp);
   tree->Branch("jetVeto30_JetAbsoluteFlavMapDown", &jetVeto30_JetAbsoluteFlavMapDown);
   tree->Branch("jetVeto30_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
   tree->Branch("jetVeto30_JetAbsoluteMPFBiasDown", &jetVeto30_JetAbsoluteMPFBiasDown);
@@ -852,12 +817,16 @@ void mutau_tree2016::set_branches() {
   tree->Branch("jetVeto30_JetTotalDown", &jetVeto30_JetTotalDown);
   tree->Branch("jetVeto30_JetTotalUp", &jetVeto30_JetTotalUp);
 
-  tree->Branch("vbfMass_JetEta0to3Down", &vbfMass_JetEta0to3Down);
-  tree->Branch("vbfMass_JetEta0to3Up", &vbfMass_JetEta0to3Up);
-  tree->Branch("vbfMass_JetEta0to5Down", &vbfMass_JetEta0to5Down);
-  tree->Branch("vbfMass_JetEta0to5Up", &vbfMass_JetEta0to5Up);
-  tree->Branch("vbfMass_JetEta3to5Down", &vbfMass_JetEta3to5Down);
-  tree->Branch("vbfMass_JetEta3to5Up", &vbfMass_JetEta3to5Up);
+  tree->Branch("vbfMassWoNoisyJets_JetEta0to3Down", &vbfMassWoNoisyJets_JetEta0to3Down);
+  tree->Branch("vbfMassWoNoisyJets_JetEta0to3Up", &vbfMassWoNoisyJets_JetEta0to3Up);
+  tree->Branch("vbfMassWoNoisyJets_JetEta0to5Down", &vbfMassWoNoisyJets_JetEta0to5Down);
+  tree->Branch("vbfMassWoNoisyJets_JetEta0to5Up", &vbfMassWoNoisyJets_JetEta0to5Up);
+  tree->Branch("vbfMassWoNoisyJets_JetEta3to5Down", &vbfMassWoNoisyJets_JetEta3to5Down);
+  tree->Branch("vbfMassWoNoisyJets_JetEta3to5Up", &vbfMassWoNoisyJets_JetEta3to5Up);
+  tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleDown", &vbfMassWoNoisyJets_JetRelativeSampleDown);
+  tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleUp", &vbfMassWoNoisyJets_JetRelativeSampleUp);
+  tree->Branch("vbfMassWoNoisyJets_JetTotalDown", &vbfMassWoNoisyJets_JetTotalDown);
+  tree->Branch("vbfMassWoNoisyJets_JetTotalUp", &vbfMassWoNoisyJets_JetTotalUp);
   tree->Branch("vbfMass_JetAbsoluteFlavMapDown", &vbfMass_JetAbsoluteFlavMapDown);
   tree->Branch("vbfMass_JetAbsoluteFlavMapUp", &vbfMass_JetAbsoluteFlavMapUp);
   tree->Branch("vbfMass_JetAbsoluteMPFBiasDown", &vbfMass_JetAbsoluteMPFBiasDown);
@@ -930,6 +899,7 @@ void mutau_tree2016::set_branches() {
 
 
   // input branches
+
   // event info
   original->SetBranchAddress("run", &Run);
   original->SetBranchAddress("lumi", &Lumi);
@@ -948,49 +918,49 @@ void mutau_tree2016::set_branches() {
   original->SetBranchAddress("genM", &genM);
   original->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
   original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
-  original->SetBranchAddress("vbfMass", &vbfMass);
+  original->SetBranchAddress("vbfMassWoNoisyJets", &vbfMassWoNoisyJets);
 
   // electron branches
   original->SetBranchAddress("mZTTGenMatching", &mZTTGenMatching);
   original->SetBranchAddress("mCharge", &mCharge);
 
   // tau branches
-  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
-  original->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &tByLooseIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &tByMediumIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &tByTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &tByVTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &tByVVTightIsolationMVArun2v1DBoldDMwLT);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight);
+//  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
+//  original->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &tByLooseIsolationMVArun2v1DBoldDMwLT);
+//  original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &tByMediumIsolationMVArun2v1DBoldDMwLT);
+//  original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &tByTightIsolationMVArun2v1DBoldDMwLT);
+//  original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &tByVTightIsolationMVArun2v1DBoldDMwLT);
+//  original->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &tByVVTightIsolationMVArun2v1DBoldDMwLT);
+//  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose"         , &tRerunMVArun2v2DBoldDMwLTLoose);
+//  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium"        , &tRerunMVArun2v2DBoldDMwLTMedium);
+//  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTTight"         , &tRerunMVArun2v2DBoldDMwLTTight);
+//  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVTight"        , &tRerunMVArun2v2DBoldDMwLTVTight);
+//  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVTight"       , &tRerunMVArun2v2DBoldDMwLTVVTight);
 
   // jet branches
-  original->SetBranchAddress("jetVeto20", &jetVeto20);
-  original->SetBranchAddress("jetVeto30", &jetVeto30);
+  original->SetBranchAddress("jetVeto20WoNoisyJets", &jetVeto20);
+  original->SetBranchAddress("jetVeto30WoNoisyJets", &jetVeto30);
 
-  original->SetBranchAddress("j1pt", &jpt_1);
-  original->SetBranchAddress("j1eta", &jeta_1);
-  original->SetBranchAddress("j1phi", &jphi_1);
-  original->SetBranchAddress("j1csv", &jcsv_1);
-  original->SetBranchAddress("j2pt", &jpt_2);
-  original->SetBranchAddress("j2eta", &jeta_2);
-  original->SetBranchAddress("j2phi", &jphi_2);
-  original->SetBranchAddress("j2csv", &jcsv_2);
-  original->SetBranchAddress("jb1pt",  &bpt_1);
-  original->SetBranchAddress("jb1eta", &beta_1);
-  original->SetBranchAddress("jb1phi", &bphi_1);
-  original->SetBranchAddress("jb1csv", &bcsv_1);
-  original->SetBranchAddress("jb1hadronflavor", &bflavor_1);
-  original->SetBranchAddress("jb2pt",  &bpt_2);
-  original->SetBranchAddress("jb2eta", &beta_2);
-  original->SetBranchAddress("jb2phi", &bphi_2);
-  original->SetBranchAddress("jb2csv", &bcsv_2);
-  original->SetBranchAddress("jb2hadronflavor", &bflavor_2);
+  original->SetBranchAddress("j1ptWoNoisyJets", &jpt_1);
+  original->SetBranchAddress("j1etaWoNoisyJets", &jeta_1);
+  original->SetBranchAddress("j1phiWoNoisyJets", &jphi_1);
+  original->SetBranchAddress("j1csvWoNoisyJets", &jcsv_1);
+  original->SetBranchAddress("j2ptWoNoisyJets", &jpt_2);
+  original->SetBranchAddress("j2etaWoNoisyJets", &jeta_2);
+  original->SetBranchAddress("j2phiWoNoisyJets", &jphi_2);
+  original->SetBranchAddress("j2csvWoNoisyJets", &jcsv_2);
+  original->SetBranchAddress("jb1ptWoNoisyJets",  &bpt_1);
+  original->SetBranchAddress("jb1etaWoNoisyJets", &beta_1);
+  original->SetBranchAddress("jb1phiWoNoisyJets", &bphi_1);
+  original->SetBranchAddress("jb1csvWoNoisyJets", &bcsv_1);
+  original->SetBranchAddress("jb1hadronflavorWoNoisyJets", &bflavor_1);
+  original->SetBranchAddress("jb2ptWoNoisyJets",  &bpt_2);
+  original->SetBranchAddress("jb2etaWoNoisyJets", &beta_2);
+  original->SetBranchAddress("jb2phiWoNoisyJets", &bphi_2);
+  original->SetBranchAddress("jb2csvWoNoisyJets", &bcsv_2);
+  original->SetBranchAddress("jb2hadronflavorWoNoisyJets", &bflavor_2);
 
-  original->SetBranchAddress("bjetDeepCSVVeto20Medium", &bjetDeepCSVVeto20Medium);
+  original->SetBranchAddress("bjetDeepCSVVeto20MediumWoNoisyJets", &bjetDeepCSVVeto20MediumWoNoisyJets);
   original->SetBranchAddress("bjetDeepCSVVeto20Tight", &bjetDeepCSVVeto20Tight);
   original->SetBranchAddress("bjetDeepCSVVeto30Loose", &bjetDeepCSVVeto30Loose);
   original->SetBranchAddress("bjetDeepCSVVeto30Medium", &bjetDeepCSVVeto30Medium);
@@ -1018,7 +988,7 @@ void mutau_tree2016::set_branches() {
   original->SetBranchAddress("tGenPt", &tGenPt);
   original->SetBranchAddress("tGenStatus", &tGenStatus);
   original->SetBranchAddress("mGenCharge", &mGenCharge);
-  original->SetBranchAddress("mGenDirectPromptTauDecayFinalState", &mGenDirectPromptTauDecayFinalState);
+//  original->SetBranchAddress("mGenDirectPromptTauDecayFinalState", &mGenDirectPromptTauDecayFinalState);
   original->SetBranchAddress("mGenEnergy", &mGenEnergy);
   original->SetBranchAddress("mGenEta", &mGenEta);
   original->SetBranchAddress("mGenIsPrompt", &mGenIsPrompt);
@@ -1027,9 +997,9 @@ void mutau_tree2016::set_branches() {
   original->SetBranchAddress("mGenPdgId", &mGenPdgId);
   original->SetBranchAddress("mGenPhi", &mGenPhi);
   original->SetBranchAddress("mGenPrompt", &mGenPrompt);
-  original->SetBranchAddress("mGenPromptTauDecay", &mGenPromptTauDecay);
+//  original->SetBranchAddress("mGenPromptTauDecay", &mGenPromptTauDecay);
   original->SetBranchAddress("mGenPt", &mGenPt);
-  original->SetBranchAddress("mGenTauDecay", &mGenTauDecay);
+//  original->SetBranchAddress("mGenTauDecay", &mGenTauDecay);
   original->SetBranchAddress("mGenVZ", &mGenVZ);
   original->SetBranchAddress("mGenVtxPVMatch", &mGenVtxPVMatch);
 
@@ -1070,12 +1040,16 @@ void mutau_tree2016::set_branches() {
   original->SetBranchAddress("type1_pfMet_shiftedPt_JetEnDown"          , &type1_pfMet_shiftedPt_JetEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown"         , &type1_pfMet_shiftedPhi_JetEnDown);
 
-  original->SetBranchAddress("jetVeto30_JetEta0to3Down", &jetVeto30_JetEta0to3Down);
-  original->SetBranchAddress("jetVeto30_JetEta0to3Up", &jetVeto30_JetEta0to3Up);
-  original->SetBranchAddress("jetVeto30_JetEta0to5Down", &jetVeto30_JetEta0to5Down);
-  original->SetBranchAddress("jetVeto30_JetEta0to5Up", &jetVeto30_JetEta0to5Up);
-  original->SetBranchAddress("jetVeto30_JetEta3to5Down", &jetVeto30_JetEta3to5Down);
-  original->SetBranchAddress("jetVeto30_JetEta3to5Up", &jetVeto30_JetEta3to5Up);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to3Down", &jetVeto30WoNoisyJets_JetEta0to3Down);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to3Up", &jetVeto30WoNoisyJets_JetEta0to3Up);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to5Down", &jetVeto30WoNoisyJets_JetEta0to5Down);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to5Up", &jetVeto30WoNoisyJets_JetEta0to5Up);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta3to5Down", &jetVeto30WoNoisyJets_JetEta3to5Down);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetEta3to5Up", &jetVeto30WoNoisyJets_JetEta3to5Up);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeSampleDown", &jetVeto30WoNoisyJets_JetRelativeSampleDown);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeSampleUp", &jetVeto30WoNoisyJets_JetRelativeSampleUp);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetTotalDown", &jetVeto30WoNoisyJets_JetTotalDown);
+  original->SetBranchAddress("jetVeto30WoNoisyJets_JetTotalUp", &jetVeto30WoNoisyJets_JetTotalUp);
   original->SetBranchAddress("jetVeto30_JetAbsoluteFlavMapDown", &jetVeto30_JetAbsoluteFlavMapDown);
   original->SetBranchAddress("jetVeto30_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
   original->SetBranchAddress("jetVeto30_JetAbsoluteMPFBiasDown", &jetVeto30_JetAbsoluteMPFBiasDown);
@@ -1139,12 +1113,16 @@ void mutau_tree2016::set_branches() {
 
 
 
-  original->SetBranchAddress("vbfMass_JetEta0to3Down", &vbfMass_JetEta0to3Down);
-  original->SetBranchAddress("vbfMass_JetEta0to3Up", &vbfMass_JetEta0to3Up);
-  original->SetBranchAddress("vbfMass_JetEta0to5Down", &vbfMass_JetEta0to5Down);
-  original->SetBranchAddress("vbfMass_JetEta0to5Up", &vbfMass_JetEta0to5Up);
-  original->SetBranchAddress("vbfMass_JetEta3to5Down", &vbfMass_JetEta3to5Down);
-  original->SetBranchAddress("vbfMass_JetEta3to5Up", &vbfMass_JetEta3to5Up);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to3Down", &vbfMassWoNoisyJets_JetEta0to3Down);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to3Up", &vbfMassWoNoisyJets_JetEta0to3Up);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to5Down", &vbfMassWoNoisyJets_JetEta0to5Down);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to5Up", &vbfMassWoNoisyJets_JetEta0to5Up);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta3to5Down", &vbfMassWoNoisyJets_JetEta3to5Down);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetEta3to5Up", &vbfMassWoNoisyJets_JetEta3to5Up);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeSampleDown", &vbfMassWoNoisyJets_JetRelativeSampleDown);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeSampleUp", &vbfMassWoNoisyJets_JetRelativeSampleUp);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetTotalDown", &vbfMassWoNoisyJets_JetTotalDown);
+  original->SetBranchAddress("vbfMassWoNoisyJets_JetTotalUp", &vbfMassWoNoisyJets_JetTotalUp);
   original->SetBranchAddress("vbfMass_JetAbsoluteFlavMapDown", &vbfMass_JetAbsoluteFlavMapDown);
   original->SetBranchAddress("vbfMass_JetAbsoluteFlavMapUp", &vbfMass_JetAbsoluteFlavMapUp);
   original->SetBranchAddress("vbfMass_JetAbsoluteMPFBiasDown", &vbfMass_JetAbsoluteMPFBiasDown);
@@ -1206,3 +1184,5 @@ void mutau_tree2016::set_branches() {
   original->SetBranchAddress("vbfMass_JetTotalDown", &vbfMass_JetTotalDown);
   original->SetBranchAddress("vbfMass_JetTotalUp", &vbfMass_JetTotalUp);
 }
+
+#endif  // ROOT_SRC_EMU_TREE_2017_H_

@@ -15,7 +15,7 @@
 #include "TNamed.h"
 
 // user includes
-#include "ltau_skimmer/ROOT/src/etau_sync_2017.h"
+#include "ltau_skimmer/ROOT/src/emu_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/CLParser.h"
 #include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
 
@@ -23,6 +23,7 @@ using json = nlohmann::json;
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
+
   CLParser parser(argc, argv);
   std::string dir_name = parser.Option("-d");
   std::string job_type = parser.Option("-j");
@@ -56,17 +57,17 @@ int main(int argc, char *argv[]) {
   TH1F* cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
 
   auto open_file = new TFile(ifile.c_str(), "READ");
-  auto ntuple = (TTree *)open_file->Get("et/final/Ntuple");
-  auto evt_count = (TH1F *)open_file->Get("et/eventCount")->Clone();
-  auto wt_count = (TH1F *)open_file->Get("et/summedWeights")->Clone();
+  auto ntuple = (TTree *)open_file->Get("mt/final/Ntuple");
+  auto evt_count = (TH1F *)open_file->Get("mt/eventCount")->Clone();
+  auto wt_count = (TH1F *)open_file->Get("mt/summedWeights")->Clone();
 
   nevents->SetBinContent(1, evt_count->Integral());
   nevents->SetBinContent(2, wt_count->Integral());
 
   auto fout = new TFile(ofile.c_str(), "RECREATE");
 
-  TTree *newtree = new TTree("etau_tree", "etau_tree");
-  etau_tree *skimmer = new etau_tree(ntuple, newtree, isMC, isEmbed, recoil);
+  TTree *newtree = new TTree("emu_tree", "emu_tree");
+  emu_tree2017 *skimmer = new emu_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
   skimmer->do_skimming(cutflow);
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
   events += skimmed_tree->GetEntries();

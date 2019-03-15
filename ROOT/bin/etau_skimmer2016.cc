@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   auto fout = new TFile(ofile.c_str(), "RECREATE");
 
   TTree *newtree = new TTree("etau_tree", "etau_tree");
-  etau_tree *skimmer = new etau_tree(ntuple, newtree, isMC, isEmbed, recoil);
+  etau_tree2016 *skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
   skimmer->do_skimming(cutflow);
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
   events += skimmed_tree->GetEntries();
