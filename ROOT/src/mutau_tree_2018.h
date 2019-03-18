@@ -399,69 +399,28 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     if (isMC && !isEmbed) {
       // met correction due to tau energy scale
       if (in->tZTTGenMatching == 5) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 1.007 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.007 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.007 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.007 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.007 * tau;
-          tau *= 1.007;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 0.998 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.998 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.998 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.998 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.998 * tau;
-          tau *= 0.998;
-        } else if (in->tDecayMode == 10) {
-          MET = MET + tau - 1.001 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.001 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.001 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.001 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.001 * tau;
-          tau *= 1.001;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
+        tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 1.003 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.003 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.003 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.003 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.003 * tau;
-          tau *= 1.003;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 1.036 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.036 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.036 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.036 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.036 * tau;
-          tau *= 1.036;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESDown, tau);
+        tau *= sf;
       }
     } else if (isEmbed) {
       if (in->tZTTGenMatching == 5) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 0.975 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * tau;
-          tau *= 0.975;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 0.975 * 1.051 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * 1.051 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * 1.051 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * 1.051 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * 1.051 * tau;
-          tau *= 0.975 * 1.051;
-        } else if (in->tDecayMode == 10) {
-          MET = MET + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * 0.975 * 0.975 * tau;
-          tau *= 0.975 * 0.975 * 0.975;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESDown, tau);
+        tau *= sf;
       }
     }
 
