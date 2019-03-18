@@ -218,6 +218,7 @@ Float_t mutau_tree2018::do_tes_met_corr(Float_t decayMode, Float_t sf1, Float_t 
     met = met + tau - sf3 * tau;
     return sf3;
   }
+  return 1.;
 }
 
 //////////////////////////////////////////////////////////////////
