@@ -117,10 +117,10 @@ mu_data_samples = {
 prefix = args.prefix
 jobType = args.job
 
-bkg_pref = '/hdfs/store/user/caillol/TauID2018_data_19dec/'
+bkg_pref = '/hdfs/store/user/caillol/TauID2018_19dec/'
 sig_pref = bkg_pref
 # ac_pref = '/hdfs/store/user/ymaravin/ac2017_v2/'
-data_pref = '/hdfs/store/user/caillol/TauID2018_19dec/'
+data_pref = '/hdfs/store/user/caillol/TauID2018_data_19dec/'
 # embed_pref = '/hdfs/store/user/caillol/SMHTT2017_embedded_8nov/'
 
 settings = {
