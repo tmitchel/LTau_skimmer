@@ -424,7 +424,7 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           genpY,               // generator Z/W/Higgs py (float)
           vispX,               // generator visible Z/W/Higgs px (float)
           vispY,               // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,       // number of jets (hadronic jet multiplicity) (int)
+          jetVeto30,           // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,        // corrected type I pf met px (float)
           pfmetcorr_ey);       // corrected type I pf met py (float)
 
@@ -481,70 +481,29 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     if (isMC && !isEmbed) {
       // met correction due to tau energy scale
-      if (tZTTGenMatching == 5) {
-        if (tDecayMode == 0) {
-          MET = MET + tau - 1.007*tau;
-          MET_JESUp = MET_JESUp+tau-1.007*tau;
-          MET_JESDown = MET_JESDown+tau-1.007*tau;
-          MET_UESUp = MET_UESUp+tau-1.007*tau;
-          MET_UESDown = MET_UESDown+tau-1.007*tau;
-          tau *= 1.007;
-        } else if (tDecayMode == 1) {
-          MET = MET + tau - 0.998*tau;
-          MET_JESUp = MET_JESUp+tau-0.998*tau;
-          MET_JESDown = MET_JESDown+tau-0.998*tau;
-          MET_UESUp = MET_UESUp+tau-0.998*tau;
-          MET_UESDown = MET_UESDown+tau-0.998*tau;
-          tau *= 0.998;
-        } else if (tDecayMode == 10) {
-          MET = MET + tau - 1.001*tau;
-          MET_JESUp = MET_JESUp+tau-1.001*tau;
-          MET_JESDown = MET_JESDown+tau-1.001*tau;
-          MET_UESUp = MET_UESUp+tau-1.001*tau;
-          MET_UESDown = MET_UESDown+tau-1.001*tau;
-          tau *= 1.001;
-        }
-      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
-        if (tDecayMode == 0) {
-          MET = MET+tau-1.003*tau;
-          MET_JESUp = MET_JESUp+tau-1.003*tau;
-          MET_JESDown = MET_JESDown+tau-1.003*tau;
-          MET_UESUp = MET_UESUp+tau-1.003*tau;
-          MET_UESDown = MET_UESDown+tau-1.003*tau;
-          tau *= 1.003;
-        } else if (tDecayMode == 1) {
-          MET = MET+tau-1.036*tau;
-          MET_JESUp = MET_JESUp+tau-1.036*tau;
-          MET_JESDown = MET_JESDown+tau-1.036*tau;
-          MET_UESUp = MET_UESUp+tau-1.036*tau;
-          MET_UESDown = MET_UESDown+tau-1.036*tau;
-          tau *= 1.036;
-        }
+      if (in->tZTTGenMatching == 5) {
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
+        tau *= sf;
+      } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESDown, tau);
+        tau *= sf;
       }
     } else if (isEmbed) {
-      if (tZTTGenMatching == 5) {
-        if (tDecayMode == 0) {
-          MET = MET + tau - 0.975*tau;
-          MET_JESUp = MET_JESUp+tau-0.975*tau;
-          MET_JESDown = MET_JESDown+tau-0.975*tau;
-          MET_UESUp = MET_UESUp+tau-0.975*tau;
-          MET_UESDown = MET_UESDown+tau-0.975*tau;
-          tau *= 0.975;
-        } else if (tDecayMode == 1) {
-          MET = MET + tau - 0.975*1.051*tau;
-          MET_JESUp = MET_JESUp+tau-0.975*1.051*tau;
-          MET_JESDown = MET_JESDown+tau-0.975*1.051*tau;
-          MET_UESUp = MET_UESUp+tau-0.975*1.051*tau;
-          MET_UESDown = MET_UESDown+tau-0.975*1.051*tau;
-          tau *= 0.975*1.051;
-        } else if (tDecayMode == 10) {
-          MET = MET + tau - 0.975*0.975*0.975*tau;
-          MET_JESUp = MET_JESUp+tau-0.975*0.975*0.975*tau;
-          MET_JESDown = MET_JESDown+tau-0.975*0.975*0.975*tau;
-          MET_UESUp = MET_UESUp+tau-0.975*0.975*0.975*tau;
-          MET_UESDown = MET_UESDown+tau-0.975*0.975*0.975*tau;
-          tau *= 0.975*0.975*0.975;
-        }
+      if (in->tZTTGenMatching == 5) {
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESDown, tau);
+        tau *= sf;
       }
     }
 
