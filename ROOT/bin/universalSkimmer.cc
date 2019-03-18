@@ -20,8 +20,10 @@
 #include "ltau_skimmer/ROOT/src/base_tree.h"
 #include "ltau_skimmer/ROOT/src/etau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/etau_tree_2017.h"
+#include "ltau_skimmer/ROOT/src/etau_tree_2018.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
+#include "ltau_skimmer/ROOT/src/mutau_tree_2018.h"
 #include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
 
 using json = nlohmann::json;
