@@ -1,11 +1,14 @@
 // Copyright 2019 Tyler Mitchell
 
+#ifndef ROOT_SRC_ETAU_TREE_2018_H_
+#define ROOT_SRC_ETAU_TREE_2018_H_
+
 #include <cmath>
 #include <iostream>
 #include <utility>
 #include <vector>
 #include "./base_tree.h"
-#include "./et_2018_input_branches.h"
+#include "../interface/et_2018_input_branches.h"
 #include "RecoilCorrector.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
@@ -38,6 +41,7 @@ class etau_tree2018 : public virtual base_tree {
   virtual ~etau_tree2018() {}
   void do_skimming(TH1F*);
   void set_branches();
+  Float_t do_tes_met_corr(Float_t, Float_t, Float_t, Float_t, TLorentzVector&, TLorentzVector);
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
 
@@ -120,14 +124,15 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     auto Ele27 = in->eMatchesEle27Filter && in->eMatchesEle27Path && in->Ele27WPTightPass;
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
-    auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24Tau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
+    // don't know if Ele24...Tight is correct or not
+    auto Cross = in->Ele24TightTau30Pass && in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
     if (isEmbed || (Ele27 || Ele32 || Ele35 || Cross))
       cutflow->Fill(2., 1.);
     else
       continue;
 
-    if (!isEmbed || (in->Ele27WPTightPass || in->Ele32WPTightPass || in->Ele35WPTightPass || in->Ele24Tau30Pass))
+    if (!isEmbed || (in->Ele27WPTightPass || in->Ele32WPTightPass || in->Ele35WPTightPass))
       cutflow->Fill(3., 1.);
     else
       continue;
@@ -198,6 +203,19 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
   }
   if (best_evt > -1)
     good_events.push_back(best_evt);
+}
+
+Float_t etau_tree2018::do_tes_met_corr(Float_t decayMode, Float_t sf1, Float_t sf2, Float_t sf3, TLorentzVector& met, TLorentzVector tau) {
+  if (decayMode == 0) {
+    met = met + tau - sf1 * tau;
+    return sf1;
+  } else if (decayMode == 1) {
+    met = met + tau - sf2 * tau;
+    return sf2;
+  } else if (decayMode == 10) {
+    met = met + tau - sf3 * tau;
+    return sf3;
+  }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -377,69 +395,28 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     if (isMC && !isEmbed) {
       // met correction due to tau energy scale
       if (in->tZTTGenMatching == 5) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 1.007 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.007 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.007 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.007 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.007 * tau;
-          tau *= 1.007;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 0.998 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.998 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.998 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.998 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.998 * tau;
-          tau *= 0.998;
-        } else if (in->tDecayMode == 10) {
-          MET = MET + tau - 1.001 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.001 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.001 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.001 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.001 * tau;
-          tau *= 1.001;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
+        tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 1.003 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.003 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.003 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.003 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.003 * tau;
-          tau *= 1.003;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 1.036 * tau;
-          MET_JESUp = MET_JESUp + tau - 1.036 * tau;
-          MET_JESDown = MET_JESDown + tau - 1.036 * tau;
-          MET_UESUp = MET_UESUp + tau - 1.036 * tau;
-          MET_UESDown = MET_UESDown + tau - 1.036 * tau;
-          tau *= 1.036;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESDown, tau);
+        tau *= sf;
       }
     } else if (isEmbed) {
       if (in->tZTTGenMatching == 5) {
-        if (in->tDecayMode == 0) {
-          MET = MET + tau - 0.975 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * tau;
-          tau *= 0.975;
-        } else if (in->tDecayMode == 1) {
-          MET = MET + tau - 0.975 * 1.051 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * 1.051 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * 1.051 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * 1.051 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * 1.051 * tau;
-          tau *= 0.975 * 1.051;
-        } else if (in->tDecayMode == 10) {
-          MET = MET + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_JESUp = MET_JESUp + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_JESDown = MET_JESDown + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_UESUp = MET_UESUp + tau - 0.975 * 0.975 * 0.975 * tau;
-          MET_UESDown = MET_UESDown + tau - 0.975 * 0.975 * 0.975 * tau;
-          tau *= 0.975 * 0.975 * 0.975;
-        }
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESDown, tau);
+        tau *= sf;
       }
     }
 
@@ -496,22 +473,21 @@ void etau_tree2018::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
-  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 
-  tree->Branch("eMatchesEle27Filter", &placeholder, "eMatchesEle27Filter/F");
-  tree->Branch("eMatchesEle32Filter", &placeholder, "eMatchesEle32Filter/F");
-  tree->Branch("eMatchesEle35Filter", &placeholder, "eMatchesEle35Filter/F");
-  tree->Branch("eMatchesEle24Tau30Filter", &placeholder, "eMatchesEle24Tau30Filter/F");
-  tree->Branch("tMatchesEle24Tau30Filter", &placeholder, "tMatchesEle24Tau30Filter/F");
-  tree->Branch("eMatchesEle27Path", &placeholder, "eMatchesEle27Path/F");
-  tree->Branch("eMatchesEle32Path", &placeholder, "eMatchesEle32Path/F");
-  tree->Branch("eMatchesEle35Path", &placeholder, "eMatchesEle35Path/F");
-  tree->Branch("eMatchesEle24Tau30Path", &placeholder, "eMatchesEle24Tau30Path/F");
-  tree->Branch("tMatchesEle24Tau30Path", &placeholder, "tMatchesEle24Tau30Path/F");
-  tree->Branch("Ele24Tau30Pass", &placeholder, "Ele24Tau30Pass/F");
-  tree->Branch("Ele27WPTightPass", &placeholder, "Ele27WPTightPass/F");
-  tree->Branch("Ele32WPTightPass", &placeholder, "Ele32WPTightPass/F");
-  tree->Branch("Ele35WPTightPass", &placeholder, "Ele35WPTightPass/F");
+  tree->Branch("eMatchesEle27Filter", &in->eMatchesEle27Filter, "eMatchesEle27Filter/F");
+  tree->Branch("eMatchesEle32Filter", &in->eMatchesEle32Filter, "eMatchesEle32Filter/F");
+  tree->Branch("eMatchesEle35Filter", &in->eMatchesEle35Filter, "eMatchesEle35Filter/F");
+  tree->Branch("eMatchesEle24Tau30Filter", &in->eMatchesEle24Tau30Filter, "eMatchesEle24Tau30Filter/F");
+  tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter, "tMatchesEle24Tau30Filter/F");
+  tree->Branch("eMatchesEle27Path", &in->eMatchesEle27Path, "eMatchesEle27Path/F");
+  tree->Branch("eMatchesEle32Path", &in->eMatchesEle32Path, "eMatchesEle32Path/F");
+  tree->Branch("eMatchesEle35Path", &in->eMatchesEle35Path, "eMatchesEle35Path/F");
+  tree->Branch("eMatchesEle24Tau30Path", &in->eMatchesEle24Tau30Path, "eMatchesEle24Tau30Path/F");
+  tree->Branch("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path, "tMatchesEle24Tau30Path/F");
+  tree->Branch("Ele24Tau30Pass", &in->Ele24TightTau30Pass, "Ele24Tau30Pass/F");
+  tree->Branch("Ele27WPTightPass", &in->Ele27WPTightPass, "Ele27WPTightPass/F");
+  tree->Branch("Ele32WPTightPass", &in->Ele32WPTightPass, "Ele32WPTightPass/F");
+  tree->Branch("Ele35WPTightPass", &in->Ele35WPTightPass, "Ele35WPTightPass/F");
 
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
@@ -847,4 +823,7 @@ void etau_tree2018::set_branches() {
   tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
   tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &placeholder, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
+  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 }
+
+#endif  // ROOT_SRC_ETAU_TREE_2018_H_
