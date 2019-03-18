@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 #include "./base_tree.h"
-#include "./mt_2018_input_branches.h"
+#include "../interface/mt_2018_input_branches.h"
 #include "RecoilCorrector.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
@@ -23,7 +23,6 @@ class mutau_tree2018 : public virtual base_tree {
 
  public:
   // Member variables
-
   Int_t Run, Lumi, recoil;
   Float_t placeholder;  // for all branches not present in 2018
 
@@ -33,68 +32,14 @@ class mutau_tree2018 : public virtual base_tree {
   Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp,
       pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
-
   Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
-
-  // // Tau Isolation
-  // Float_t tByLooseIsolationMVArun2v1DBoldDMwLT, tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT;
-  // Float_t tRerunMVArun2v2DBoldDMwLTLoose, tRerunMVArun2v2DBoldDMwLTMedium, tRerunMVArun2v2DBoldDMwLTTight, tRerunMVArun2v2DBoldDMwLTVTight, tRerunMVArun2v2DBoldDMwLTVVTight;
-
-  // // Jets
-  // Float_t vbfMassWoNoisyJets, jpt_1, jeta_1, jphi_1, jcsv_1, jpt_2, jeta_2, jphi_2, jcsv_2, bpt_1, beta_1, bphi_1, bcsv_1, bflavor_1, bpt_2, beta_2, bphi_2, bcsv_2, bflavor_2, bjetDeepCSVVeto20Tight, bjetDeepCSVVeto30Loose, bjetDeepCSVVeto30Medium, bjetDeepCSVVeto30Tight, topQuarkPt1, topQuarkPt2;
-
-  // // Gen Ino
-  // Float_t tZTTGenPt, tZTTGenPhi, tZTTGenEta, tZTTGenDR, tGenDecayMode, tGenEnergy, tGenEta, tGenJetEta, tGenJetPt, tGenMotherEnergy, tGenMotherEta, tGenMotherPdgId, tGenMotherPhi, tGenMotherPt, tGenPdgId, tGenPhi, tGenPt, tGenStatus,
-  //         mGenCharge, mGenDirectPromptTauDecayFinalState, mGenEnergy, mGenEta, mGenIsPrompt, mGenMotherPdgId, mGenParticle, mGenPdgId, mGenPhi, mGenPrompt, mGenPromptTauDecay, mGenPt, mGenTauDecay, mGenVZ, mGenVtxPVMatch;
-
-  // // Others
-  // Float_t rho, metcov00, metcov01, metcov10, metcov11, NUP, genM, genpT, genEta, numGenJets, nTruePU, nvtx, mZTTGenMatching, mCharge, GenWeight, metSig, metcov00_v2, metcov01_v2, metcov10_v2, metcov11_v2, Rivet_higgsPt, Rivet_nJets30,
-  // type1_pfMetEt, type1_pfMetPhi, bjetDeepCSVVeto20MediumWoNoisyJets;
-
-  // // Others Uncertainty
-  // Float_t type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPhi_UnclusteredEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnDown,
-  //         type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPhi_JetEnDown,
-  //         type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPhi_JetResDown;
-
-  // // Flags
-  // Float_t Flag_BadChargedCandidateFilter, Flag_BadPFMuonFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_HBHENoiseIsoFilter, Flag_badMuons, Flag_duplicateMuons, Flag_ecalBadCalibFilter, Flag_eeBadScFilter,
-  //         Flag_globalSuperTightHalo2016Filter, Flag_globalTightHalo2016Filter, Flag_goodVertices;
-
-  // // Systematics
-  // Float_t jetVeto30WoNoisyJets_JetEta0to3Down, jetVeto30WoNoisyJets_JetEta0to3Up, jetVeto30WoNoisyJets_JetEta0to5Down, jetVeto30WoNoisyJets_JetEta0to5Up, jetVeto30WoNoisyJets_JetEta3to5Down, jetVeto30WoNoisyJets_JetEta3to5Up,
-  //         jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets, jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets, jetVeto30WoNoisyJets_JetRelativeSampleDown, jetVeto30WoNoisyJets_JetRelativeSampleUp, jetVeto30WoNoisyJets_JetTotalDown,
-  //         jetVeto30WoNoisyJets_JetTotalUp, jetVeto30_JetAbsoluteFlavMapDown, jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteScaleUp,
-  //         jetVeto30_JetAbsoluteStatDown, jetVeto30_JetAbsoluteStatUp, jetVeto30_JetClosureDown, jetVeto30_JetClosureUp, jetVeto30_JetEnDown, jetVeto30_JetFlavorQCDDown, jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationDown,
-  //         jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCDown, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBDown, jetVeto30_JetPileUpPtBBUp, jetVeto30_JetPileUpPtEC1Down, jetVeto30_JetPileUpPtEC1Up, jetVeto30_JetPileUpPtEC2Down,
-  //         jetVeto30_JetPileUpPtEC2Up, jetVeto30_JetPileUpPtHFDown, jetVeto30_JetPileUpPtHFUp, jetVeto30_JetPileUpPtRefDown, jetVeto30_JetPileUpPtRefUp, jetVeto30_JetRelativeBalDown, jetVeto30_JetRelativeBalUp, jetVeto30_JetRelativeFSRDown,
-  //         jetVeto30_JetRelativeFSRUp, jetVeto30_JetRelativeJEREC1Down, jetVeto30_JetRelativeJEREC1Up, jetVeto30_JetRelativeJEREC2Down, jetVeto30_JetRelativeJEREC2Up, jetVeto30_JetRelativeJERHFDown, jetVeto30_JetRelativeJERHFUp,
-  //         jetVeto30_JetRelativePtBBDown, jetVeto30_JetRelativePtBBUp, jetVeto30_JetRelativePtEC1Down, jetVeto30_JetRelativePtEC1Up, jetVeto30_JetRelativePtEC2Down, jetVeto30_JetRelativePtEC2Up, jetVeto30_JetRelativePtHFDown,
-  //         jetVeto30_JetRelativePtHFUp, jetVeto30_JetRelativeSampleDown, jetVeto30_JetRelativeSampleUp, jetVeto30_JetRelativeStatECDown, jetVeto30_JetRelativeStatECUp, jetVeto30_JetRelativeStatFSRDown, jetVeto30_JetRelativeStatFSRUp,
-  //         jetVeto30_JetRelativeStatHFDown, jetVeto30_JetRelativeStatHFUp, jetVeto30_JetSinglePionECALDown, jetVeto30_JetSinglePionECALUp, jetVeto30_JetSinglePionHCALDown, jetVeto30_JetSinglePionHCALUp, jetVeto30_JetTimePtEtaDown,
-  //         jetVeto30_JetTimePtEtaUp, jetVeto30_JetTotalDown, jetVeto30_JetTotalUp;
-
-  // Float_t vbfMassWoNoisyJets_JetEta0to3Down, vbfMassWoNoisyJets_JetEta0to3Up, vbfMassWoNoisyJets_JetEta0to5Down, vbfMassWoNoisyJets_JetEta0to5Up, vbfMassWoNoisyJets_JetEta3to5Down, vbfMassWoNoisyJets_JetEta3to5Up,
-  //         vbfMassWoNoisyJets_JetRelativeSampleDown, vbfMassWoNoisyJets_JetRelativeSampleUp, vbfMassWoNoisyJets_JetTotalDown,
-  //         vbfMassWoNoisyJets_JetTotalUp, vbfMass_JetAbsoluteFlavMapDown, vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasDown, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleDown, vbfMass_JetAbsoluteScaleUp,
-  //         vbfMass_JetAbsoluteStatDown, vbfMass_JetAbsoluteStatUp, vbfMass_JetClosureDown, vbfMass_JetClosureUp, vbfMass_JetFlavorQCDDown, vbfMass_JetFlavorQCDUp, vbfMass_JetFragmentationDown,
-  //         vbfMass_JetFragmentationUp, vbfMass_JetPileUpDataMCDown, vbfMass_JetPileUpDataMCUp, vbfMass_JetPileUpPtBBDown, vbfMass_JetPileUpPtBBUp, vbfMass_JetPileUpPtEC1Down, vbfMass_JetPileUpPtEC1Up, vbfMass_JetPileUpPtEC2Down,
-  //         vbfMass_JetPileUpPtEC2Up, vbfMass_JetPileUpPtHFDown, vbfMass_JetPileUpPtHFUp, vbfMass_JetPileUpPtRefDown, vbfMass_JetPileUpPtRefUp, vbfMass_JetRelativeBalDown, vbfMass_JetRelativeBalUp, vbfMass_JetRelativeFSRDown,
-  //         vbfMass_JetRelativeFSRUp, vbfMass_JetRelativeJEREC1Down, vbfMass_JetRelativeJEREC1Up, vbfMass_JetRelativeJEREC2Down, vbfMass_JetRelativeJEREC2Up, vbfMass_JetRelativeJERHFDown, vbfMass_JetRelativeJERHFUp,
-  //         vbfMass_JetRelativePtBBDown, vbfMass_JetRelativePtBBUp, vbfMass_JetRelativePtEC1Down, vbfMass_JetRelativePtEC1Up, vbfMass_JetRelativePtEC2Down, vbfMass_JetRelativePtEC2Up, vbfMass_JetRelativePtHFDown,
-  //         vbfMass_JetRelativePtHFUp, vbfMass_JetRelativeSampleDown, vbfMass_JetRelativeSampleUp, vbfMass_JetRelativeStatECDown, vbfMass_JetRelativeStatECUp, vbfMass_JetRelativeStatFSRDown, vbfMass_JetRelativeStatFSRUp,
-  //         vbfMass_JetRelativeStatHFDown, vbfMass_JetRelativeStatHFUp, vbfMass_JetSinglePionECALDown, vbfMass_JetSinglePionECALUp, vbfMass_JetSinglePionHCALDown, vbfMass_JetSinglePionHCALUp, vbfMass_JetTimePtEtaDown,
-  //         vbfMass_JetTimePtEtaUp, vbfMass_JetTotalDown, vbfMass_JetTotalUp;
-
-  // // 2016 Placeholder
-  // Float_t amcatNLO_weight, tAgainstElectronTightMVA6, tAgainstMuonLoose3, decayModeFindingNewDMs_2, mMatchesIsoMu22eta2p1Path, mMatchesIsoTkMu22eta2p1Path, mMatchesIsoMu22Path,
-  //     mMatchesIsoTkMu22Path, mMatchesMu19Tau20sL1Path, mIsoMu22eta2p1Filter, mIsoTkMu22eta2p1Filter, mIsoMu22Filter, mIsoTkMu22Filter, mMatchesMu19Tau20sL1Filter, singleIsoMu22eta2p1Pass,
-  //     singleIsoTkMu22eta2p1Pass, singleIsoMu22Pass, singleIsoTkMu22Pass, singleMu19eta2p1LooseTau20singleL1Pass, tMatchesMu19Tau20sL1Path, tMatchesMu19Tau20sL1Filter;
 
   // Member functions
   mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
   virtual ~mutau_tree2018() {}
   void do_skimming(TH1F*);
   void set_branches();
+  Float_t do_tes_met_corr(Float_t, Float_t, Float_t, Float_t, TLorentzVector&, TLorentzVector);
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
 
@@ -176,9 +121,10 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;
-    auto Mu27 = in->IsoMu27Pass && in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;
-    auto Cross = in->Mu20Tau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
+    auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;  // good in 2017 & 2018
+    auto Mu27 = in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;  // no Pass in 2018
+    // don't know if I need TightTau or what
+    auto Cross = in->Mu20TightTau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
 
     if (Mu24 || Mu27 || Cross)
       cutflow->Fill(2., 1.);
@@ -259,6 +205,19 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
   }
   if (best_evt > -1)
     good_events.push_back(best_evt);
+}
+
+Float_t mutau_tree2018::do_tes_met_corr(Float_t decayMode, Float_t sf1, Float_t sf2, Float_t sf3, TLorentzVector& met, TLorentzVector tau) {
+  if (decayMode == 0) {
+    met = met + tau - sf1 * tau;
+    return sf1;
+  } else if (decayMode == 1) {
+    met = met + tau - sf2 * tau;
+    return sf2;
+  } else if (decayMode == 10) {
+    met = met + tau - sf3 * tau;
+    return sf3;
+  }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -559,14 +518,13 @@ void mutau_tree2018::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
-  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 
   tree->Branch("mMatchesIsoMu20Tau27Path", &in->mMatchesIsoMu20Tau27Path, "mMatchesIsoMu20Tau27Path/F");
   tree->Branch("mMatchesIsoMu24Filter", &in->mMatchesIsoMu24Filter, "mMatchesIsoMu24Filter/F");
   tree->Branch("mMatchesIsoMu24Path", &in->mMatchesIsoMu24Path, "mMatchesIsoMu24Path/F");
   tree->Branch("mMatchesIsoMu27Filter", &in->mMatchesIsoMu27Filter, "mMatchesIsoMu27Filter/F");
   tree->Branch("mMatchesIsoMu27Path", &in->mMatchesIsoMu27Path, "mMatchesIsoMu27Path/F");
-  tree->Branch("Mu20Tau27Pass", &placeholder, "Mu20Tau27Pass/F");
+  tree->Branch("Mu20Tau27Pass", &in->Mu20TightTau27Pass, "Mu20Tau27Pass/F");
   tree->Branch("IsoMu27Pass", &placeholder, "IsoMu27Pass/F");
   tree->Branch("IsoMu24Pass", &in->IsoMu24Pass, "IsoMu24Pass/F");
   tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter, "tMatchesIsoMu20Tau27Filter/F");
@@ -575,19 +533,14 @@ void mutau_tree2018::set_branches() {
   tree->Branch("matchIsoTkMu22eta2p1_1", &placeholder);
   tree->Branch("matchIsoMu22_1", &placeholder);
   tree->Branch("matchIsoTkMu22_1", &placeholder);
-  tree->Branch("matchIsoMu19Tau20_1", &placeholder);
   tree->Branch("filterIsoMu22eta2p1_1", &placeholder);
   tree->Branch("filterIsoTkMu22eta2p1_1", &placeholder);
   tree->Branch("filterIsoMu22_1", &placeholder);
   tree->Branch("filterIsoTkMu22_1", &placeholder);
-  tree->Branch("filterIsoMu19Tau20_1", &placeholder);
   tree->Branch("passIsoMu22eta2p1", &placeholder);
   tree->Branch("passIsoTkMu22eta2p1", &placeholder);
   tree->Branch("passIsoMu22", &placeholder);
   tree->Branch("passIsoTkMu22", &placeholder);
-  tree->Branch("passIsoMu19Tau20", &placeholder);
-  tree->Branch("matchIsoMu19Tau20_2", &placeholder);
-  tree->Branch("filterIsoMu19Tau20_2", &placeholder);
 
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
@@ -919,6 +872,12 @@ void mutau_tree2018::set_branches() {
   tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
   tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
+  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
+  tree->Branch("matchIsoMu19Tau20_1", &placeholder);
+  tree->Branch("filterIsoMu19Tau20_1", &placeholder);
+  tree->Branch("passIsoMu19Tau20", &placeholder);
+  tree->Branch("matchIsoMu19Tau20_2", &placeholder);
+  tree->Branch("filterIsoMu19Tau20_2", &placeholder);
 }
 
 #endif  // ROOT_SRC_MUTAU_TREE_2018_H_
