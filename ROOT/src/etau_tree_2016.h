@@ -346,7 +346,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,      // generator Z/W/Higgs py (float)
           in->vispX,      // generator visible Z/W/Higgs px (float)
           in->vispY,      // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -482,21 +482,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
     tree->Branch("vbfMass", &in->vbfMass, "vbfMass/F");
 
-    tree->Branch("eMatchesEle27Filter", &placeholder, "eMatchesEle27Filter/F");
-    tree->Branch("eMatchesEle32Filter", &placeholder, "eMatchesEle32Filter/F");
-    tree->Branch("eMatchesEle35Filter", &placeholder, "eMatchesEle35Filter/F");
     tree->Branch("eMatchesEle24Tau30Filter", &in->eMatchesEle24Tau30Filter, "eMatchesEle24Tau30Filter/F");
     tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter, "tMatchesEle24Tau30Filter/F");
-    tree->Branch("eMatchesEle27Path", &placeholder, "eMatchesEle27Path/F");
-    tree->Branch("eMatchesEle32Path", &placeholder, "eMatchesEle32Path/F");
-    tree->Branch("eMatchesEle35Path", &placeholder, "eMatchesEle35Path/F");
     tree->Branch("eMatchesEle24Tau30Path", &in->eMatchesEle24Tau30Path, "eMatchesEle24Tau30Path/F");
     tree->Branch("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path, "tMatchesEle24Tau30Path/F");
-    tree->Branch("Ele24Tau30Pass", &placeholder, "Ele24Tau30Pass/F");
-    tree->Branch("Ele27WPTightPass", &placeholder, "Ele27WPTightPass/F");
-    tree->Branch("Ele32WPTightPass", &placeholder, "Ele32WPTightPass/F");
-    tree->Branch("Ele35WPTightPass", &placeholder, "Ele35WPTightPass/F");
-    tree->Branch("eMatchesSingleE25Tight", &placeholder, "eMatchesSingleE25Tight/F");
     tree->Branch("eMatchesEle25TightFilter", &in->eMatchesEle25TightFilter, "eMatchesEle25TightFilter/F");
     tree->Branch("singleE25eta2p1TightPass", &in->singleE25eta2p1TightPass, "singleE25eta2p1TightPass/F");
 
@@ -527,7 +516,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("d0_1", &in->ePVDXY, "d0_1/F");
     tree->Branch("q_1", &in->eCharge, "q_1/F");
     tree->Branch("iso_1", &in->eIsoDB03, "iso_1/F");
-    tree->Branch("NoisoID80_1", &placeholder, "NoisoID80_1/F");
     tree->Branch("pt_2", &pt_2, "pt_2/F");
     tree->Branch("eta_2", &eta_2, "eta_2/F");
     tree->Branch("phi_2", &phi_2, "phi_2/F");
@@ -540,8 +528,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("q_2", &in->tCharge, "q_2/F");
     tree->Branch("iso_2", &in->tByIsolationMVArun2v1DBoldDMwLTraw, "iso_2/F");
     tree->Branch("decayModeFinding_2", &in->tDecayModeFinding, "decayModeFinding_2/F");
+    tree->Branch("decayModeFindingNewDMs_2", &in->tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
     tree->Branch("l2_decayMode", &in->tDecayMode, "l2_decayMode/F");
 
+    tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
     tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
     tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &in->tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
     tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
@@ -552,6 +542,11 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("tRerunMVArun2v1DBoldDMwLTTight", &in->tRerunMVArun2v1DBoldDMwLTTight, "tRerunMVArun2v2DBoldDMwLTTight/F");
     tree->Branch("tRerunMVArun2v1DBoldDMwLTVTight", &in->tRerunMVArun2v1DBoldDMwLTVTight, "tRerunMVArun2v2DBoldDMwLTVTight/F");
     tree->Branch("tRerunMVArun2v1DBoldDMwLTVVTight", &in->tRerunMVArun2v1DBoldDMwLTVVTight, "tRerunMVArun2v2DBoldDMwLTVVTight/F");
+
+    tree->Branch("againstElectronTightMVA6_2", &in->tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
+    tree->Branch("againstElectronVLooseMVA6_2", &in->tAgainstElectronVLooseMVA6, "againstElectronVLooseMVA6_2/F");
+    tree->Branch("againstMuonTight3_2", &in->tAgainstMuonLoose3, "againstMuonTight3_2/F");
+    tree->Branch("againstMuonLoose3_2", &in->tAgainstMuonTight3, "againstMuonLoose3_2/F");
 
     tree->Branch("rho", &in->rho, "rho/F");
     tree->Branch("metcov00", &in->metcov00, "metcov00/F");
@@ -569,7 +564,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("numGenJets", &in->numGenJets, "numGenJets/F");
     tree->Branch("npu", &in->nTruePU, "npu/F");
     tree->Branch("npv", &in->nvtx, "npv/F");
-    tree->Branch("eMVANoisoWP80", &placeholder, "eMVANoisoWP80/F");
     tree->Branch("genweight", &in->GenWeight, "genweight/F");
     tree->Branch("metSig", &in->metSig, "metSig/F");
     tree->Branch("Rivet_higgsPt", &in->Rivet_higgsPt, "Rivet_higgsPt/F");
@@ -600,11 +594,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("bjetCISVVeto30Loose", &in->bjetCISVVeto30Loose, "bjetCISVVeto30Loose/F");
     tree->Branch("bjetCISVVeto30Medium", &in->bjetCISVVeto30Medium, "bjetCISVVeto30Medium/F");
     tree->Branch("bjetCISVVeto30Tight", &in->bjetCISVVeto30Tight, "bjetCISVVeto30Tight/F");
-
-    tree->Branch("bjetDeepCSVVeto20Tight", &placeholder, "bjetDeepCSVVeto20Tight/F");
-    tree->Branch("bjetDeepCSVVeto30Loose", &placeholder, "bjetDeepCSVVeto30Loose/F");
-    tree->Branch("bjetDeepCSVVeto30Medium", &placeholder, "bjetDeepCSVVeto30Medium/F");
-    tree->Branch("bjetDeepCSVVeto30Tight", &placeholder, "bjetDeepCSVVeto30Tight/F");
 
     tree->Branch("topQuarkPt1", &in->topQuarkPt1, "topQuarkPt1/F");
     tree->Branch("topQuarkPt2", &in->topQuarkPt2, "topQuarkPt2/F");
@@ -651,9 +640,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("Flag_HBHENoiseIsoFilter", &in->Flag_HBHENoiseIsoFilter, "Flag_HBHENoiseIsoFilter/F");
     tree->Branch("Flag_badMuons", &in->Flag_badMuons, "Flag_badMuons/F");
     tree->Branch("Flag_duplicateMuons", &in->Flag_duplicateMuons, "Flag_duplicateMuons/F");
-    tree->Branch("Flag_ecalBadCalibFilter", &placeholder, "Flag_ecalBadCalibFilter/F");
     tree->Branch("Flag_eeBadScFilter", &in->Flag_eeBadScFilter, "Flag_eeBadScFilter/F");
-    tree->Branch("Flag_globalSuperTightHalo2016Filter", &placeholder, "Flag_globalSuperTightHalo2016Filter/F");
     tree->Branch("Flag_globalTightHalo2016Filter", &in->Flag_globalTightHalo2016Filter, "Flag_globalTightHalo2016Filter/F");
     tree->Branch("Flag_goodVertices", &in->Flag_goodVertices, "Flag_goodVertices/F");
 
@@ -684,16 +671,8 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("type1_pfMet_shiftedPt_JetEnDown", &in->type1_pfMet_shiftedPt_JetEnDown, "type1_pfMet_shiftedPt_JetEnDown/F");
     tree->Branch("type1_pfMet_shiftedPhi_JetEnDown", &in->type1_pfMet_shiftedPhi_JetEnDown, "type1_pfMet_shiftedPhi_JetEnDown/F");
 
-    tree->Branch("jetVeto30_JetEta0to3Down", &placeholder, "jetVeto30_JetEta0to3Down/F");
-    tree->Branch("jetVeto30_JetEta0to3Up", &placeholder);
-    tree->Branch("jetVeto30_JetEta0to5Down", &placeholder);
-    tree->Branch("jetVeto30_JetEta0to5Up", &placeholder);
-    tree->Branch("jetVeto30_JetEta3to5Down", &placeholder);
-    tree->Branch("jetVeto30_JetEta3to5Up", &placeholder);
     tree->Branch("jetVeto30_JetRelativeBalDown", &in->jetVeto30_JetRelativeBalDown);
     tree->Branch("jetVeto30_JetRelativeBalUp", &in->jetVeto30_JetRelativeBalUp);
-    tree->Branch("jetVeto30_JetRelativeSampleDown", &placeholder);
-    tree->Branch("jetVeto30_JetRelativeSampleUp", &placeholder);
     tree->Branch("jetVeto30_JetTotalDown", &in->jetVeto30_JetTotalDown);
     tree->Branch("jetVeto30_JetTotalUp", &in->jetVeto30_JetTotalUp);
     tree->Branch("jetVeto30_JetAbsoluteFlavMapDown", &in->jetVeto30_JetAbsoluteFlavMapDown);
@@ -741,8 +720,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("jetVeto30_JetRelativePtEC2Up", &in->jetVeto30_JetRelativePtEC2Up);
     tree->Branch("jetVeto30_JetRelativePtHFDown", &in->jetVeto30_JetRelativePtHFDown);
     tree->Branch("jetVeto30_JetRelativePtHFUp", &in->jetVeto30_JetRelativePtHFUp);
-    tree->Branch("jetVeto30_JetRelativeSampleDown", &placeholder);
-    tree->Branch("jetVeto30_JetRelativeSampleUp", &placeholder);
     tree->Branch("jetVeto30_JetRelativeStatECDown", &in->jetVeto30_JetRelativeStatECDown);
     tree->Branch("jetVeto30_JetRelativeStatECUp", &in->jetVeto30_JetRelativeStatECUp);
     tree->Branch("jetVeto30_JetRelativeStatFSRDown", &in->jetVeto30_JetRelativeStatFSRDown);
@@ -758,14 +735,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("jetVeto30_JetTotalDown", &in->jetVeto30_JetTotalDown);
     tree->Branch("jetVeto30_JetTotalUp", &in->jetVeto30_JetTotalUp);
 
-    tree->Branch("vbfMass_JetEta0to3Down", &placeholder);
-    tree->Branch("vbfMass_JetEta0to3Up", &placeholder);
-    tree->Branch("vbfMass_JetEta0to5Down", &placeholder);
-    tree->Branch("vbfMass_JetEta0to5Up", &placeholder);
-    tree->Branch("vbfMass_JetEta3to5Down", &placeholder);
-    tree->Branch("vbfMass_JetEta3to5Up", &placeholder);
-    tree->Branch("vbfMass_JetRelativeSampleDown", &placeholder);
-    tree->Branch("vbfMass_JetRelativeSampleUp", &placeholder);
     tree->Branch("vbfMass_JetTotalDown", &in->vbfMass_JetTotalDown);
     tree->Branch("vbfMass_JetTotalUp", &in->vbfMass_JetTotalUp);
     tree->Branch("vbfMass_JetAbsoluteFlavMapDown", &in->vbfMass_JetAbsoluteFlavMapDown);
@@ -812,8 +781,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("vbfMass_JetRelativePtEC2Up", &in->vbfMass_JetRelativePtEC2Up);
     tree->Branch("vbfMass_JetRelativePtHFDown", &in->vbfMass_JetRelativePtHFDown);
     tree->Branch("vbfMass_JetRelativePtHFUp", &in->vbfMass_JetRelativePtHFUp);
-    tree->Branch("vbfMass_JetRelativeSampleDown", &placeholder);
-    tree->Branch("vbfMass_JetRelativeSampleUp", &placeholder);
     tree->Branch("vbfMass_JetRelativeStatECDown", &in->vbfMass_JetRelativeStatECDown);
     tree->Branch("vbfMass_JetRelativeStatECUp", &in->vbfMass_JetRelativeStatECUp);
     tree->Branch("vbfMass_JetRelativeStatFSRDown", &in->vbfMass_JetRelativeStatFSRDown);
@@ -831,12 +798,45 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     // 2016 placeholders
 
-    tree->Branch("againstElectronTightMVA6_2", &placeholder, "againstElectronTightMVA6_2/F");
-    tree->Branch("againstElectronVLooseMVA6_2", &placeholder, "againstElectronVLooseMVA6_2/F");
-    tree->Branch("againstMuonTight3_2", &placeholder, "againstMuonTight3_2/F");
-    tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
-    tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &placeholder, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-    tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
+    tree->Branch("eMatchesEle27Filter", &placeholder, "eMatchesEle27Filter/F");
+    tree->Branch("eMatchesEle32Filter", &placeholder, "eMatchesEle32Filter/F");
+    tree->Branch("eMatchesEle35Filter", &placeholder, "eMatchesEle35Filter/F");
+    tree->Branch("eMatchesEle27Path", &placeholder, "eMatchesEle27Path/F");
+    tree->Branch("eMatchesEle32Path", &placeholder, "eMatchesEle32Path/F");
+    tree->Branch("eMatchesEle35Path", &placeholder, "eMatchesEle35Path/F");
+    tree->Branch("Ele24Tau30Pass", &placeholder, "Ele24Tau30Pass/F");
+    tree->Branch("Ele27WPTightPass", &placeholder, "Ele27WPTightPass/F");
+    tree->Branch("Ele32WPTightPass", &placeholder, "Ele32WPTightPass/F");
+    tree->Branch("Ele35WPTightPass", &placeholder, "Ele35WPTightPass/F");
+    tree->Branch("eMatchesSingleE25Tight", &placeholder, "eMatchesSingleE25Tight/F");
+    tree->Branch("NoisoID80_1", &placeholder, "NoisoID80_1/F");
+    tree->Branch("eMVANoisoWP80", &placeholder, "eMVANoisoWP80/F");
+    tree->Branch("bjetDeepCSVVeto20Tight", &placeholder, "bjetDeepCSVVeto20Tight/F");
+    tree->Branch("bjetDeepCSVVeto30Loose", &placeholder, "bjetDeepCSVVeto30Loose/F");
+    tree->Branch("bjetDeepCSVVeto30Medium", &placeholder, "bjetDeepCSVVeto30Medium/F");
+    tree->Branch("bjetDeepCSVVeto30Tight", &placeholder, "bjetDeepCSVVeto30Tight/F");
+    tree->Branch("Flag_ecalBadCalibFilter", &placeholder, "Flag_ecalBadCalibFilter/F");
+    tree->Branch("Flag_globalSuperTightHalo2016Filter", &placeholder, "Flag_globalSuperTightHalo2016Filter/F");
+    tree->Branch("jetVeto30_JetEta0to3Down", &placeholder, "jetVeto30_JetEta0to3Down/F");
+    tree->Branch("jetVeto30_JetEta0to3Up", &placeholder);
+    tree->Branch("jetVeto30_JetEta0to5Down", &placeholder);
+    tree->Branch("jetVeto30_JetEta0to5Up", &placeholder);
+    tree->Branch("jetVeto30_JetEta3to5Down", &placeholder);
+    tree->Branch("jetVeto30_JetEta3to5Up", &placeholder);
+    tree->Branch("jetVeto30_JetRelativeSampleDown", &placeholder);
+    tree->Branch("jetVeto30_JetRelativeSampleUp", &placeholder);
+    tree->Branch("jetVeto30_JetRelativeSampleDown", &placeholder);
+    tree->Branch("jetVeto30_JetRelativeSampleUp", &placeholder);
+    tree->Branch("vbfMass_JetEta0to3Down", &placeholder);
+    tree->Branch("vbfMass_JetEta0to3Up", &placeholder);
+    tree->Branch("vbfMass_JetEta0to5Down", &placeholder);
+    tree->Branch("vbfMass_JetEta0to5Up", &placeholder);
+    tree->Branch("vbfMass_JetEta3to5Down", &placeholder);
+    tree->Branch("vbfMass_JetEta3to5Up", &placeholder);
+    tree->Branch("vbfMass_JetRelativeSampleDown", &placeholder);
+    tree->Branch("vbfMass_JetRelativeSampleUp", &placeholder);
+    tree->Branch("vbfMass_JetRelativeSampleDown", &placeholder);
+    tree->Branch("vbfMass_JetRelativeSampleUp", &placeholder);
   }
 
 #endif  // ROOT_SRC_ETAU_TREE_2016_H_

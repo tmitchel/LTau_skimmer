@@ -335,7 +335,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,          // generator Z/W/Higgs py (float)
           in->vispX,          // generator visible Z/W/Higgs px (float)
           in->vispY,          // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -528,8 +528,10 @@ void etau_tree2017::set_branches() {
   tree->Branch("q_2", &in->tCharge, "q_2/F");
   tree->Branch("iso_2", &in->tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
   tree->Branch("decayModeFinding_2", &in->tDecayModeFinding, "decayModeFinding_2/F");
+  tree->Branch("decayModeFindingNewDMs_2", &in->tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
   tree->Branch("l2_decayMode", &in->tDecayMode, "l2_decayMode/F");
 
+  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &in->tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
@@ -541,6 +543,11 @@ void etau_tree2017::set_branches() {
   tree->Branch("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight, "tRerunMVArun2v2DBoldDMwLTTight/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight, "tRerunMVArun2v2DBoldDMwLTVTight/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight, "tRerunMVArun2v2DBoldDMwLTVVTight/F");
+
+  tree->Branch("againstElectronTightMVA6_2", &in->tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
+  tree->Branch("againstElectronVLooseMVA6_2", &in->tAgainstElectronVLooseMVA6, "againstElectronVLooseMVA6_2/F");
+  tree->Branch("againstMuonTight3_2", &in->tAgainstMuonLoose3, "againstMuonTight3_2/F");
+  tree->Branch("againstMuonLoose3_2", &in->tAgainstMuonTight3, "againstMuonLoose3_2/F");
 
   tree->Branch("rho", &in->rho, "rho/F");
   tree->Branch("metcov00", &in->metcov00, "metcov00/F");
@@ -816,12 +823,6 @@ void etau_tree2017::set_branches() {
   tree->Branch("eMatchesSingleE25Tight", &placeholder, "eMatchesSingleE25Tight/F");
   tree->Branch("eMatchesEle25TightFilter", &placeholder, "eMatchesEle25TightFilter/F");
   tree->Branch("singleE25eta2p1TightPass", &placeholder, "singleE25eta2p1TightPass/F");
-  tree->Branch("againstElectronTightMVA6_2", &placeholder, "againstElectronTightMVA6_2/F");
-  tree->Branch("againstElectronVLooseMVA6_2", &placeholder, "againstElectronVLooseMVA6_2/F");
-  tree->Branch("againstMuonTight3_2", &placeholder, "againstMuonTight3_2/F");
-  tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
-  tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &placeholder, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
 }
 
 #endif  // ROOT_SRC_ETAU_TREE_2017_H_
