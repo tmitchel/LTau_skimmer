@@ -341,7 +341,7 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,      // generator Z/W/Higgs py (float)
           in->vispX,      // generator visible Z/W/Higgs px (float)
           in->vispY,      // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -489,23 +489,6 @@ void mutau_tree2017::set_branches() {
   tree->Branch("IsoMu24Pass", &in->IsoMu24Pass, "IsoMu24Pass/F");
   tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter, "tMatchesIsoMu20Tau27Filter/F");
   tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path, "tMatchesIsoMu20Tau27Path/F");
-  tree->Branch("matchIsoMu22eta2p1_1", &placeholder);
-  tree->Branch("matchIsoTkMu22eta2p1_1", &placeholder);
-  tree->Branch("matchIsoMu22_1", &placeholder);
-  tree->Branch("matchIsoTkMu22_1", &placeholder);
-  tree->Branch("matchIsoMu19Tau20_1", &placeholder);
-  tree->Branch("filterIsoMu22eta2p1_1", &placeholder);
-  tree->Branch("filterIsoTkMu22eta2p1_1", &placeholder);
-  tree->Branch("filterIsoMu22_1", &placeholder);
-  tree->Branch("filterIsoTkMu22_1", &placeholder);
-  tree->Branch("filterIsoMu19Tau20_1", &placeholder);
-  tree->Branch("passIsoMu22eta2p1", &placeholder);
-  tree->Branch("passIsoTkMu22eta2p1", &placeholder);
-  tree->Branch("passIsoMu22", &placeholder);
-  tree->Branch("passIsoTkMu22", &placeholder);
-  tree->Branch("passIsoMu19Tau20", &placeholder);
-  tree->Branch("matchIsoMu19Tau20_2", &placeholder);
-  tree->Branch("filterIsoMu19Tau20_2", &placeholder);
 
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
@@ -546,9 +529,11 @@ void mutau_tree2017::set_branches() {
   tree->Branch("q_2", &in->tCharge, "q_2/F");
   tree->Branch("iso_2", &in->tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
   tree->Branch("decayModeFinding_2", &in->tDecayModeFinding, "decayModeFinding_2/F");
+  tree->Branch("decayModeFindingNewDMs_2", &in->tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
   tree->Branch("l2_decayMode", &in->tDecayMode, "l2_decayMode/F");
   tree->Branch("id_m_medium_1", &in->mPFIDMedium, "id_m_medium_1/F");
 
+  tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &in->tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
@@ -560,6 +545,11 @@ void mutau_tree2017::set_branches() {
   tree->Branch("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight, "tRerunMVArun2v2DBoldDMwLTTight/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight, "tRerunMVArun2v2DBoldDMwLTVTight/F");
   tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight, "tRerunMVArun2v2DBoldDMwLTVVTight/F");
+
+  tree->Branch("againstElectronTightMVA6_2", &in->tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
+  tree->Branch("againstElectronVLooseMVA6_2", &in->tAgainstElectronVLooseMVA6, "againstElectronVLooseMVA6_2/F");
+  tree->Branch("againstMuonTight3_2", &in->tAgainstMuonLoose3, "againstMuonTight3_2/F");
+  tree->Branch("againstMuonLoose3_2", &in->tAgainstMuonTight3, "againstMuonLoose3_2/F");
 
   tree->Branch("rho", &in->rho, "rho/F");
   tree->Branch("metcov00", &in->metcov00, "metcov00/F");
@@ -831,12 +821,23 @@ void mutau_tree2017::set_branches() {
 
   // 2016 placeholders
   tree->Branch("amcatNLO_weight", &placeholder, "amcatNLO_weight/F");
-  tree->Branch("againstElectronTightMVA6_2", &placeholder, "againstElectronTightMVA6_2/F");
-  tree->Branch("againstElectronVLooseMVA6_2", &placeholder, "againstElectronVLooseMVA6_2/F");
-  tree->Branch("againstMuonTight3_2", &placeholder, "againstMuonTight3_2/F");
-  tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
-  tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &placeholder, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
+  tree->Branch("matchIsoMu22eta2p1_1", &placeholder);
+  tree->Branch("matchIsoTkMu22eta2p1_1", &placeholder);
+  tree->Branch("matchIsoMu22_1", &placeholder);
+  tree->Branch("matchIsoTkMu22_1", &placeholder);
+  tree->Branch("matchIsoMu19Tau20_1", &placeholder);
+  tree->Branch("filterIsoMu22eta2p1_1", &placeholder);
+  tree->Branch("filterIsoTkMu22eta2p1_1", &placeholder);
+  tree->Branch("filterIsoMu22_1", &placeholder);
+  tree->Branch("filterIsoTkMu22_1", &placeholder);
+  tree->Branch("filterIsoMu19Tau20_1", &placeholder);
+  tree->Branch("passIsoMu22eta2p1", &placeholder);
+  tree->Branch("passIsoTkMu22eta2p1", &placeholder);
+  tree->Branch("passIsoMu22", &placeholder);
+  tree->Branch("passIsoTkMu22", &placeholder);
+  tree->Branch("passIsoMu19Tau20", &placeholder);
+  tree->Branch("matchIsoMu19Tau20_2", &placeholder);
+  tree->Branch("filterIsoMu19Tau20_2", &placeholder);
 }
 
 #endif  // ROOT_SRC_MUTAU_TREE_2017_H_
