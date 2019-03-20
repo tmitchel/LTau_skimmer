@@ -38,6 +38,8 @@ class mt_2016_input_branches {
   Float_t NUP;
   Float_t Phi;
   Float_t Pt;
+  Float_t Rivet_higgsPt;
+  Float_t Rivet_nJets30;
   Float_t bjetCISVVeto20Loose;
   Float_t bjetCISVVeto20Medium;
   Float_t bjetCISVVeto20Tight;
@@ -1142,6 +1144,8 @@ mt_2016_input_branches::mt_2016_input_branches(TTree *tree) {
   tree->SetBranchAddress("NUP", &NUP);
   tree->SetBranchAddress("Phi", &Phi);
   tree->SetBranchAddress("Pt", &Pt);
+  tree->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
+  tree->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
   tree->SetBranchAddress("bjetCISVVeto20Loose", &bjetCISVVeto20Loose);
   tree->SetBranchAddress("bjetCISVVeto20Medium", &bjetCISVVeto20Medium);
   tree->SetBranchAddress("bjetCISVVeto20Tight", &bjetCISVVeto20Tight);
