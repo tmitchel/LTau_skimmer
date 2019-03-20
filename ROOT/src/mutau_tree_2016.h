@@ -56,7 +56,10 @@ mutau_tree2016::mutau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool Is
                                                                                                     in(new mt_2016_input_branches(Original)),
                                                                                                     isMC(IsMC),
                                                                                                     isEmbed(IsEmbed),
-                                                                                                    recoil(rec) {}
+                                                                                                    recoil(rec) {
+  original->SetBranchStatus("double*", 0);
+  original->SetBranchStatus("singleE*", 0);
+}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
