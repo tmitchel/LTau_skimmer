@@ -8,6 +8,10 @@ parser.add_argument('-j', '--job', action = 'store', help = 'job type')
 parser.add_argument('-l', '--lepton', action = 'store', help = 'which lepton (mt or et)')
 args = parser.parse_args()
 
+test_batch = {
+  'DYJets1'      : ['DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_v14-v1'                 , 'Z'],
+    }
+
 bkg_samples_batch1 = {
   'DYJets_lowM'  : ['DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8_v14-v1', 'Z'],
   'DYJets'       : ['DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_v14-v1', 'Z'],
@@ -104,6 +108,13 @@ ac_samples = {
   # 'ttHiggs0Mf05ph0ToTauTau_M125_13TeV_JHUGenV7011_pythia8__94X_mc2017_realistic_v14-v2', '0'],
   # 'ttHiggs0PMToTauTau_M125_13TeV_JHUGenV7011_pythia8__94X_mc2017_realistic_v14-v2', '0'],
 } 
+
+madgraph_samples = {
+    "ggH_TwoJet_madgraph"        : ["GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8__94X_mc2017_realistic_v14-v1", 'Z'],
+    "ggH_PS_TwoJet_madgraph"     : ["GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8__94X_mc2017_realistic_v14-v1", 'Z'],
+    "ggH_Maxmix_TwoJet_madgraph" : ["GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8__94X_mc2017_realistic_v14-v1", 'Z'],
+}
+
 el_data_samples = {
     'datasE-B'     : ['data_SingleElectron_Run2017B-31Mar2018', '0'],
     'datasE-C'     : ['data_SingleElectron_Run2017C-31Mar2018', '0'],
@@ -142,18 +153,21 @@ jobType = args.job
 bkg_pref = '/hdfs/store/user/caillol/SMHTT_2017_7nov/'
 sig_pref = bkg_pref
 ac_pref = '/hdfs/store/user/ymaravin/ac2017_v2/'
+madgraph_pref = '/hdfs/store/user/ymaravin/mg2017_v1/'
 data_pref = '/hdfs/store/user/caillol/SMHTT2017_data_8nov/'
 embed_pref = '/hdfs/store/user/caillol/SMHTT2017_embedded_8nov/'
 
 settings = {
   'sig': [sig_pref, sig_samples],
   'ac': [ac_pref, ac_samples],
+  'madgraph': [madgraph_pref, madgraph_samples],
   'dataMu': [data_pref, mu_data_samples],
   'dataEl': [data_pref, el_data_samples],
   'embedMu': [embed_pref, mu_embedded_samples],
   'embedEl': [embed_pref, el_embedded_samples],
   'bkg1': [bkg_pref, bkg_samples_batch1],
   'bkg2': [bkg_pref, bkg_samples_batch2],
+  'test': [bkg_pref, test_batch],
 }
 
 pref = settings[args.job][0]
