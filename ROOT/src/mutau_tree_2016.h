@@ -463,6 +463,7 @@ void mutau_tree2016::set_branches() {
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
   tree->Branch("vbfMass", &in->vbfMass, "vbfMass/F");
+  tree->Branch("vbfMassWoNoisyJets", &in->vbfMass, "vbfMassWoNoisyJets/F");
 
   tree->Branch("mMatchesIsoMu24Path", &in->mMatchesIsoMu24Path, "mMatchesIsoMu24Path/F");
   tree->Branch("matchIsoMu22eta2p1_1", &in->mMatchesIsoMu22eta2p1Path);

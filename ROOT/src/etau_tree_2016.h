@@ -481,7 +481,8 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     tree->Branch("nbtag", &nbtag, "nbtag/I");
     tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
     tree->Branch("vbfMass", &in->vbfMass, "vbfMass/F");
-
+    tree->Branch("vbfMassWoNoisyJets", &in->vbfMass, "vbfMassWoNoisyJets/F");
+  
     tree->Branch("eMatchesEle24Tau30Filter", &in->eMatchesEle24Tau30Filter, "eMatchesEle24Tau30Filter/F");
     tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter, "tMatchesEle24Tau30Filter/F");
     tree->Branch("eMatchesEle24Tau30Path", &in->eMatchesEle24Tau30Path, "eMatchesEle24Tau30Path/F");
