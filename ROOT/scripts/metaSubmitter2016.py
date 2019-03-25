@@ -12,6 +12,10 @@ parser.add_argument('-j', '--job', action='store',
                     help='job type [dataMu, dataEl, sig, bkg1, bkg2, embedMu, embedEl]')
 args = parser.parse_args()
 
+test_batch = {
+  "DYJets1"      : ["DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1", 'Z'],
+    }
+
 bkg_samples_batch1 = {
     "DYJets": ["DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext1-v2", 'Z'],
     "DYJets_ext1": ["DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext2-v1", 'Z'],
@@ -94,6 +98,15 @@ ac_samples = {
     "ggh_a3int": ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v6-v1', 'Z'],
 }
 
+madgraph_v2_samples = {
+    "ggH_TwoJet_madgraph"        : ["GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+    "ggH_PS_TwoJet_madgraph"     : ["GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+    "ggH_Maxmix_TwoJet_madgraph" : ["GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+    "ggH_PS_madgraph"            : ["GluGluToPseudoscalarHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+    "ggH_Maxmix_madgraph"        : ["GluGluToMaxmixHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+    "ggH_madgraph" : ["GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+}
+
 el_data_samples = {
     "datasE-B": ["data_SingleElectron_Run2016B_v1", '0'],
     "datasE-B_ext1": ["data_SingleElectron_Run2016B_v2", '0'],
@@ -149,16 +162,19 @@ mu_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_mt_v5/'
 ggH_pref = '/hdfs/store/user/truggles/SM-HTT_HTXS_ggH_aug31_v1/'
 ac_pref = '/hdfs/store/user/truggles/aHTT_signals_aug16/'
 ac_ggH_pref = ' /hdfs/store/user/truggles/aHTT_signals_ggH_nov11/'
+madgraph_v2_pref = '/hdfs/store/user/ymaravin/ggH_2016_jan21/'
 
 settings = {
-    'sig': [sig_pref, sig_samples],
-    'ac': [ac_pref, ac_samples],
-    'dataMu': [data_pref, mu_data_samples],
-    'dataEl': [data_pref, el_data_samples],
-    'embedMu': [mu_embed_pref, mu_embedded_samples],
-    'embedEl': [el_embed_pref, el_embedded_samples],
-    'bkg1': [bkg_pref, bkg_samples_batch1],
-    'bkg2': [bkg_pref, bkg_samples_batch2],
+  'sig': [sig_pref, sig_samples],
+  'ac': [ac_pref, ac_samples],
+  'dataMu': [data_pref, mu_data_samples],
+  'dataEl': [data_pref, el_data_samples],
+  'embedMu': [mu_embed_pref, mu_embedded_samples],
+  'embedEl': [el_embed_pref, el_embedded_samples],
+  'bkg1': [bkg_pref, bkg_samples_batch1],
+  'bkg2': [bkg_pref, bkg_samples_batch2],
+  'test': [bkg_pref, test_batch],
+  'madgraph': [madgraph_v2_pref, madgraph_v2_samples],
 }
 
 pref = settings[args.job][0]
