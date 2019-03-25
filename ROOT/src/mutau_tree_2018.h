@@ -478,6 +478,8 @@ void mutau_tree2018::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
+  tree->Branch("vbfMass", &in->vbfMass, "vbfMass/F");
+  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 
   tree->Branch("mMatchesIsoMu20Tau27Path", &in->mMatchesIsoMu20Tau27Path, "mMatchesIsoMu20Tau27Path/F");
   tree->Branch("mMatchesIsoMu24Filter", &in->mMatchesIsoMu24Filter, "mMatchesIsoMu24Filter/F");
@@ -832,7 +834,6 @@ void mutau_tree2018::set_branches() {
   tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
   tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
-  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
   tree->Branch("matchIsoMu19Tau20_1", &placeholder);
   tree->Branch("filterIsoMu19Tau20_1", &placeholder);
   tree->Branch("passIsoMu19Tau20", &placeholder);

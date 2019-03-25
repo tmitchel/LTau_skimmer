@@ -588,6 +588,7 @@ void etau_tree2017::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
+  tree->Branch("vbfMass", &vbfMassWoNoisyJets, "vbfMass/F");
   tree->Branch("vbfMassWoNoisyJets", &vbfMassWoNoisyJets, "vbfMassWoNoisyJets/F");
 
   tree->Branch("eMatchesEle27Filter"     , &eMatchesEle27Filter     , "eMatchesEle27Filter/F");
