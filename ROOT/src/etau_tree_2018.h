@@ -474,6 +474,8 @@ void etau_tree2018::set_branches() {
   tree->Branch("njets", &njets, "njets/I");
   tree->Branch("nbtag", &nbtag, "nbtag/I");
   tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
+  tree->Branch("vbfMass", &in->vbfMass, "vbfMass/F");
+  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 
   tree->Branch("eMatchesEle27Filter", &in->eMatchesEle27Filter, "eMatchesEle27Filter/F");
   tree->Branch("eMatchesEle32Filter", &in->eMatchesEle32Filter, "eMatchesEle32Filter/F");
@@ -824,7 +826,6 @@ void etau_tree2018::set_branches() {
   tree->Branch("againstMuonLoose3_2", &placeholder, "againstMuonLoose3_2/F");
   tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &placeholder, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &placeholder, "decayModeFindingNewDMs_2/F");
-  tree->Branch("vbfMassWoNoisyJets", &placeholder, "vbfMassWoNoisyJets/F");
 }
 
 #endif  // ROOT_SRC_ETAU_TREE_2018_H_
