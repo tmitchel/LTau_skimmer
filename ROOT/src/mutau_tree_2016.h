@@ -418,7 +418,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           genpY,          // generator Z/W/Higgs py (float)
           vispX,          // generator visible Z/W/Higgs px (float)
           vispY,          // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
