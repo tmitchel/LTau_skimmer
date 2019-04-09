@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
   std::string dir_name = parser.Option("-d");
   std::string job_type = parser.Option("-j");
   std::string inrecoil = parser.Option("-r");
+  std::string real_fname = parser.Option("-n");
 
   // recoil corrections
   int recoil(0);
@@ -122,12 +123,15 @@ int main(int argc, char *argv[]) {
       std::cout << "Reading JSON" << std::endl;
       // read the file stream into our json object
       ntupleMap >> j;
-      std::string tmpName = open_file->GetName();
-      auto searchName = tmpName.substr(10);
+      std::cout << "before strip " << real_fname << std::endl;
+      auto searchName = real_fname.substr(real_fname.find("/store/"), std::string::npos);
+      std::cout << "Searching for " << searchName << std::endl;
       for (json::iterator it = j.begin(); it != j.end(); ++it) {
         for (auto ntuple : it.value()) {
           if (std::string(ntuple).find(searchName) != std::string::npos) {
             originalName = it.key();
+            std::cout << "found name " << originalName << " from " << searchName << std::endl;
+            break;
           }
         }
       }
