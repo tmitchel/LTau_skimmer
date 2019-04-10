@@ -12,6 +12,7 @@
 #include "RecoilCorrector.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
+#include "TMath.h"
 
 class etau_tree2017 : public virtual base_tree {
  private:
@@ -23,7 +24,8 @@ class etau_tree2017 : public virtual base_tree {
 
  public:
   // Member variables
-  Int_t Run, Lumi, recoil;
+  UInt_t Run, Lumi;
+  Int_t recoil;
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
@@ -233,6 +235,9 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   for (auto& ievt : good_events) {
     original->GetEntry(ievt);
 
+    Run = in->run;
+    Lumi = in->lumi;
+
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
@@ -279,7 +284,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,          // generator Z/W/Higgs py (float)
           in->vispX,          // generator visible Z/W/Higgs px (float)
           in->vispY,          // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -290,7 +295,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                // generator Z/W/Higgs py (float)
           in->vispX,                // generator visible Z/W/Higgs px (float)
           in->vispY,                // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -301,7 +306,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                // generator Z/W/Higgs py (float)
           in->vispX,                // generator visible Z/W/Higgs px (float)
           in->vispY,                // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -312,7 +317,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                  // generator Z/W/Higgs py (float)
           in->vispX,                  // generator visible Z/W/Higgs px (float)
           in->vispY,                  // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -323,7 +328,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                  // generator Z/W/Higgs py (float)
           in->vispX,                  // generator visible Z/W/Higgs px (float)
           in->vispY,                  // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
 
@@ -335,7 +340,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,          // generator Z/W/Higgs py (float)
           in->vispX,          // generator visible Z/W/Higgs px (float)
           in->vispY,          // generator visible Z/W/Higgs py (float)
-          jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -346,7 +351,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                // generator Z/W/Higgs py (float)
           in->vispX,                // generator visible Z/W/Higgs px (float)
           in->vispY,                // generator visible Z/W/Higgs py (float)
-          jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,            // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -357,7 +362,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                // generator Z/W/Higgs py (float)
           in->vispX,                // generator visible Z/W/Higgs px (float)
           in->vispY,                // generator visible Z/W/Higgs py (float)
-          jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,            // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -368,7 +373,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                  // generator Z/W/Higgs py (float)
           in->vispX,                  // generator visible Z/W/Higgs px (float)
           in->vispY,                  // generator visible Z/W/Higgs py (float)
-          jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,              // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -379,7 +384,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,                  // generator Z/W/Higgs py (float)
           in->vispX,                  // generator visible Z/W/Higgs px (float)
           in->vispY,                  // generator visible Z/W/Higgs py (float)
-          jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,              // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
     }
@@ -464,8 +469,8 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 void etau_tree2017::set_branches() {
   // output file branches
   tree->Branch("evt", &in->evt);
-  tree->Branch("run", &in->run);
-  tree->Branch("lumi", &in->lumi);
+  tree->Branch("run", &Run);
+  tree->Branch("lumi", &Lumi);
   tree->Branch("gen_match_1", &gen_match_1, "gen_match_1/I");
   tree->Branch("gen_match_2", &gen_match_2, "gen_match_2/I");
   tree->Branch("njets", &njets, "njets/I");

@@ -20,6 +20,7 @@ class mutau_tree2016 : public virtual base_tree {
 
  public:
   // Member variables
+  UInt_t Run, Lumi;
   Int_t recoil;
   Float_t placeholder;  // for all branches not present in 2016
 
@@ -225,6 +226,9 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   // loop through all events pasing skimming/sorting
   for (auto& ievt : good_events) {
     original->GetEntry(ievt);
+
+    Run = in->run;
+    Lumi = in->lumi;
 
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->mZTTGenMatching;
@@ -455,8 +459,8 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 void mutau_tree2016::set_branches() {
   // output file branches
   tree->Branch("evt", &in->evt);
-  tree->Branch("run", &in->run);
-  tree->Branch("lumi", &in->lumi);
+  tree->Branch("run", &Run);
+  tree->Branch("lumi", &Lumi);
   tree->Branch("gen_match_1", &gen_match_1, "gen_match_1/I");
   tree->Branch("gen_match_2", &gen_match_2, "gen_match_2/I");
   tree->Branch("njets", &njets, "njets/I");

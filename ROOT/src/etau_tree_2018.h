@@ -23,8 +23,8 @@ class etau_tree2018 : public virtual base_tree {
 
  public:
   // Member variables
-
-  Int_t Run, Lumi, recoil;
+  UInt_t Run, Lumi;
+  Int_t recoil;
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
@@ -234,6 +234,9 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   // loop through all events pasing skimming/sorting
   for (auto& ievt : good_events) {
     original->GetEntry(ievt);
+
+    Run = in->run;
+    Lumi = in->lumi;
 
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->eZTTGenMatching;
