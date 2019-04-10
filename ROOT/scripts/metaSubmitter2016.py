@@ -161,7 +161,7 @@ el_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v5/'
 mu_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_mt_v5/'
 ggH_pref = '/hdfs/store/user/truggles/SM-HTT_HTXS_ggH_aug31_v1/'
 ac_pref = '/hdfs/store/user/truggles/aHTT_signals_aug16/'
-ac_ggH_pref = ' /hdfs/store/user/truggles/aHTT_signals_ggH_nov11/'
+ac_ggH_pref = '/hdfs/store/user/truggles/aHTT_signals_ggH_nov11/'
 madgraph_v2_pref = '/hdfs/store/user/ymaravin/ggH_2016_jan21/'
 
 settings = {
