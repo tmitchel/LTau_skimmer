@@ -3,13 +3,14 @@
 This repository contains all of the code needed to skim either lepton+tau channel in 2016 or 2017. There is a single binary used to control the skimming for all year/lepton permutations and various headers containing the tree info for each permuation.
 
 ##### Table of Contents
-[File Locations](#files) <br/>
+[Input File Locations](#files) <br/>
+[Output File Locations](#ofiles) <br/>
 [Quick Start](#quickstart) <br/>
 [Using Condor](#condor) <br/>
 
 <a name="files"/>
 
-## File Locations
+## Input File Locations
 
 Here are the locations of all currently used FSA ntuples
 - 2016 ntuples
@@ -25,6 +26,28 @@ Here are the locations of all currently used FSA ntuples
     - Data: /hdfs/store/user/caillol/SMHTT2017_data_8nov/
     - Embedded: /hdfs/store/user/caillol/SMHTT2017_embedded_8nov/
 
+- 2018 ntuples
+    - Monte Carlo: /hdfs/store/user/caillol/TauID2018_19dec/
+    - Data: /hdfs/store/user/caillol/TauID2018_data_19dec/
+    - Embedded: Not Produced Yet
+
+<a name="ofiles"/>
+
+## Output File Locations
+
+Here are the locations of the skims currently being used for studies
+- 2016 skims:
+    - /hdfs/store/user/tmitchel/etau2016_official_v3-skim
+    - /hdfs/store/user/tmitchel/mutau2016_official_v3-skim
+
+- 2017 ntuples
+    - /hdfs/store/user/tmitchel/etau2017_official_v3-skim
+    - /hdfs/store/user/tmitchel/mutau2017_official_v3-skim
+
+- 2018 ntuples
+    - /hdfs/store/user/tmitchel/etau2018_first-look_v2
+    - /hdfs/store/user/tmitchel/mutau2018_first-look_v2
+
 <a name="quickstart"/>
 
 ## Quick Start
@@ -38,7 +61,7 @@ This section is designed so that you can start producing skims by simply copy/pa
 2. Clone all necessary repositories and get them setup
     - clone this repo
         ```
-        git clone -b generalize ssh://git@gitlab.cern.ch:7999/KState-HEP-HTT/ltau_skimmer.git
+        git clone -b development ssh://git@gitlab.cern.ch:7999/KState-HEP-HTT/ltau_skimmer.git
         ```
     - get the files needed for recoil corrections
         ```
@@ -64,14 +87,11 @@ This section is designed so that you can start producing skims by simply copy/pa
 Submitting 2016 samples to be skimmed is done using a single python script to submit multiple jobs.
     ```
     voms-proxy-init --voms=cms --valid=48:00 # get certificate
-    python metaSubmitter2016.py -p mutau2016_stable_v3 -l mt -j sig
+    python submit2016.py -p mutau2016_stable_v3 -l mt -j sig
     ```
-    This will farmout a job to skim all signal samples in the 2016 mutau channel. The output files will be saved to /hdfs/store/user/your_name/mutau2016_stable_v3 or whatever name you provide to the `-p` option. As you can see from the example, the `-l` flag is used to give the lepton type and the `-j` flag is used to pass the job type [sig, bkg, data, embed].
+    This will farmout a job to skim all signal samples in the 2016 mutau channel. The output files will be saved to /hdfs/store/user/your_name/mutau2016_stable_v3 or whatever name you provide to the `-p` option. As you can see from the example, the `-l` flag is used to give the lepton type and the `-j` flag is used to pass the job type [sig, bkg1, bkg2, data, embed].
 
-    Skimming 2017 FSA ntuples is done in nearly the exact same way. The only difference is that the `metaSubmitterCecile.py` script should be used instead
-    ```
-    python metaSubmitterCecile.py -p mutau2017_stable_v3 -l mt -j sig
-    ```
+    The script `submit2017.py` can be used in the exact same way to submit jobs for 2017.
 
 These scripts will be combined into a universal script later when I have some free time.
 
@@ -88,10 +108,10 @@ python Skimminate.py --job bkg --recoil Z --jobName chooseAName --samplename DYJ
 
 This command will skim all files in the directory `/hdfs/store/user/tmitchel/input/DYJets1` assuming they are from the dataset `DYJets1`. The corrections appropriate for a background MC sample will be applied and the output files will be stored in `/hdfs/store/user/tmitchel/chooseAName`. The `-l` option tells the script for which channel we want to submit skims and the `-y` option provides the year.
 
-The typical way to produce skims is using the `metaSubmitter.py` script which allows entire job types to be submitted at once. An example command to skim all embedded samples, with appropriate corrections, is shown below.
+The typical way to produce skims is using the `submit*.py` scripts which allows entire job types to be submitted at once. An example command to skim all embedded samples, with appropriate corrections, is shown below.
 
 ```
-python metaSubmitter2016.py -p myName -l et -j embed
+python submit2016.py -p myName -l et -j embed
 ```
 
 The output files will be stored in `/hdfs/store/user/tmitchel/myName`.
