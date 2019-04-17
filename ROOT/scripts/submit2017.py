@@ -1,5 +1,5 @@
 import os
-import subprocess
+import condor_handler as ch
 from argparse import ArgumentParser
 
 parser = ArgumentParser(
@@ -184,5 +184,7 @@ elif args.lepton == 'et':
 for sample in sorted(samples.keys()):
     recoil = samples[sample][1]
     path = samples[sample][0]
-    subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s -y %s' %
-                    (sample, pref+path, prefix, jobType, recoil, lep, '2017'), shell=True)
+    pref = settings[args.job][0]
+
+    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i input_file.root -o \'$OUTPUT\'' % (pref+path, jobType, recoil, '2017', lep) 
+    ch.submit_command(command, prefix, pref+path, sample, use_input='-n ', dryrun=False)

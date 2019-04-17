@@ -40,14 +40,15 @@ This section is designed so that you can start producing skims by simply copy/pa
         ```
         git clone -b generalize ssh://git@gitlab.cern.ch:7999/KState-HEP-HTT/ltau_skimmer.git
         ```
-    - get the files needed for recoil corrections (thanks nlohmann!)
+    - get the files needed for recoil corrections
         ```
         git clone https://github.com/CMS-HTT/RecoilCorrections.git HTT-utilities/RecoilCorrections
         ```
     - get this super awesome project for reading JSON files in C++ code (thanks nlohmann!)
         ```
-        cd ltau_skimmer
-        git clone https://github.com/nlohmann/json.git
+        cd ltau_skimmer/ROOT/src
+        wget https://github.com/nlohmann/json/releases/download/v3.6.1/json.hpp
+        cd -
         ```
     - now compile CMSSW things that need compiling
         ```
