@@ -276,7 +276,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,      // generator Z/W/Higgs py (float)
           in->vispX,      // generator visible Z/W/Higgs px (float)
           in->vispY,      // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -287,7 +287,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -298,7 +298,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30 + 1,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -309,7 +309,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -320,7 +320,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30 + 1,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
 
@@ -332,7 +332,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,      // generator Z/W/Higgs py (float)
           in->vispX,      // generator visible Z/W/Higgs px (float)
           in->vispY,      // generator visible Z/W/Higgs py (float)
-          jetVeto30,      // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30,      // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -343,7 +343,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -354,7 +354,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30,            // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -365,7 +365,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -376,7 +376,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30,              // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
     }
