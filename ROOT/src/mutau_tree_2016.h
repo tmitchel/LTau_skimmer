@@ -1,5 +1,8 @@
 // Copyright 2018 Tyler Mitchell
 
+#ifndef ROOT_SRC_MUTAU_TREE_2016_H_
+#define ROOT_SRC_MUTAU_TREE_2016_H_
+
 #include <cmath>
 #include <iostream>
 #include <utility>
@@ -1193,3 +1196,5 @@ void mutau_tree2016::set_branches() {
   tree->SetBranchAddress("vispY", &in->vispY);
   tree->SetBranchAddress("idx", &in->idx);
 }
+
+#endif  // ROOT_SRC_MUTAU_TREE_2016_H_
