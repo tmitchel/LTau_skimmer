@@ -7,17 +7,17 @@
 #include <iostream>
 #include <utility>
 #include <vector>
-#include "../interface/et_2017_input_branches.h"
+#include "../interface/etau_input_branches.h"
 #include "./base_tree.h"
 #include "RecoilCorrector.h"
 #include "TLorentzVector.h"
-#include "TTree.h"
 #include "TMath.h"
+#include "TTree.h"
 
 class etau_tree2017 : public virtual base_tree {
  private:
   TTree *tree, *original;
-  et_2017_input_branches* in;
+  etau_input_branches* in;
   bool isMC, isEmbed;
   std::vector<Int_t> good_events;
   TLorentzVector ele, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
@@ -58,14 +58,10 @@ class etau_tree2017 : public virtual base_tree {
 //////////////////////////////////////////////////////////////////
 etau_tree2017::etau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) : tree(itree),
                                                                                                   original(Original),
-                                                                                                  in(new et_2017_input_branches(Original)),
+                                                                                                  in(new etau_input_branches(Original)),
                                                                                                   isMC(IsMC),
                                                                                                   isEmbed(IsEmbed),
-                                                                                                  recoil(rec) {
-  original->SetBranchStatus("double*", 0);
-  original->SetBranchStatus("Double*", 0);
-  original->SetBranchStatus("IsoMu*", 0);
-}
+                                                                                                  recoil(rec) {}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -125,6 +121,7 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
     auto Ele27 = in->eMatchesEle27Filter && in->eMatchesEle27Path && in->Ele27WPTightPass;
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
+    // in->Ele24LooseHPSTau30Pass || in->Ele24LooseHPSTau30TightIDPass || in->Ele24LooseTau30Pass || in->Ele24LooseTau30TightIDPass options
     auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24Tau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
     if (isEmbed || (Ele27 || Ele32 || Ele35 || Cross))
@@ -241,9 +238,9 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
-    njets = in->jetVeto30WoNoisyJets;
-    nbtag = in->bjetDeepCSVVeto20MediumWoNoisyJets;
-    njetspt20 = in->jetVeto20WoNoisyJets;
+    njets = in->jetVeto30;
+    nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0;
+    njetspt20 = in->jetVeto20;
 
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
@@ -278,57 +275,57 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
     if (recoil == 1) {
       recoilPFMetCorrector.CorrectByMeanResolution(
-          MET.Px(),       // uncorrected type I pf met px (float)
-          MET.Py(),       // uncorrected type I pf met py (float)
+          MET.Px(),           // uncorrected type I pf met px (float)
+          MET.Py(),           // uncorrected type I pf met py (float)
           in->genpX,          // generator Z/W/Higgs px (float)
           in->genpY,          // generator Z/W/Higgs py (float)
           in->vispX,          // generator visible Z/W/Higgs px (float)
           in->vispY,          // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,   // corrected type I pf met px (float)
-          pfmetcorr_ey);  // corrected type I pf met py (float)
+          in->jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          pfmetcorr_ex,       // corrected type I pf met px (float)
+          pfmetcorr_ey);      // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESUp.Px(),       // uncorrected type I pf met px (float)
           MET_JESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                // generator Z/W/Higgs px (float)
-          in->genpY,                // generator Z/W/Higgs py (float)
-          in->vispX,                // generator visible Z/W/Higgs px (float)
-          in->vispY,                // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,            // generator Z/W/Higgs px (float)
+          in->genpY,            // generator Z/W/Higgs py (float)
+          in->vispX,            // generator visible Z/W/Higgs px (float)
+          in->vispY,            // generator visible Z/W/Higgs py (float)
+          in->jetVeto30 + 1,    // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_UESUp.Px(),       // uncorrected type I pf met px (float)
           MET_UESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                // generator Z/W/Higgs px (float)
-          in->genpY,                // generator Z/W/Higgs py (float)
-          in->vispX,                // generator visible Z/W/Higgs px (float)
-          in->vispY,                // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,        // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,            // generator Z/W/Higgs px (float)
+          in->genpY,            // generator Z/W/Higgs py (float)
+          in->vispX,            // generator visible Z/W/Higgs px (float)
+          in->vispY,            // generator visible Z/W/Higgs py (float)
+          in->jetVeto30 + 1,    // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESDown.Px(),       // uncorrected type I pf met px (float)
           MET_JESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                  // generator Z/W/Higgs px (float)
-          in->genpY,                  // generator Z/W/Higgs py (float)
-          in->vispX,                  // generator visible Z/W/Higgs px (float)
-          in->vispY,                  // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,              // generator Z/W/Higgs px (float)
+          in->genpY,              // generator Z/W/Higgs py (float)
+          in->vispX,              // generator visible Z/W/Higgs px (float)
+          in->vispY,              // generator visible Z/W/Higgs py (float)
+          in->jetVeto30 + 1,      // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_UESDown.Px(),       // uncorrected type I pf met px (float)
           MET_UESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                  // generator Z/W/Higgs px (float)
-          in->genpY,                  // generator Z/W/Higgs py (float)
-          in->vispX,                  // generator visible Z/W/Higgs px (float)
-          in->vispY,                  // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,          // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,              // generator Z/W/Higgs px (float)
+          in->genpY,              // generator Z/W/Higgs py (float)
+          in->vispX,              // generator visible Z/W/Higgs px (float)
+          in->vispY,              // generator visible Z/W/Higgs py (float)
+          in->jetVeto30 + 1,      // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
 
@@ -336,55 +333,55 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET.Px(),       // uncorrected type I pf met px (float)
           MET.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,          // generator Z/W/Higgs px (float)
-          in->genpY,          // generator Z/W/Higgs py (float)
-          in->vispX,          // generator visible Z/W/Higgs px (float)
-          in->vispY,          // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,  // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,      // generator Z/W/Higgs px (float)
+          in->genpY,      // generator Z/W/Higgs py (float)
+          in->vispX,      // generator visible Z/W/Higgs px (float)
+          in->vispY,      // generator visible Z/W/Higgs py (float)
+          in->jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESUp.Px(),       // uncorrected type I pf met px (float)
           MET_JESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                // generator Z/W/Higgs px (float)
-          in->genpY,                // generator Z/W/Higgs py (float)
-          in->vispX,                // generator visible Z/W/Higgs px (float)
-          in->vispY,                // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,            // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,            // generator Z/W/Higgs px (float)
+          in->genpY,            // generator Z/W/Higgs py (float)
+          in->vispX,            // generator visible Z/W/Higgs px (float)
+          in->vispY,            // generator visible Z/W/Higgs py (float)
+          in->jetVeto30,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_UESUp.Px(),       // uncorrected type I pf met px (float)
           MET_UESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                // generator Z/W/Higgs px (float)
-          in->genpY,                // generator Z/W/Higgs py (float)
-          in->vispX,                // generator visible Z/W/Higgs px (float)
-          in->vispY,                // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,            // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,            // generator Z/W/Higgs px (float)
+          in->genpY,            // generator Z/W/Higgs py (float)
+          in->vispX,            // generator visible Z/W/Higgs px (float)
+          in->vispY,            // generator visible Z/W/Higgs py (float)
+          in->jetVeto30,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_JESDown.Px(),       // uncorrected type I pf met px (float)
           MET_JESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                  // generator Z/W/Higgs px (float)
-          in->genpY,                  // generator Z/W/Higgs py (float)
-          in->vispX,                  // generator visible Z/W/Higgs px (float)
-          in->vispY,                  // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,              // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,              // generator Z/W/Higgs px (float)
+          in->genpY,              // generator Z/W/Higgs py (float)
+          in->vispX,              // generator visible Z/W/Higgs px (float)
+          in->vispY,              // generator visible Z/W/Higgs py (float)
+          in->jetVeto30,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
       recoilPFMetCorrector.CorrectByMeanResolution(
           MET_UESDown.Px(),       // uncorrected type I pf met px (float)
           MET_UESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,                  // generator Z/W/Higgs px (float)
-          in->genpY,                  // generator Z/W/Higgs py (float)
-          in->vispX,                  // generator visible Z/W/Higgs px (float)
-          in->vispY,                  // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,              // number of jets (hadronic jet multiplicity) (int)
+          in->genpX,              // generator Z/W/Higgs px (float)
+          in->genpY,              // generator Z/W/Higgs py (float)
+          in->vispX,              // generator visible Z/W/Higgs px (float)
+          in->vispY,              // generator visible Z/W/Higgs py (float)
+          in->jetVeto30,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
     }
@@ -404,7 +401,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
         tau *= sf;
-        } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
+      } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
         do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_JESUp, tau);
         do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_JESDown, tau);
@@ -467,368 +464,737 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //   - Create branches in tree to store any variable we want    //
 //////////////////////////////////////////////////////////////////
 void etau_tree2017::set_branches() {
-  // output file branches
-  tree->Branch("evt", &in->evt);
-  tree->Branch("run", &Run);
-  tree->Branch("lumi", &Lumi);
-  tree->Branch("gen_match_1", &gen_match_1, "gen_match_1/I");
-  tree->Branch("gen_match_2", &gen_match_2, "gen_match_2/I");
-  tree->Branch("njets", &njets, "njets/I");
-  tree->Branch("nbtag", &nbtag, "nbtag/I");
-  tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
-  tree->Branch("vbfMass", &in->vbfMassWoNoisyJets, "vbfMass/F");
-  tree->Branch("vbfMassWoNoisyJets", &in->vbfMassWoNoisyJets, "vbfMassWoNoisyJets/F");
+  // new branches
+  tree->SetBranchAddress("Run", &Run);
+  tree->SetBranchAddress("Lumi", &Lumi);
+  tree->SetBranchAddress("gen_match_1", &in->eZTTGenMatching);
+  tree->SetBranchAddress("gen_match_2", &in->tZTTGenMatching);
+  tree->SetBranchAddress("njets", &in->jetVeto30);
+  tree->SetBranchAddress("nbtag", &in->bjetDeepCSVVeto20Medium_2017_DR0);
+  tree->SetBranchAddress("njetspt20", &in->jetVeto20);
+  tree->SetBranchAddress("met_px", &met_px);
+  tree->SetBranchAddress("met_py", &met_py);
+  tree->SetBranchAddress("extraelec_veto", &extraelec_veto);
+  tree->SetBranchAddress("extramuon_veto", &extramuon_veto);
+  tree->SetBranchAddress("dilepton_veto", &dilepton_veto);
+  tree->SetBranchAddress("pfmetcorr_ex", &pfmetcorr_ex);
+  tree->SetBranchAddress("pfmetcorr_ey", &pfmetcorr_ey);
+  tree->SetBranchAddress("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp);
+  tree->SetBranchAddress("pfmetcorr_ey_UESUp", &pfmetcorr_ey_UESUp);
+  tree->SetBranchAddress("pfmetcorr_ex_UESDown", &pfmetcorr_ex_UESDown);
+  tree->SetBranchAddress("pfmetcorr_ey_UESDown", &pfmetcorr_ey_UESDown);
+  tree->SetBranchAddress("pfmetcorr_ex_JESUp", &pfmetcorr_ex_JESUp);
+  tree->SetBranchAddress("pfmetcorr_ey_JESUp", &pfmetcorr_ey_JESUp);
+  tree->SetBranchAddress("pfmetcorr_ex_JESDown", &pfmetcorr_ex_JESDown);
+  tree->SetBranchAddress("pfmetcorr_ey_JESDown", &pfmetcorr_ey_JESDown);
+  tree->SetBranchAddress("met", &met);
+  tree->SetBranchAddress("metphi", &metphi);
+  tree->SetBranchAddress("met_px", &met_px);
+  tree->SetBranchAddress("met_py", &met_py);
+  tree->SetBranchAddress("met_JESUp", &met_JESUp);
+  tree->SetBranchAddress("met_JESDown", &met_JESDown);
+  tree->SetBranchAddress("met_UESUp", &met_UESUp);
+  tree->SetBranchAddress("met_UESDown", &met_UESDown);
+  tree->SetBranchAddress("metphi_JESUp", &metphi_JESUp);
+  tree->SetBranchAddress("metphi_JESDown", &metphi_JESDown);
+  tree->SetBranchAddress("metphi_UESUp", &metphi_UESUp);
+  tree->SetBranchAddress("metphi_UESDown", &metphi_UESDown);
+  tree->SetBranchAddress("m_1", &m_1);
+  tree->SetBranchAddress("px_1", &px_1);
+  tree->SetBranchAddress("py_1", &py_1);
+  tree->SetBranchAddress("pz_1", &pz_1);
+  tree->SetBranchAddress("e_1", &e_1);
+  tree->SetBranchAddress("pt_1", &pt_1);
+  tree->SetBranchAddress("phi_1", &phi_1);
+  tree->SetBranchAddress("eta_1", &eta_1);
+  tree->SetBranchAddress("m_2", &m_2);
+  tree->SetBranchAddress("px_2", &px_2);
+  tree->SetBranchAddress("py_2", &py_2);
+  tree->SetBranchAddress("pz_2", &pz_2);
+  tree->SetBranchAddress("e_2", &e_2);
+  tree->SetBranchAddress("pt_2", &pt_2);
+  tree->SetBranchAddress("phi_2", &phi_2);
+  tree->SetBranchAddress("eta_2", &eta_2);
 
-  tree->Branch("eMatchesEle27Filter", &in->eMatchesEle27Filter, "eMatchesEle27Filter/F");
-  tree->Branch("eMatchesEle32Filter", &in->eMatchesEle32Filter, "eMatchesEle32Filter/F");
-  tree->Branch("eMatchesEle35Filter", &in->eMatchesEle35Filter, "eMatchesEle35Filter/F");
-  tree->Branch("eMatchesEle24Tau30Filter", &in->eMatchesEle24Tau30Filter, "eMatchesEle24Tau30Filter/F");
-  tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter, "tMatchesEle24Tau30Filter/F");
-  tree->Branch("eMatchesEle27Path", &in->eMatchesEle27Path, "eMatchesEle27Path/F");
-  tree->Branch("eMatchesEle32Path", &in->eMatchesEle32Path, "eMatchesEle32Path/F");
-  tree->Branch("eMatchesEle35Path", &in->eMatchesEle35Path, "eMatchesEle35Path/F");
-  tree->Branch("eMatchesEle24Tau30Path", &in->eMatchesEle24Tau30Path, "eMatchesEle24Tau30Path/F");
-  tree->Branch("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path, "tMatchesEle24Tau30Path/F");
-  tree->Branch("Ele24Tau30Pass", &in->Ele24Tau30Pass, "Ele24Tau30Pass/F");
-  tree->Branch("Ele27WPTightPass", &in->Ele27WPTightPass, "Ele27WPTightPass/F");
-  tree->Branch("Ele32WPTightPass", &in->Ele32WPTightPass, "Ele32WPTightPass/F");
-  tree->Branch("Ele35WPTightPass", &in->Ele35WPTightPass, "Ele35WPTightPass/F");
-
-  tree->Branch("met_px", &met_px, "met_px/F");
-  tree->Branch("met_py", &met_py, "met_py/F");
-  tree->Branch("extraelec_veto", &extraelec_veto, "extraelec_veto/F");
-  tree->Branch("extramuon_veto", &extramuon_veto, "extramuon_veto/F");
-  tree->Branch("dilepton_veto", &dilepton_veto, "dilepton_veto/F");
-  tree->Branch("pfmetcorr_ex", &pfmetcorr_ex, "pfmetcorr_ex/F");
-  tree->Branch("pfmetcorr_ey", &pfmetcorr_ey, "pfmetcorr_ey/F");
-  tree->Branch("genpX", &in->genpX, "genpX/F");
-  tree->Branch("genpY", &in->genpY, "genpY/F");
-  tree->Branch("vispX", &in->vispX, "vispX/F");
-  tree->Branch("vispY", &in->vispY, "vispY/F");
-  tree->Branch("met", &met, "met/F");
-  tree->Branch("metphi", &metphi, "metphi/F");
-  tree->Branch("met_px", &met_px, "met_px/F");
-  tree->Branch("met_py", &met_py, "met_py/F");
-  tree->Branch("pt_1", &pt_1, "pt_1/F");
-  tree->Branch("eta_1", &eta_1, "eta_1/F");
-  tree->Branch("phi_1", &phi_1, "phi_1/F");
-  tree->Branch("m_1", &m_1, "m_1/F");
-  tree->Branch("e_1", &e_1, "e_1/F");
-  tree->Branch("px_1", &px_1, "px_1/F");
-  tree->Branch("py_1", &py_1, "py_1/F");
-  tree->Branch("pz_1", &pz_1, "pz_1/F");
-  tree->Branch("dZ_1", &in->ePVDZ, "dZ_1/F");
-  tree->Branch("d0_1", &in->ePVDXY, "d0_1/F");
-  tree->Branch("q_1", &in->eCharge, "q_1/F");
-  tree->Branch("iso_1", &in->eIsoDB03, "iso_1/F");
-  tree->Branch("NoisoID80_1", &in->eMVANoisoWP80, "NoisoID80_1/F");
-  tree->Branch("pt_2", &pt_2, "pt_2/F");
-  tree->Branch("eta_2", &eta_2, "eta_2/F");
-  tree->Branch("phi_2", &phi_2, "phi_2/F");
-  tree->Branch("m_2", &m_2, "m_2/F");
-  tree->Branch("e_2", &e_2, "e_2/F");
-  tree->Branch("px_2", &px_2, "px_2/F");
-  tree->Branch("py_2", &py_2, "py_2/F");
-  tree->Branch("pz_2", &pz_2, "pz_2/F");
-  tree->Branch("dZ_2", &in->tPVDZ, "dZ_2/F");
-  tree->Branch("q_2", &in->tCharge, "q_2/F");
-  tree->Branch("iso_2", &in->tRerunMVArun2v2DBoldDMwLTraw, "iso_2/F");
-  tree->Branch("decayModeFinding_2", &in->tDecayModeFinding, "decayModeFinding_2/F");
-  tree->Branch("decayModeFindingNewDMs_2", &in->tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
-  tree->Branch("l2_decayMode", &in->tDecayMode, "l2_decayMode/F");
-
-  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &in->tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &in->tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByVTightIsolationMVArun2v1DBoldDMwLT, "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &in->tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose", &in->tRerunMVArun2v2DBoldDMwLTVLoose, "tRerunMVArun2v2DBoldDMwLTVLoose/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose", &in->tRerunMVArun2v2DBoldDMwLTLoose, "tRerunMVArun2v2DBoldDMwLTLoose/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium", &in->tRerunMVArun2v2DBoldDMwLTMedium, "tRerunMVArun2v2DBoldDMwLTMedium/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight, "tRerunMVArun2v2DBoldDMwLTTight/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight, "tRerunMVArun2v2DBoldDMwLTVTight/F");
-  tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight, "tRerunMVArun2v2DBoldDMwLTVVTight/F");
-
-  tree->Branch("againstElectronTightMVA6_2", &in->tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
-  tree->Branch("againstElectronVLooseMVA6_2", &in->tAgainstElectronVLooseMVA6, "againstElectronVLooseMVA6_2/F");
-  tree->Branch("againstMuonTight3_2", &in->tAgainstMuonLoose3, "againstMuonTight3_2/F");
-  tree->Branch("againstMuonLoose3_2", &in->tAgainstMuonTight3, "againstMuonLoose3_2/F");
-
-  tree->Branch("rho", &in->rho, "rho/F");
-  tree->Branch("metcov00", &in->metcov00, "metcov00/F");
-  tree->Branch("metcov01", &in->metcov01, "metcov01/F");
-  tree->Branch("metcov10", &in->metcov10, "metcov10/F");
-  tree->Branch("metcov11", &in->metcov11, "metcov11/F");
-  tree->Branch("metcov00_v2", &in->metcov00_DESYlike, "metcov00_v2/F");
-  tree->Branch("metcov01_v2", &in->metcov01_DESYlike, "metcov01_v2/F");
-  tree->Branch("metcov10_v2", &in->metcov10_DESYlike, "metcov10_v2/F");
-  tree->Branch("metcov11_v2", &in->metcov11_DESYlike, "metcov11_v2/F");
-  tree->Branch("NUP", &in->NUP, "NUP/F");
-  tree->Branch("genM", &in->genM, "genM/F");
-  tree->Branch("genpT", &in->genpT, "genpT/F");
-  tree->Branch("genEta", &in->genEta, "genEta/F");
-  tree->Branch("numGenJets", &in->numGenJets, "numGenJets/F");
-  tree->Branch("npu", &in->nTruePU, "npu/F");
-  tree->Branch("npv", &in->nvtx, "npv/F");
-  tree->Branch("eMVANoisoWP80", &in->eMVANoisoWP80, "eMVANoisoWP80/F");
-  tree->Branch("genweight", &in->GenWeight, "genweight/F");
-  tree->Branch("metSig", &in->metSig, "metSig/F");
-  tree->Branch("Rivet_higgsPt", &in->Rivet_higgsPt, "Rivet_higgsPt/F");
-  tree->Branch("Rivet_nJets30", &in->Rivet_nJets30, "Rivet_nJets30/F");
-
-  tree->Branch("jpt_1", &in->j1ptWoNoisyJets, "jpt_1/F");
-  tree->Branch("jeta_1", &in->j1etaWoNoisyJets, "jeta_1/F");
-  tree->Branch("jphi_1", &in->j1phiWoNoisyJets, "jphi_1/F");
-  tree->Branch("jcsv_1", &in->j1csvWoNoisyJets, "jcsv_1/F");
-  tree->Branch("jpt_2", &in->j2ptWoNoisyJets, "jpt_2/F");
-  tree->Branch("jeta_2", &in->j2etaWoNoisyJets, "jeta_2/F");
-  tree->Branch("jphi_2", &in->j2phiWoNoisyJets, "jphi_2/F");
-  tree->Branch("jcsv_2", &in->j2csvWoNoisyJets, "jcsv_2/F");
-  tree->Branch("bpt_1", &in->jb1ptWoNoisyJets, "bpt_1/F");
-  tree->Branch("beta_1", &in->jb1etaWoNoisyJets, "beta_1/F");
-  tree->Branch("bphi_1", &in->jb1phiWoNoisyJets, "bphi_1/F");
-  tree->Branch("bcsv_1", &in->jb1csvWoNoisyJets, "bcsv_1/F");
-  tree->Branch("bflavor_1", &in->jb1hadronflavorWoNoisyJets, "bflavor_1/F");
-  tree->Branch("bpt_2", &in->jb2ptWoNoisyJets, "bpt_2/F");
-  tree->Branch("beta_2", &in->jb2etaWoNoisyJets, "beta_2/F");
-  tree->Branch("bphi_2", &in->jb2phiWoNoisyJets, "bphi_2/F");
-  tree->Branch("bcsv_2", &in->jb2csvWoNoisyJets, "bcsv_2/F");
-  tree->Branch("bflavor_2", &in->jb2hadronflavorWoNoisyJets, "bflavor_2/F");
-
-  tree->Branch("bjetDeepCSVVeto20Tight", &in->bjetDeepCSVVeto20Tight, "bjetDeepCSVVeto20Tight/F");
-  tree->Branch("bjetDeepCSVVeto30Loose", &in->bjetDeepCSVVeto30Loose, "bjetDeepCSVVeto30Loose/F");
-  tree->Branch("bjetDeepCSVVeto30Medium", &in->bjetDeepCSVVeto30Medium, "bjetDeepCSVVeto30Medium/F");
-  tree->Branch("bjetDeepCSVVeto30Tight", &in->bjetDeepCSVVeto30Tight, "bjetDeepCSVVeto30Tight/F");
-
-  tree->Branch("topQuarkPt1", &in->topQuarkPt1, "topQuarkPt1/F");
-  tree->Branch("topQuarkPt2", &in->topQuarkPt2, "topQuarkPt2/F");
-
-  tree->Branch("tZTTGenPt", &in->tZTTGenPt, "tZTTGenPt/F");
-  tree->Branch("tZTTGenPhi", &in->tZTTGenPhi, "tZTTGenPhi/F");
-  tree->Branch("tZTTGenEta", &in->tZTTGenEta, "tZTTGenEta/F");
-  tree->Branch("tZTTGenDR", &in->tZTTGenDR, "tZTTGenDR/F");
-  tree->Branch("tGenDecayMode", &in->tGenDecayMode, "tGenDecayMode/F");
-  tree->Branch("tGenEnergy", &in->tGenEnergy, "tGenEnergy/F");
-  tree->Branch("tGenEta", &in->tGenEta, "tGenEta/F");
-  tree->Branch("tGenJetEta", &in->tGenJetEta, "tGenJetEta/F");
-  tree->Branch("tGenJetPt", &in->tGenJetPt, "tGenJetPt/F");
-  tree->Branch("tGenMotherEnergy", &in->tGenMotherEnergy, "tGenMotherEnergy/F");
-  tree->Branch("tGenMotherEta", &in->tGenMotherEta, "tGenMotherEta/F");
-  tree->Branch("tGenMotherPdgId", &in->tGenMotherPdgId, "tGenMotherPdgId/F");
-  tree->Branch("tGenMotherPhi", &in->tGenMotherPhi, "tGenMotherPhi/F");
-  tree->Branch("tGenMotherPt", &in->tGenMotherPt, "tGenMotherPt/F");
-  tree->Branch("tGenPdgId", &in->tGenPdgId, "tGenPdgId/F");
-  tree->Branch("tGenPhi", &in->tGenPhi, "tGenPhi/F");
-  tree->Branch("tGenPt", &in->tGenPt, "tGenPt/F");
-  tree->Branch("tGenStatus", &in->tGenStatus, "tGenStatus/F");
-  tree->Branch("eGenCharge", &in->eGenCharge, "eGenCharge/F");
-  tree->Branch("eGenDirectPromptTauDecay", &in->eGenDirectPromptTauDecay, "eGenDirectPromptTauDecay/F");
-  tree->Branch("eGenEnergy", &in->eGenEnergy, "eGenEnergy/F");
-  tree->Branch("eGenEta", &in->eGenEta, "eGenEta/F");
-  tree->Branch("eGenIsPrompt", &in->eGenIsPrompt, "eGenIsPrompt/F");
-  tree->Branch("eGenMotherPdgId", &in->eGenMotherPdgId, "eGenMotherPdgId/F");
-  tree->Branch("eGenParticle", &in->eGenParticle, "eGenParticle/F");
-  tree->Branch("eGenPdgId", &in->eGenPdgId, "eGenPdgId/F");
-  tree->Branch("eGenPhi", &in->eGenPhi, "eGenPhi/F");
-  tree->Branch("eGenPrompt", &in->eGenPrompt, "eGenPrompt/F");
-  tree->Branch("eGenPromptTauDecay", &in->eGenPromptTauDecay, "eGenPromptTauDecay/F");
-  tree->Branch("eGenPt", &in->eGenPt, "eGenPt/F");
-  tree->Branch("eGenTauDecay", &in->eGenTauDecay, "eGenTauDecay/F");
-  tree->Branch("eGenVZ", &in->eGenVZ, "eGenVZ/F");
-  tree->Branch("eGenVtxPVMatch", &in->eGenVtxPVMatch, "eGenVtxPVMatch/F");
-
-  // Flags
-  tree->Branch("Flag_BadChargedCandidateFilter", &in->Flag_BadChargedCandidateFilter, "Flag_BadChargedCandidateFilter/F");
-  tree->Branch("Flag_BadPFMuonFilter", &in->Flag_BadPFMuonFilter, "Flag_BadPFMuonFilter/F");
-  tree->Branch("Flag_EcalDeadCellTriggerPrimitiveFilter", &in->Flag_EcalDeadCellTriggerPrimitiveFilter, "Flag_EcalDeadCellTriggerPrimitiveFilter/F");
-  tree->Branch("Flag_HBHENoiseFilter", &in->Flag_HBHENoiseFilter, "Flag_HBHENoiseFilter/F");
-  tree->Branch("Flag_HBHENoiseIsoFilter", &in->Flag_HBHENoiseIsoFilter, "Flag_HBHENoiseIsoFilter/F");
-  tree->Branch("Flag_badMuons", &in->Flag_badMuons, "Flag_badMuons/F");
-  tree->Branch("Flag_duplicateMuons", &in->Flag_duplicateMuons, "Flag_duplicateMuons/F");
-  tree->Branch("Flag_ecalBadCalibFilter", &in->Flag_ecalBadCalibFilter, "Flag_ecalBadCalibFilter/F");
-  tree->Branch("Flag_eeBadScFilter", &in->Flag_eeBadScFilter, "Flag_eeBadScFilter/F");
-  tree->Branch("Flag_globalSuperTightHalo2016Filter", &in->Flag_globalSuperTightHalo2016Filter, "Flag_globalSuperTightHalo2016Filter/F");
-  tree->Branch("Flag_globalTightHalo2016Filter", &in->Flag_globalTightHalo2016Filter, "Flag_globalTightHalo2016Filter/F");
-  tree->Branch("Flag_goodVertices", &in->Flag_goodVertices, "Flag_goodVertices/F");
-
-  // Systematics
-  tree->Branch("met_JESUp", &met_JESUp, "met_JESUp/F");
-  tree->Branch("met_JESDown", &met_JESDown, "met_JESDown/F");
-  tree->Branch("met_UESUp", &met_UESUp, "met_UESUp/F");
-  tree->Branch("met_UESDown", &met_UESDown, "met_UESDown/F");
-  tree->Branch("metphi_JESUp", &metphi_JESUp, "metphi_JESUp/F");
-  tree->Branch("metphi_JESDown", &metphi_JESDown, "metphi_JESDown/F");
-  tree->Branch("metphi_UESUp", &metphi_UESUp, "metphi_UESUp/F");
-  tree->Branch("metphi_UESDown", &metphi_UESDown, "metphi_UESDown/F");
-
-  tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp, "pfmetcorr_ex_UESUp/F");
-  tree->Branch("pfmetcorr_ey_UESUp", &pfmetcorr_ey_UESUp, "pfmetcorr_ey_UESUp/F");
-  tree->Branch("pfmetcorr_ex_UESDown", &pfmetcorr_ex_UESDown, "pfmetcorr_ex_UESDown/F");
-  tree->Branch("pfmetcorr_ey_UESDown", &pfmetcorr_ey_UESDown, "pfmetcorr_ey_UESDown/F");
-  tree->Branch("pfmetcorr_ex_JESUp", &pfmetcorr_ex_JESUp, "pfmetcorr_ex_JESUp/F");
-  tree->Branch("pfmetcorr_ey_JESUp", &pfmetcorr_ey_JESUp, "pfmetcorr_ey_JESUp/F");
-  tree->Branch("pfmetcorr_ex_JESDown", &pfmetcorr_ex_JESDown, "pfmetcorr_ex_JESDown/F");
-  tree->Branch("pfmetcorr_ey_JESDown", &pfmetcorr_ey_JESDown, "pfmetcorr_ey_JESDown/F");
-  tree->Branch("type1_pfMet_shiftedPt_UnclusteredEnUp", &in->type1_pfMet_shiftedPt_UnclusteredEnUp, "type1_pfMet_shiftedPt_UnclusteredEnUp/F");
-  tree->Branch("type1_pfMet_shiftedPhi_UnclusteredEnUp", &in->type1_pfMet_shiftedPhi_UnclusteredEnUp, "type1_pfMet_shiftedPhi_UnclusteredEnUp/F");
-  tree->Branch("type1_pfMet_shiftedPt_UnclusteredEnDown", &in->type1_pfMet_shiftedPt_UnclusteredEnDown, "type1_pfMet_shiftedPt_UnclusteredEnDown/F");
-  tree->Branch("type1_pfMet_shiftedPhi_UnclusteredEnDown", &in->type1_pfMet_shiftedPhi_UnclusteredEnDown, "type1_pfMet_shiftedPhi_UnclusteredEnDown/F");
-  tree->Branch("type1_pfMet_shiftedPt_JetEnUp", &in->type1_pfMet_shiftedPt_JetEnUp, "type1_pfMet_shiftedPt_JetEnUp/F");
-  tree->Branch("type1_pfMet_shiftedPhi_JetEnUp", &in->type1_pfMet_shiftedPhi_JetEnUp, "type1_pfMet_shiftedPhi_JetEnUp/F");
-  tree->Branch("type1_pfMet_shiftedPt_JetEnDown", &in->type1_pfMet_shiftedPt_JetEnDown, "type1_pfMet_shiftedPt_JetEnDown/F");
-  tree->Branch("type1_pfMet_shiftedPhi_JetEnDown", &in->type1_pfMet_shiftedPhi_JetEnDown, "type1_pfMet_shiftedPhi_JetEnDown/F");
-
-  tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Down", &in->jetVeto30WoNoisyJets_JetEta0to3Down, "jetVeto30WoNoisyJets_JetEta0to3Down/F");
-  tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Up", &in->jetVeto30WoNoisyJets_JetEta0to3Up);
-  tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Down", &in->jetVeto30WoNoisyJets_JetEta0to5Down);
-  tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Up", &in->jetVeto30WoNoisyJets_JetEta0to5Up);
-  tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Down", &in->jetVeto30WoNoisyJets_JetEta3to5Down);
-  tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Up", &in->jetVeto30WoNoisyJets_JetEta3to5Up);
-  tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets);
-  tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets);
-  tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleDown", &in->jetVeto30WoNoisyJets_JetRelativeSampleDown);
-  tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleUp", &in->jetVeto30WoNoisyJets_JetRelativeSampleUp);
-  tree->Branch("jetVeto30WoNoisyJets_JetTotalDown", &in->jetVeto30WoNoisyJets_JetTotalDown);
-  tree->Branch("jetVeto30WoNoisyJets_JetTotalUp", &in->jetVeto30WoNoisyJets_JetTotalUp);
-  tree->Branch("jetVeto30_JetAbsoluteFlavMapDown", &in->jetVeto30_JetAbsoluteFlavMapDown);
-  tree->Branch("jetVeto30_JetAbsoluteFlavMapUp", &in->jetVeto30_JetAbsoluteFlavMapUp);
-  tree->Branch("jetVeto30_JetAbsoluteMPFBiasDown", &in->jetVeto30_JetAbsoluteMPFBiasDown);
-  tree->Branch("jetVeto30_JetAbsoluteMPFBiasUp", &in->jetVeto30_JetAbsoluteMPFBiasUp);
-  tree->Branch("jetVeto30_JetAbsoluteScaleDown", &in->jetVeto30_JetAbsoluteScaleDown);
-  tree->Branch("jetVeto30_JetAbsoluteScaleUp", &in->jetVeto30_JetAbsoluteScaleUp);
-  tree->Branch("jetVeto30_JetAbsoluteStatDown", &in->jetVeto30_JetAbsoluteStatDown);
-  tree->Branch("jetVeto30_JetAbsoluteStatUp", &in->jetVeto30_JetAbsoluteStatUp);
-  tree->Branch("jetVeto30_JetClosureDown", &in->jetVeto30_JetClosureDown);
-  tree->Branch("jetVeto30_JetClosureUp", &in->jetVeto30_JetClosureUp);
-  tree->Branch("jetVeto30_JetEnDown", &in->jetVeto30_JetEnDown);
-  tree->Branch("jetVeto30_JetFlavorQCDDown", &in->jetVeto30_JetFlavorQCDDown);
-  tree->Branch("jetVeto30_JetFlavorQCDUp", &in->jetVeto30_JetFlavorQCDUp);
-  tree->Branch("jetVeto30_JetFragmentationDown", &in->jetVeto30_JetFragmentationDown);
-  tree->Branch("jetVeto30_JetFragmentationUp", &in->jetVeto30_JetFragmentationUp);
-  tree->Branch("jetVeto30_JetPileUpDataMCDown", &in->jetVeto30_JetPileUpDataMCDown);
-  tree->Branch("jetVeto30_JetPileUpDataMCUp", &in->jetVeto30_JetPileUpDataMCUp);
-  tree->Branch("jetVeto30_JetPileUpPtBBDown", &in->jetVeto30_JetPileUpPtBBDown);
-  tree->Branch("jetVeto30_JetPileUpPtBBUp", &in->jetVeto30_JetPileUpPtBBUp);
-  tree->Branch("jetVeto30_JetPileUpPtEC1Down", &in->jetVeto30_JetPileUpPtEC1Down);
-  tree->Branch("jetVeto30_JetPileUpPtEC1Up", &in->jetVeto30_JetPileUpPtEC1Up);
-  tree->Branch("jetVeto30_JetPileUpPtEC2Down", &in->jetVeto30_JetPileUpPtEC2Down);
-  tree->Branch("jetVeto30_JetPileUpPtEC2Up", &in->jetVeto30_JetPileUpPtEC2Up);
-  tree->Branch("jetVeto30_JetPileUpPtHFDown", &in->jetVeto30_JetPileUpPtHFDown);
-  tree->Branch("jetVeto30_JetPileUpPtHFUp", &in->jetVeto30_JetPileUpPtHFUp);
-  tree->Branch("jetVeto30_JetPileUpPtRefDown", &in->jetVeto30_JetPileUpPtRefDown);
-  tree->Branch("jetVeto30_JetPileUpPtRefUp", &in->jetVeto30_JetPileUpPtRefUp);
-  tree->Branch("jetVeto30_JetRelativeBalDown", &in->jetVeto30_JetRelativeBalDown);
-  tree->Branch("jetVeto30_JetRelativeBalUp", &in->jetVeto30_JetRelativeBalUp);
-  tree->Branch("jetVeto30_JetRelativeFSRDown", &in->jetVeto30_JetRelativeFSRDown);
-  tree->Branch("jetVeto30_JetRelativeFSRUp", &in->jetVeto30_JetRelativeFSRUp);
-  tree->Branch("jetVeto30_JetRelativeJEREC1Down", &in->jetVeto30_JetRelativeJEREC1Down);
-  tree->Branch("jetVeto30_JetRelativeJEREC1Up", &in->jetVeto30_JetRelativeJEREC1Up);
-  tree->Branch("jetVeto30_JetRelativeJEREC2Down", &in->jetVeto30_JetRelativeJEREC2Down);
-  tree->Branch("jetVeto30_JetRelativeJEREC2Up", &in->jetVeto30_JetRelativeJEREC2Up);
-  tree->Branch("jetVeto30_JetRelativeJERHFDown", &in->jetVeto30_JetRelativeJERHFDown);
-  tree->Branch("jetVeto30_JetRelativeJERHFUp", &in->jetVeto30_JetRelativeJERHFUp);
-  tree->Branch("jetVeto30_JetRelativePtBBDown", &in->jetVeto30_JetRelativePtBBDown);
-  tree->Branch("jetVeto30_JetRelativePtBBUp", &in->jetVeto30_JetRelativePtBBUp);
-  tree->Branch("jetVeto30_JetRelativePtEC1Down", &in->jetVeto30_JetRelativePtEC1Down);
-  tree->Branch("jetVeto30_JetRelativePtEC1Up", &in->jetVeto30_JetRelativePtEC1Up);
-  tree->Branch("jetVeto30_JetRelativePtEC2Down", &in->jetVeto30_JetRelativePtEC2Down);
-  tree->Branch("jetVeto30_JetRelativePtEC2Up", &in->jetVeto30_JetRelativePtEC2Up);
-  tree->Branch("jetVeto30_JetRelativePtHFDown", &in->jetVeto30_JetRelativePtHFDown);
-  tree->Branch("jetVeto30_JetRelativePtHFUp", &in->jetVeto30_JetRelativePtHFUp);
-  tree->Branch("jetVeto30_JetRelativeSampleDown", &in->jetVeto30_JetRelativeSampleDown);
-  tree->Branch("jetVeto30_JetRelativeSampleUp", &in->jetVeto30_JetRelativeSampleUp);
-  tree->Branch("jetVeto30_JetRelativeStatECDown", &in->jetVeto30_JetRelativeStatECDown);
-  tree->Branch("jetVeto30_JetRelativeStatECUp", &in->jetVeto30_JetRelativeStatECUp);
-  tree->Branch("jetVeto30_JetRelativeStatFSRDown", &in->jetVeto30_JetRelativeStatFSRDown);
-  tree->Branch("jetVeto30_JetRelativeStatFSRUp", &in->jetVeto30_JetRelativeStatFSRUp);
-  tree->Branch("jetVeto30_JetRelativeStatHFDown", &in->jetVeto30_JetRelativeStatHFDown);
-  tree->Branch("jetVeto30_JetRelativeStatHFUp", &in->jetVeto30_JetRelativeStatHFUp);
-  tree->Branch("jetVeto30_JetSinglePionECALDown", &in->jetVeto30_JetSinglePionECALDown);
-  tree->Branch("jetVeto30_JetSinglePionECALUp", &in->jetVeto30_JetSinglePionECALUp);
-  tree->Branch("jetVeto30_JetSinglePionHCALDown", &in->jetVeto30_JetSinglePionHCALDown);
-  tree->Branch("jetVeto30_JetSinglePionHCALUp", &in->jetVeto30_JetSinglePionHCALUp);
-  tree->Branch("jetVeto30_JetTimePtEtaDown", &in->jetVeto30_JetTimePtEtaDown);
-  tree->Branch("jetVeto30_JetTimePtEtaUp", &in->jetVeto30_JetTimePtEtaUp);
-  tree->Branch("jetVeto30_JetTotalDown", &in->jetVeto30_JetTotalDown);
-  tree->Branch("jetVeto30_JetTotalUp", &in->jetVeto30_JetTotalUp);
-
-  tree->Branch("vbfMassWoNoisyJets_JetEta0to3Down", &in->vbfMassWoNoisyJets_JetEta0to3Down);
-  tree->Branch("vbfMassWoNoisyJets_JetEta0to3Up", &in->vbfMassWoNoisyJets_JetEta0to3Up);
-  tree->Branch("vbfMassWoNoisyJets_JetEta0to5Down", &in->vbfMassWoNoisyJets_JetEta0to5Down);
-  tree->Branch("vbfMassWoNoisyJets_JetEta0to5Up", &in->vbfMassWoNoisyJets_JetEta0to5Up);
-  tree->Branch("vbfMassWoNoisyJets_JetEta3to5Down", &in->vbfMassWoNoisyJets_JetEta3to5Down);
-  tree->Branch("vbfMassWoNoisyJets_JetEta3to5Up", &in->vbfMassWoNoisyJets_JetEta3to5Up);
-  tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleDown", &in->vbfMassWoNoisyJets_JetRelativeSampleDown);
-  tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleUp", &in->vbfMassWoNoisyJets_JetRelativeSampleUp);
-  tree->Branch("vbfMassWoNoisyJets_JetTotalDown", &in->vbfMassWoNoisyJets_JetTotalDown);
-  tree->Branch("vbfMassWoNoisyJets_JetTotalUp", &in->vbfMassWoNoisyJets_JetTotalUp);
-  tree->Branch("vbfMass_JetAbsoluteFlavMapDown", &in->vbfMass_JetAbsoluteFlavMapDown);
-  tree->Branch("vbfMass_JetAbsoluteFlavMapUp", &in->vbfMass_JetAbsoluteFlavMapUp);
-  tree->Branch("vbfMass_JetAbsoluteMPFBiasDown", &in->vbfMass_JetAbsoluteMPFBiasDown);
-  tree->Branch("vbfMass_JetAbsoluteMPFBiasUp", &in->vbfMass_JetAbsoluteMPFBiasUp);
-  tree->Branch("vbfMass_JetAbsoluteScaleDown", &in->vbfMass_JetAbsoluteScaleDown);
-  tree->Branch("vbfMass_JetAbsoluteScaleUp", &in->vbfMass_JetAbsoluteScaleUp);
-  tree->Branch("vbfMass_JetAbsoluteStatDown", &in->vbfMass_JetAbsoluteStatDown);
-  tree->Branch("vbfMass_JetAbsoluteStatUp", &in->vbfMass_JetAbsoluteStatUp);
-  tree->Branch("vbfMass_JetClosureDown", &in->vbfMass_JetClosureDown);
-  tree->Branch("vbfMass_JetClosureUp", &in->vbfMass_JetClosureUp);
-  tree->Branch("vbfMass_JetFlavorQCDDown", &in->vbfMass_JetFlavorQCDDown);
-  tree->Branch("vbfMass_JetFlavorQCDUp", &in->vbfMass_JetFlavorQCDUp);
-  tree->Branch("vbfMass_JetFragmentationDown", &in->vbfMass_JetFragmentationDown);
-  tree->Branch("vbfMass_JetFragmentationUp", &in->vbfMass_JetFragmentationUp);
-  tree->Branch("vbfMass_JetPileUpDataMCDown", &in->vbfMass_JetPileUpDataMCDown);
-  tree->Branch("vbfMass_JetPileUpDataMCUp", &in->vbfMass_JetPileUpDataMCUp);
-  tree->Branch("vbfMass_JetPileUpPtBBDown", &in->vbfMass_JetPileUpPtBBDown);
-  tree->Branch("vbfMass_JetPileUpPtBBUp", &in->vbfMass_JetPileUpPtBBUp);
-  tree->Branch("vbfMass_JetPileUpPtEC1Down", &in->vbfMass_JetPileUpPtEC1Down);
-  tree->Branch("vbfMass_JetPileUpPtEC1Up", &in->vbfMass_JetPileUpPtEC1Up);
-  tree->Branch("vbfMass_JetPileUpPtEC2Down", &in->vbfMass_JetPileUpPtEC2Down);
-  tree->Branch("vbfMass_JetPileUpPtEC2Up", &in->vbfMass_JetPileUpPtEC2Up);
-  tree->Branch("vbfMass_JetPileUpPtHFDown", &in->vbfMass_JetPileUpPtHFDown);
-  tree->Branch("vbfMass_JetPileUpPtHFUp", &in->vbfMass_JetPileUpPtHFUp);
-  tree->Branch("vbfMass_JetPileUpPtRefDown", &in->vbfMass_JetPileUpPtRefDown);
-  tree->Branch("vbfMass_JetPileUpPtRefUp", &in->vbfMass_JetPileUpPtRefUp);
-  tree->Branch("vbfMass_JetRelativeBalDown", &in->vbfMass_JetRelativeBalDown);
-  tree->Branch("vbfMass_JetRelativeBalUp", &in->vbfMass_JetRelativeBalUp);
-  tree->Branch("vbfMass_JetRelativeFSRDown", &in->vbfMass_JetRelativeFSRDown);
-  tree->Branch("vbfMass_JetRelativeFSRUp", &in->vbfMass_JetRelativeFSRUp);
-  tree->Branch("vbfMass_JetRelativeJEREC1Down", &in->vbfMass_JetRelativeJEREC1Down);
-  tree->Branch("vbfMass_JetRelativeJEREC1Up", &in->vbfMass_JetRelativeJEREC1Up);
-  tree->Branch("vbfMass_JetRelativeJEREC2Down", &in->vbfMass_JetRelativeJEREC2Down);
-  tree->Branch("vbfMass_JetRelativeJEREC2Up", &in->vbfMass_JetRelativeJEREC2Up);
-  tree->Branch("vbfMass_JetRelativeJERHFDown", &in->vbfMass_JetRelativeJERHFDown);
-  tree->Branch("vbfMass_JetRelativeJERHFUp", &in->vbfMass_JetRelativeJERHFUp);
-  tree->Branch("vbfMass_JetRelativePtBBDown", &in->vbfMass_JetRelativePtBBDown);
-  tree->Branch("vbfMass_JetRelativePtBBUp", &in->vbfMass_JetRelativePtBBUp);
-  tree->Branch("vbfMass_JetRelativePtEC1Down", &in->vbfMass_JetRelativePtEC1Down);
-  tree->Branch("vbfMass_JetRelativePtEC1Up", &in->vbfMass_JetRelativePtEC1Up);
-  tree->Branch("vbfMass_JetRelativePtEC2Down", &in->vbfMass_JetRelativePtEC2Down);
-  tree->Branch("vbfMass_JetRelativePtEC2Up", &in->vbfMass_JetRelativePtEC2Up);
-  tree->Branch("vbfMass_JetRelativePtHFDown", &in->vbfMass_JetRelativePtHFDown);
-  tree->Branch("vbfMass_JetRelativePtHFUp", &in->vbfMass_JetRelativePtHFUp);
-  tree->Branch("vbfMass_JetRelativeSampleDown", &in->vbfMass_JetRelativeSampleDown);
-  tree->Branch("vbfMass_JetRelativeSampleUp", &in->vbfMass_JetRelativeSampleUp);
-  tree->Branch("vbfMass_JetRelativeStatECDown", &in->vbfMass_JetRelativeStatECDown);
-  tree->Branch("vbfMass_JetRelativeStatECUp", &in->vbfMass_JetRelativeStatECUp);
-  tree->Branch("vbfMass_JetRelativeStatFSRDown", &in->vbfMass_JetRelativeStatFSRDown);
-  tree->Branch("vbfMass_JetRelativeStatFSRUp", &in->vbfMass_JetRelativeStatFSRUp);
-  tree->Branch("vbfMass_JetRelativeStatHFDown", &in->vbfMass_JetRelativeStatHFDown);
-  tree->Branch("vbfMass_JetRelativeStatHFUp", &in->vbfMass_JetRelativeStatHFUp);
-  tree->Branch("vbfMass_JetSinglePionECALDown", &in->vbfMass_JetSinglePionECALDown);
-  tree->Branch("vbfMass_JetSinglePionECALUp", &in->vbfMass_JetSinglePionECALUp);
-  tree->Branch("vbfMass_JetSinglePionHCALDown", &in->vbfMass_JetSinglePionHCALDown);
-  tree->Branch("vbfMass_JetSinglePionHCALUp", &in->vbfMass_JetSinglePionHCALUp);
-  tree->Branch("vbfMass_JetTimePtEtaDown", &in->vbfMass_JetTimePtEtaDown);
-  tree->Branch("vbfMass_JetTimePtEtaUp", &in->vbfMass_JetTimePtEtaUp);
-  tree->Branch("vbfMass_JetTotalDown", &in->vbfMass_JetTotalDown);
-  tree->Branch("vbfMass_JetTotalUp", &in->vbfMass_JetTotalUp);
-
-  // 2016 placeholders
-  tree->Branch("amcatNLO_weight", &placeholder, "amcatNLO_weight/F");
-  tree->Branch("eMatchesSingleE25Tight", &placeholder, "eMatchesSingleE25Tight/F");
-  tree->Branch("eMatchesEle25TightFilter", &placeholder, "eMatchesEle25TightFilter/F");
-  tree->Branch("singleE25eta2p1TightPass", &placeholder, "singleE25eta2p1TightPass/F");
+  // copy the rest
+  tree->SetBranchAddress("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
+  tree->SetBranchAddress("DoubleMediumHPSTau35TightIDPass", &in->DoubleMediumHPSTau35TightIDPass);
+  tree->SetBranchAddress("DoubleMediumHPSTau40Pass", &in->DoubleMediumHPSTau40Pass);
+  tree->SetBranchAddress("DoubleMediumHPSTau40TightIDPass", &in->DoubleMediumHPSTau40TightIDPass);
+  tree->SetBranchAddress("DoubleMediumTau35Pass", &in->DoubleMediumTau35Pass);
+  tree->SetBranchAddress("DoubleMediumTau35TightIDPass", &in->DoubleMediumTau35TightIDPass);
+  tree->SetBranchAddress("DoubleMediumTau40Pass", &in->DoubleMediumTau40Pass);
+  tree->SetBranchAddress("DoubleMediumTau40TightIDPass", &in->DoubleMediumTau40TightIDPass);
+  tree->SetBranchAddress("DoubleTightHPSTau35Pass", &in->DoubleTightHPSTau35Pass);
+  tree->SetBranchAddress("DoubleTightHPSTau35TightIDPass", &in->DoubleTightHPSTau35TightIDPass);
+  tree->SetBranchAddress("DoubleTightHPSTau40Pass", &in->DoubleTightHPSTau40Pass);
+  tree->SetBranchAddress("DoubleTightHPSTau40TightIDPass", &in->DoubleTightHPSTau40TightIDPass);
+  tree->SetBranchAddress("DoubleTightTau35Pass", &in->DoubleTightTau35Pass);
+  tree->SetBranchAddress("DoubleTightTau35TightIDPass", &in->DoubleTightTau35TightIDPass);
+  tree->SetBranchAddress("DoubleTightTau40Pass", &in->DoubleTightTau40Pass);
+  tree->SetBranchAddress("DoubleTightTau40TightIDPass", &in->DoubleTightTau40TightIDPass);
+  tree->SetBranchAddress("Ele24LooseHPSTau30Pass", &in->Ele24LooseHPSTau30Pass);
+  tree->SetBranchAddress("Ele24LooseHPSTau30TightIDPass", &in->Ele24LooseHPSTau30TightIDPass);
+  tree->SetBranchAddress("Ele24LooseTau30Pass", &in->Ele24LooseTau30Pass);
+  tree->SetBranchAddress("Ele24LooseTau30TightIDPass", &in->Ele24LooseTau30TightIDPass);
+  tree->SetBranchAddress("Ele27WPTightPass", &in->Ele27WPTightPass);
+  tree->SetBranchAddress("Ele32WPTightPass", &in->Ele32WPTightPass);
+  tree->SetBranchAddress("Ele35WPTightPass", &in->Ele35WPTightPass);
+  tree->SetBranchAddress("Ele38WPTightPass", &in->Ele38WPTightPass);
+  tree->SetBranchAddress("Ele40WPTightPass", &in->Ele40WPTightPass);
+  tree->SetBranchAddress("EmbPtWeight", &in->EmbPtWeight);
+  tree->SetBranchAddress("Eta", &in->Eta);
+  tree->SetBranchAddress("Flag_BadChargedCandidateFilter", &in->Flag_BadChargedCandidateFilter);
+  tree->SetBranchAddress("Flag_BadPFMuonFilter", &in->Flag_BadPFMuonFilter);
+  tree->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &in->Flag_EcalDeadCellTriggerPrimitiveFilter);
+  tree->SetBranchAddress("Flag_HBHENoiseFilter", &in->Flag_HBHENoiseFilter);
+  tree->SetBranchAddress("Flag_HBHENoiseIsoFilter", &in->Flag_HBHENoiseIsoFilter);
+  tree->SetBranchAddress("Flag_badMuons", &in->Flag_badMuons);
+  tree->SetBranchAddress("Flag_duplicateMuons", &in->Flag_duplicateMuons);
+  tree->SetBranchAddress("Flag_ecalBadCalibFilter", &in->Flag_ecalBadCalibFilter);
+  tree->SetBranchAddress("Flag_eeBadScFilter", &in->Flag_eeBadScFilter);
+  tree->SetBranchAddress("Flag_globalSuperTightHalo2016Filter", &in->Flag_globalSuperTightHalo2016Filter);
+  tree->SetBranchAddress("Flag_globalTightHalo2016Filter", &in->Flag_globalTightHalo2016Filter);
+  tree->SetBranchAddress("Flag_goodVertices", &in->Flag_goodVertices);
+  tree->SetBranchAddress("GenWeight", &in->GenWeight);
+  tree->SetBranchAddress("Ht", &in->Ht);
+  tree->SetBranchAddress("IsoMu24Pass", &in->IsoMu24Pass);
+  tree->SetBranchAddress("IsoMu27Pass", &in->IsoMu27Pass);
+  tree->SetBranchAddress("LT", &in->LT);
+  tree->SetBranchAddress("Mass", &in->Mass);
+  tree->SetBranchAddress("MassError", &in->MassError);
+  tree->SetBranchAddress("MassErrord1", &in->MassErrord1);
+  tree->SetBranchAddress("MassErrord2", &in->MassErrord2);
+  tree->SetBranchAddress("MassErrord3", &in->MassErrord3);
+  tree->SetBranchAddress("MassErrord4", &in->MassErrord4);
+  tree->SetBranchAddress("Mt", &in->Mt);
+  tree->SetBranchAddress("Mu20LooseHPSTau27Pass", &in->Mu20LooseHPSTau27Pass);
+  tree->SetBranchAddress("Mu20LooseHPSTau27TightIDPass", &in->Mu20LooseHPSTau27TightIDPass);
+  tree->SetBranchAddress("Mu20LooseTau27Pass", &in->Mu20LooseTau27Pass);
+  tree->SetBranchAddress("Mu20LooseTau27TightIDPass", &in->Mu20LooseTau27TightIDPass);
+  tree->SetBranchAddress("Mu50Pass", &in->Mu50Pass);
+  tree->SetBranchAddress("NUP", &in->NUP);
+  tree->SetBranchAddress("Phi", &in->Phi);
+  tree->SetBranchAddress("Pt", &in->Pt);
+  tree->SetBranchAddress("Rivet_VEta", &in->Rivet_VEta);
+  tree->SetBranchAddress("Rivet_VPt", &in->Rivet_VPt);
+  tree->SetBranchAddress("Rivet_errorCode", &in->Rivet_errorCode);
+  tree->SetBranchAddress("Rivet_higgsEta", &in->Rivet_higgsEta);
+  tree->SetBranchAddress("Rivet_higgsPt", &in->Rivet_higgsPt);
+  tree->SetBranchAddress("Rivet_nJets25", &in->Rivet_nJets25);
+  tree->SetBranchAddress("Rivet_nJets30", &in->Rivet_nJets30);
+  tree->SetBranchAddress("Rivet_p4decay_VEta", &in->Rivet_p4decay_VEta);
+  tree->SetBranchAddress("Rivet_p4decay_VPt", &in->Rivet_p4decay_VPt);
+  tree->SetBranchAddress("Rivet_prodMode", &in->Rivet_prodMode);
+  tree->SetBranchAddress("Rivet_stage0_cat", &in->Rivet_stage0_cat);
+  tree->SetBranchAddress("Rivet_stage1_cat_pTjet25GeV", &in->Rivet_stage1_cat_pTjet25GeV);
+  tree->SetBranchAddress("Rivet_stage1_cat_pTjet30GeV", &in->Rivet_stage1_cat_pTjet30GeV);
+  tree->SetBranchAddress("Rivet_stage1p1_cat", &in->Rivet_stage1p1_cat);
+  tree->SetBranchAddress("VBFDoubleLooseHPSTau20Pass", &in->VBFDoubleLooseHPSTau20Pass);
+  tree->SetBranchAddress("VBFDoubleLooseTau20Pass", &in->VBFDoubleLooseTau20Pass);
+  tree->SetBranchAddress("VBFDoubleMediumHPSTau20Pass", &in->VBFDoubleMediumHPSTau20Pass);
+  tree->SetBranchAddress("VBFDoubleMediumTau20Pass", &in->VBFDoubleMediumTau20Pass);
+  tree->SetBranchAddress("VBFDoubleTightHPSTau20Pass", &in->VBFDoubleTightHPSTau20Pass);
+  tree->SetBranchAddress("VBFDoubleTightTau20Pass", &in->VBFDoubleTightTau20Pass);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Loose_2016_DR0p5", &in->bjetDeepCSVVeto20Loose_2016_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Loose_2017_DR0p5", &in->bjetDeepCSVVeto20Loose_2017_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Loose_2018_DR0p5", &in->bjetDeepCSVVeto20Loose_2018_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2016_DR0", &in->bjetDeepCSVVeto20Medium_2016_DR0);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2016_DR0p5", &in->bjetDeepCSVVeto20Medium_2016_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2017_DR0", &in->bjetDeepCSVVeto20Medium_2017_DR0);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2017_DR0p5", &in->bjetDeepCSVVeto20Medium_2017_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2018_DR0", &in->bjetDeepCSVVeto20Medium_2018_DR0);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Medium_2018_DR0p5", &in->bjetDeepCSVVeto20Medium_2018_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2016_DR0p5", &in->bjetDeepCSVVeto20Tight_2016_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2017_DR0p5", &in->bjetDeepCSVVeto20Tight_2017_DR0p5);
+  tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2018_DR0p5", &in->bjetDeepCSVVeto20Tight_2018_DR0p5);
+  tree->SetBranchAddress("charge", &in->charge);
+  tree->SetBranchAddress("dielectronVeto", &in->dielectronVeto);
+  tree->SetBranchAddress("dimu9ele9Pass", &in->dimu9ele9Pass);
+  tree->SetBranchAddress("dimuonVeto", &in->dimuonVeto);
+  tree->SetBranchAddress("doubleE25Pass", &in->doubleE25Pass);
+  tree->SetBranchAddress("doubleE33Pass", &in->doubleE33Pass);
+  tree->SetBranchAddress("doubleE_23_12Pass", &in->doubleE_23_12Pass);
+  tree->SetBranchAddress("doubleMuDZminMass3p8Pass", &in->doubleMuDZminMass3p8Pass);
+  tree->SetBranchAddress("doubleMuDZminMass8Pass", &in->doubleMuDZminMass8Pass);
+  tree->SetBranchAddress("doubleMuSingleEPass", &in->doubleMuSingleEPass);
+  tree->SetBranchAddress("doubleTau35Pass", &in->doubleTau35Pass);
+  tree->SetBranchAddress("doubleTauCmbIso35RegPass", &in->doubleTauCmbIso35RegPass);
+  tree->SetBranchAddress("eCBIDLoose", &in->eCBIDLoose);
+  tree->SetBranchAddress("eCBIDMedium", &in->eCBIDMedium);
+  tree->SetBranchAddress("eCBIDTight", &in->eCBIDTight);
+  tree->SetBranchAddress("eCBIDVeto", &in->eCBIDVeto);
+  tree->SetBranchAddress("eCharge", &in->eCharge);
+  tree->SetBranchAddress("eChargeIdLoose", &in->eChargeIdLoose);
+  tree->SetBranchAddress("eChargeIdMed", &in->eChargeIdMed);
+  tree->SetBranchAddress("eChargeIdTight", &in->eChargeIdTight);
+  tree->SetBranchAddress("eComesFromHiggs", &in->eComesFromHiggs);
+  tree->SetBranchAddress("eCorrectedEt", &in->eCorrectedEt);
+  tree->SetBranchAddress("eE1x5", &in->eE1x5);
+  tree->SetBranchAddress("eE2x5Max", &in->eE2x5Max);
+  tree->SetBranchAddress("eE5x5", &in->eE5x5);
+  tree->SetBranchAddress("eEcalIsoDR03", &in->eEcalIsoDR03);
+  tree->SetBranchAddress("eEnergyError", &in->eEnergyError);
+  tree->SetBranchAddress("eEnergyScaleDown", &in->eEnergyScaleDown);
+  tree->SetBranchAddress("eEnergyScaleGainDown", &in->eEnergyScaleGainDown);
+  tree->SetBranchAddress("eEnergyScaleGainUp", &in->eEnergyScaleGainUp);
+  tree->SetBranchAddress("eEnergyScaleStatDown", &in->eEnergyScaleStatDown);
+  tree->SetBranchAddress("eEnergyScaleStatUp", &in->eEnergyScaleStatUp);
+  tree->SetBranchAddress("eEnergyScaleSystDown", &in->eEnergyScaleSystDown);
+  tree->SetBranchAddress("eEnergyScaleSystUp", &in->eEnergyScaleSystUp);
+  tree->SetBranchAddress("eEnergyScaleUp", &in->eEnergyScaleUp);
+  tree->SetBranchAddress("eEnergySigmaDown", &in->eEnergySigmaDown);
+  tree->SetBranchAddress("eEnergySigmaPhiDown", &in->eEnergySigmaPhiDown);
+  tree->SetBranchAddress("eEnergySigmaPhiUp", &in->eEnergySigmaPhiUp);
+  tree->SetBranchAddress("eEnergySigmaRhoDown", &in->eEnergySigmaRhoDown);
+  tree->SetBranchAddress("eEnergySigmaRhoUp", &in->eEnergySigmaRhoUp);
+  tree->SetBranchAddress("eEnergySigmaUp", &in->eEnergySigmaUp);
+  tree->SetBranchAddress("eEta", &in->eEta);
+  tree->SetBranchAddress("eGenCharge", &in->eGenCharge);
+  tree->SetBranchAddress("eGenDirectPromptTauDecay", &in->eGenDirectPromptTauDecay);
+  tree->SetBranchAddress("eGenEnergy", &in->eGenEnergy);
+  tree->SetBranchAddress("eGenEta", &in->eGenEta);
+  tree->SetBranchAddress("eGenIsPrompt", &in->eGenIsPrompt);
+  tree->SetBranchAddress("eGenMotherPdgId", &in->eGenMotherPdgId);
+  tree->SetBranchAddress("eGenParticle", &in->eGenParticle);
+  tree->SetBranchAddress("eGenPdgId", &in->eGenPdgId);
+  tree->SetBranchAddress("eGenPhi", &in->eGenPhi);
+  tree->SetBranchAddress("eGenPrompt", &in->eGenPrompt);
+  tree->SetBranchAddress("eGenPromptTauDecay", &in->eGenPromptTauDecay);
+  tree->SetBranchAddress("eGenPt", &in->eGenPt);
+  tree->SetBranchAddress("eGenTauDecay", &in->eGenTauDecay);
+  tree->SetBranchAddress("eGenVZ", &in->eGenVZ);
+  tree->SetBranchAddress("eGenVtxPVMatch", &in->eGenVtxPVMatch);
+  tree->SetBranchAddress("eHadronicDepth1OverEm", &in->eHadronicDepth1OverEm);
+  tree->SetBranchAddress("eHadronicDepth2OverEm", &in->eHadronicDepth2OverEm);
+  tree->SetBranchAddress("eHadronicOverEM", &in->eHadronicOverEM);
+  tree->SetBranchAddress("eHcalIsoDR03", &in->eHcalIsoDR03);
+  tree->SetBranchAddress("eIP3D", &in->eIP3D);
+  tree->SetBranchAddress("eIP3DErr", &in->eIP3DErr);
+  tree->SetBranchAddress("eIsoDB03", &in->eIsoDB03);
+  tree->SetBranchAddress("eJetArea", &in->eJetArea);
+  tree->SetBranchAddress("eJetBtag", &in->eJetBtag);
+  tree->SetBranchAddress("eJetDR", &in->eJetDR);
+  tree->SetBranchAddress("eJetEtaEtaMoment", &in->eJetEtaEtaMoment);
+  tree->SetBranchAddress("eJetEtaPhiMoment", &in->eJetEtaPhiMoment);
+  tree->SetBranchAddress("eJetEtaPhiSpread", &in->eJetEtaPhiSpread);
+  tree->SetBranchAddress("eJetHadronFlavour", &in->eJetHadronFlavour);
+  tree->SetBranchAddress("eJetPFCISVBtag", &in->eJetPFCISVBtag);
+  tree->SetBranchAddress("eJetPartonFlavour", &in->eJetPartonFlavour);
+  tree->SetBranchAddress("eJetPhiPhiMoment", &in->eJetPhiPhiMoment);
+  tree->SetBranchAddress("eJetPt", &in->eJetPt);
+  tree->SetBranchAddress("eLowestMll", &in->eLowestMll);
+  tree->SetBranchAddress("eMVAIsoWP80", &in->eMVAIsoWP80);
+  tree->SetBranchAddress("eMVAIsoWP90", &in->eMVAIsoWP90);
+  tree->SetBranchAddress("eMVAIsoWPHZZ", &in->eMVAIsoWPHZZ);
+  tree->SetBranchAddress("eMVAIsoWPLoose", &in->eMVAIsoWPLoose);
+  tree->SetBranchAddress("eMVANoisoWP80", &in->eMVANoisoWP80);
+  tree->SetBranchAddress("eMVANoisoWP90", &in->eMVANoisoWP90);
+  tree->SetBranchAddress("eMVANoisoWPLoose", &in->eMVANoisoWPLoose);
+  tree->SetBranchAddress("eMass", &in->eMass);
+  tree->SetBranchAddress("eMatchesEle24HPSTau30Filter", &in->eMatchesEle24HPSTau30Filter);
+  tree->SetBranchAddress("eMatchesEle24HPSTau30Path", &in->eMatchesEle24HPSTau30Path);
+  tree->SetBranchAddress("eMatchesEle24Tau30Filter", &in->eMatchesEle24Tau30Filter);
+  tree->SetBranchAddress("eMatchesEle24Tau30Path", &in->eMatchesEle24Tau30Path);
+  tree->SetBranchAddress("eMatchesEle25Filter", &in->eMatchesEle25Filter);
+  tree->SetBranchAddress("eMatchesEle25Path", &in->eMatchesEle25Path);
+  tree->SetBranchAddress("eMatchesEle27Filter", &in->eMatchesEle27Filter);
+  tree->SetBranchAddress("eMatchesEle27Path", &in->eMatchesEle27Path);
+  tree->SetBranchAddress("eMatchesEle32Filter", &in->eMatchesEle32Filter);
+  tree->SetBranchAddress("eMatchesEle32Path", &in->eMatchesEle32Path);
+  tree->SetBranchAddress("eMatchesEle35Filter", &in->eMatchesEle35Filter);
+  tree->SetBranchAddress("eMatchesEle35Path", &in->eMatchesEle35Path);
+  tree->SetBranchAddress("eMissingHits", &in->eMissingHits);
+  tree->SetBranchAddress("eNearMuonVeto", &in->eNearMuonVeto);
+  tree->SetBranchAddress("eNearestMuonDR", &in->eNearestMuonDR);
+  tree->SetBranchAddress("eNearestZMass", &in->eNearestZMass);
+  tree->SetBranchAddress("ePFChargedIso", &in->ePFChargedIso);
+  tree->SetBranchAddress("ePFNeutralIso", &in->ePFNeutralIso);
+  tree->SetBranchAddress("ePFPUChargedIso", &in->ePFPUChargedIso);
+  tree->SetBranchAddress("ePFPhotonIso", &in->ePFPhotonIso);
+  tree->SetBranchAddress("ePVDXY", &in->ePVDXY);
+  tree->SetBranchAddress("ePVDZ", &in->ePVDZ);
+  tree->SetBranchAddress("ePassesConversionVeto", &in->ePassesConversionVeto);
+  tree->SetBranchAddress("ePhi", &in->ePhi);
+  tree->SetBranchAddress("ePt", &in->ePt);
+  tree->SetBranchAddress("eRelIso", &in->eRelIso);
+  tree->SetBranchAddress("eRelPFIsoDB", &in->eRelPFIsoDB);
+  tree->SetBranchAddress("eRelPFIsoRho", &in->eRelPFIsoRho);
+  tree->SetBranchAddress("eRho", &in->eRho);
+  tree->SetBranchAddress("eSCEnergy", &in->eSCEnergy);
+  tree->SetBranchAddress("eSCEta", &in->eSCEta);
+  tree->SetBranchAddress("eSCEtaWidth", &in->eSCEtaWidth);
+  tree->SetBranchAddress("eSCPhi", &in->eSCPhi);
+  tree->SetBranchAddress("eSCPhiWidth", &in->eSCPhiWidth);
+  tree->SetBranchAddress("eSCPreshowerEnergy", &in->eSCPreshowerEnergy);
+  tree->SetBranchAddress("eSCRawEnergy", &in->eSCRawEnergy);
+  tree->SetBranchAddress("eSIP2D", &in->eSIP2D);
+  tree->SetBranchAddress("eSIP3D", &in->eSIP3D);
+  tree->SetBranchAddress("eSigmaIEtaIEta", &in->eSigmaIEtaIEta);
+  tree->SetBranchAddress("eTrkIsoDR03", &in->eTrkIsoDR03);
+  tree->SetBranchAddress("eVZ", &in->eVZ);
+  tree->SetBranchAddress("eVetoHZZPt5", &in->eVetoHZZPt5);
+  tree->SetBranchAddress("eVetoZTTp001dxyz", &in->eVetoZTTp001dxyz);
+  tree->SetBranchAddress("eVetoZTTp001dxyzR0", &in->eVetoZTTp001dxyzR0);
+  tree->SetBranchAddress("eZTTGenMatching", &in->eZTTGenMatching);
+  tree->SetBranchAddress("e_t_DR", &in->e_t_DR);
+  tree->SetBranchAddress("e_t_Mass", &in->e_t_Mass);
+  tree->SetBranchAddress("e_t_doubleL1IsoTauMatch", &in->e_t_doubleL1IsoTauMatch);
+  tree->SetBranchAddress("edeltaEtaSuperClusterTrackAtVtx", &in->edeltaEtaSuperClusterTrackAtVtx);
+  tree->SetBranchAddress("edeltaPhiSuperClusterTrackAtVtx", &in->edeltaPhiSuperClusterTrackAtVtx);
+  tree->SetBranchAddress("eeSuperClusterOverP", &in->eeSuperClusterOverP);
+  tree->SetBranchAddress("eecalEnergy", &in->eecalEnergy);
+  tree->SetBranchAddress("efBrem", &in->efBrem);
+  tree->SetBranchAddress("etrackMomentumAtVtxP", &in->etrackMomentumAtVtxP);
+  tree->SetBranchAddress("evt", &in->evt);
+  tree->SetBranchAddress("genEta", &in->genEta);
+  tree->SetBranchAddress("genHTT", &in->genHTT);
+  tree->SetBranchAddress("genM", &in->genM);
+  tree->SetBranchAddress("genMass", &in->genMass);
+  tree->SetBranchAddress("genPhi", &in->genPhi);
+  tree->SetBranchAddress("genpT", &in->genpT);
+  tree->SetBranchAddress("genpX", &in->genpX);
+  tree->SetBranchAddress("genpY", &in->genpY);
+  tree->SetBranchAddress("isdata", &in->isdata);
+  tree->SetBranchAddress("isembed", &in->isembed);
+  tree->SetBranchAddress("j1csv", &in->j1csv);
+  tree->SetBranchAddress("j1csvWoNoisyJets", &in->j1csvWoNoisyJets);
+  tree->SetBranchAddress("j1eta", &in->j1eta);
+  tree->SetBranchAddress("j1etaWoNoisyJets", &in->j1etaWoNoisyJets);
+  tree->SetBranchAddress("j1hadronflavor", &in->j1hadronflavor);
+  tree->SetBranchAddress("j1hadronflavorWoNoisyJets", &in->j1hadronflavorWoNoisyJets);
+  tree->SetBranchAddress("j1phi", &in->j1phi);
+  tree->SetBranchAddress("j1phiWoNoisyJets", &in->j1phiWoNoisyJets);
+  tree->SetBranchAddress("j1pt", &in->j1pt);
+  tree->SetBranchAddress("j1ptWoNoisyJets", &in->j1ptWoNoisyJets);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEC2Down", &in->j1ptWoNoisyJets_JetEC2Down);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEC2Up", &in->j1ptWoNoisyJets_JetEC2Up);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to3Down", &in->j1ptWoNoisyJets_JetEta0to3Down);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to3Up", &in->j1ptWoNoisyJets_JetEta0to3Up);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to5Down", &in->j1ptWoNoisyJets_JetEta0to5Down);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to5Up", &in->j1ptWoNoisyJets_JetEta0to5Up);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta3to5Down", &in->j1ptWoNoisyJets_JetEta3to5Down);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetEta3to5Up", &in->j1ptWoNoisyJets_JetEta3to5Up);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeBalDown", &in->j1ptWoNoisyJets_JetRelativeBalDown);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeBalUp", &in->j1ptWoNoisyJets_JetRelativeBalUp);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeSampleDown", &in->j1ptWoNoisyJets_JetRelativeSampleDown);
+  tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeSampleUp", &in->j1ptWoNoisyJets_JetRelativeSampleUp);
+  tree->SetBranchAddress("j1pt_JetEC2Down", &in->j1pt_JetEC2Down);
+  tree->SetBranchAddress("j1pt_JetEC2Up", &in->j1pt_JetEC2Up);
+  tree->SetBranchAddress("j1pt_JetEta0to3Down", &in->j1pt_JetEta0to3Down);
+  tree->SetBranchAddress("j1pt_JetEta0to3Up", &in->j1pt_JetEta0to3Up);
+  tree->SetBranchAddress("j1pt_JetEta0to5Down", &in->j1pt_JetEta0to5Down);
+  tree->SetBranchAddress("j1pt_JetEta0to5Up", &in->j1pt_JetEta0to5Up);
+  tree->SetBranchAddress("j1pt_JetEta3to5Down", &in->j1pt_JetEta3to5Down);
+  tree->SetBranchAddress("j1pt_JetEta3to5Up", &in->j1pt_JetEta3to5Up);
+  tree->SetBranchAddress("j1pt_JetRelativeBalDown", &in->j1pt_JetRelativeBalDown);
+  tree->SetBranchAddress("j1pt_JetRelativeBalUp", &in->j1pt_JetRelativeBalUp);
+  tree->SetBranchAddress("j1pt_JetRelativeSampleDown", &in->j1pt_JetRelativeSampleDown);
+  tree->SetBranchAddress("j1pt_JetRelativeSampleUp", &in->j1pt_JetRelativeSampleUp);
+  tree->SetBranchAddress("j2csv", &in->j2csv);
+  tree->SetBranchAddress("j2csvWoNoisyJets", &in->j2csvWoNoisyJets);
+  tree->SetBranchAddress("j2eta", &in->j2eta);
+  tree->SetBranchAddress("j2etaWoNoisyJets", &in->j2etaWoNoisyJets);
+  tree->SetBranchAddress("j2hadronflavor", &in->j2hadronflavor);
+  tree->SetBranchAddress("j2hadronflavorWoNoisyJets", &in->j2hadronflavorWoNoisyJets);
+  tree->SetBranchAddress("j2phi", &in->j2phi);
+  tree->SetBranchAddress("j2phiWoNoisyJets", &in->j2phiWoNoisyJets);
+  tree->SetBranchAddress("j2pt", &in->j2pt);
+  tree->SetBranchAddress("j2ptWoNoisyJets", &in->j2ptWoNoisyJets);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEC2Down", &in->j2ptWoNoisyJets_JetEC2Down);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEC2Up", &in->j2ptWoNoisyJets_JetEC2Up);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to3Down", &in->j2ptWoNoisyJets_JetEta0to3Down);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to3Up", &in->j2ptWoNoisyJets_JetEta0to3Up);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to5Down", &in->j2ptWoNoisyJets_JetEta0to5Down);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to5Up", &in->j2ptWoNoisyJets_JetEta0to5Up);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta3to5Down", &in->j2ptWoNoisyJets_JetEta3to5Down);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetEta3to5Up", &in->j2ptWoNoisyJets_JetEta3to5Up);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeBalDown", &in->j2ptWoNoisyJets_JetRelativeBalDown);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeBalUp", &in->j2ptWoNoisyJets_JetRelativeBalUp);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeSampleDown", &in->j2ptWoNoisyJets_JetRelativeSampleDown);
+  tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeSampleUp", &in->j2ptWoNoisyJets_JetRelativeSampleUp);
+  tree->SetBranchAddress("j2pt_JetEC2Down", &in->j2pt_JetEC2Down);
+  tree->SetBranchAddress("j2pt_JetEC2Up", &in->j2pt_JetEC2Up);
+  tree->SetBranchAddress("j2pt_JetEta0to3Down", &in->j2pt_JetEta0to3Down);
+  tree->SetBranchAddress("j2pt_JetEta0to3Up", &in->j2pt_JetEta0to3Up);
+  tree->SetBranchAddress("j2pt_JetEta0to5Down", &in->j2pt_JetEta0to5Down);
+  tree->SetBranchAddress("j2pt_JetEta0to5Up", &in->j2pt_JetEta0to5Up);
+  tree->SetBranchAddress("j2pt_JetEta3to5Down", &in->j2pt_JetEta3to5Down);
+  tree->SetBranchAddress("j2pt_JetEta3to5Up", &in->j2pt_JetEta3to5Up);
+  tree->SetBranchAddress("j2pt_JetRelativeBalDown", &in->j2pt_JetRelativeBalDown);
+  tree->SetBranchAddress("j2pt_JetRelativeBalUp", &in->j2pt_JetRelativeBalUp);
+  tree->SetBranchAddress("j2pt_JetRelativeSampleDown", &in->j2pt_JetRelativeSampleDown);
+  tree->SetBranchAddress("j2pt_JetRelativeSampleUp", &in->j2pt_JetRelativeSampleUp);
+  tree->SetBranchAddress("jb1eta_2016", &in->jb1eta_2016);
+  tree->SetBranchAddress("jb1eta_2017", &in->jb1eta_2017);
+  tree->SetBranchAddress("jb1eta_2018", &in->jb1eta_2018);
+  tree->SetBranchAddress("jb1hadronflavor_2016", &in->jb1hadronflavor_2016);
+  tree->SetBranchAddress("jb1hadronflavor_2017", &in->jb1hadronflavor_2017);
+  tree->SetBranchAddress("jb1hadronflavor_2018", &in->jb1hadronflavor_2018);
+  tree->SetBranchAddress("jb1phi_2016", &in->jb1phi_2016);
+  tree->SetBranchAddress("jb1phi_2017", &in->jb1phi_2017);
+  tree->SetBranchAddress("jb1phi_2018", &in->jb1phi_2018);
+  tree->SetBranchAddress("jb1pt_2016", &in->jb1pt_2016);
+  tree->SetBranchAddress("jb1pt_2017", &in->jb1pt_2017);
+  tree->SetBranchAddress("jb1pt_2018", &in->jb1pt_2018);
+  tree->SetBranchAddress("jb2eta_2016", &in->jb2eta_2016);
+  tree->SetBranchAddress("jb2eta_2017", &in->jb2eta_2017);
+  tree->SetBranchAddress("jb2eta_2018", &in->jb2eta_2018);
+  tree->SetBranchAddress("jb2hadronflavor_2016", &in->jb2hadronflavor_2016);
+  tree->SetBranchAddress("jb2hadronflavor_2017", &in->jb2hadronflavor_2017);
+  tree->SetBranchAddress("jb2hadronflavor_2018", &in->jb2hadronflavor_2018);
+  tree->SetBranchAddress("jb2phi_2016", &in->jb2phi_2016);
+  tree->SetBranchAddress("jb2phi_2017", &in->jb2phi_2017);
+  tree->SetBranchAddress("jb2phi_2018", &in->jb2phi_2018);
+  tree->SetBranchAddress("jb2pt_2016", &in->jb2pt_2016);
+  tree->SetBranchAddress("jb2pt_2017", &in->jb2pt_2017);
+  tree->SetBranchAddress("jb2pt_2018", &in->jb2pt_2018);
+  tree->SetBranchAddress("jetVeto20", &in->jetVeto20);
+  tree->SetBranchAddress("jetVeto20_JetEnDown", &in->jetVeto20_JetEnDown);
+  tree->SetBranchAddress("jetVeto20_JetEnUp", &in->jetVeto20_JetEnUp);
+  tree->SetBranchAddress("jetVeto30", &in->jetVeto30);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEC2Down", &in->jetVeto30WoNoisyJets_JetEC2Down);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEC2Up", &in->jetVeto30WoNoisyJets_JetEC2Up);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to3Down", &in->jetVeto30WoNoisyJets_JetEta0to3Down);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to3Up", &in->jetVeto30WoNoisyJets_JetEta0to3Up);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to5Down", &in->jetVeto30WoNoisyJets_JetEta0to5Down);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to5Up", &in->jetVeto30WoNoisyJets_JetEta0to5Up);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta3to5Down", &in->jetVeto30WoNoisyJets_JetEta3to5Down);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta3to5Up", &in->jetVeto30WoNoisyJets_JetEta3to5Up);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeSampleDown", &in->jetVeto30WoNoisyJets_JetRelativeSampleDown);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetRelativeSampleUp", &in->jetVeto30WoNoisyJets_JetRelativeSampleUp);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetTotalDown", &in->jetVeto30WoNoisyJets_JetTotalDown);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets_JetTotalUp", &in->jetVeto30WoNoisyJets_JetTotalUp);
+  tree->SetBranchAddress("jetVeto30_JetEC2Down", &in->jetVeto30_JetEC2Down);
+  tree->SetBranchAddress("jetVeto30_JetEC2Up", &in->jetVeto30_JetEC2Up);
+  tree->SetBranchAddress("jetVeto30_JetEnDown", &in->jetVeto30_JetEnDown);
+  tree->SetBranchAddress("jetVeto30_JetEnUp", &in->jetVeto30_JetEnUp);
+  tree->SetBranchAddress("jetVeto30_JetEta0to3Down", &in->jetVeto30_JetEta0to3Down);
+  tree->SetBranchAddress("jetVeto30_JetEta0to3Up", &in->jetVeto30_JetEta0to3Up);
+  tree->SetBranchAddress("jetVeto30_JetEta0to5Down", &in->jetVeto30_JetEta0to5Down);
+  tree->SetBranchAddress("jetVeto30_JetEta0to5Up", &in->jetVeto30_JetEta0to5Up);
+  tree->SetBranchAddress("jetVeto30_JetEta3to5Down", &in->jetVeto30_JetEta3to5Down);
+  tree->SetBranchAddress("jetVeto30_JetEta3to5Up", &in->jetVeto30_JetEta3to5Up);
+  tree->SetBranchAddress("jetVeto30_JetRelativeBalDown", &in->jetVeto30_JetRelativeBalDown);
+  tree->SetBranchAddress("jetVeto30_JetRelativeBalUp", &in->jetVeto30_JetRelativeBalUp);
+  tree->SetBranchAddress("jetVeto30_JetRelativeSampleDown", &in->jetVeto30_JetRelativeSampleDown);
+  tree->SetBranchAddress("jetVeto30_JetRelativeSampleUp", &in->jetVeto30_JetRelativeSampleUp);
+  tree->SetBranchAddress("jetVeto30_JetTotalDown", &in->jetVeto30_JetTotalDown);
+  tree->SetBranchAddress("jetVeto30_JetTotalUp", &in->jetVeto30_JetTotalUp);
+  tree->SetBranchAddress("lumi", &in->lumi);
+  tree->SetBranchAddress("metSig", &in->metSig);
+  tree->SetBranchAddress("metcov00", &in->metcov00);
+  tree->SetBranchAddress("metcov01", &in->metcov01);
+  tree->SetBranchAddress("metcov10", &in->metcov10);
+  tree->SetBranchAddress("metcov11", &in->metcov11);
+  tree->SetBranchAddress("mu12e23DZPass", &in->mu12e23DZPass);
+  tree->SetBranchAddress("mu12e23Pass", &in->mu12e23Pass);
+  tree->SetBranchAddress("mu23e12DZPass", &in->mu23e12DZPass);
+  tree->SetBranchAddress("mu23e12Pass", &in->mu23e12Pass);
+  tree->SetBranchAddress("mu8diele12DZPass", &in->mu8diele12DZPass);
+  tree->SetBranchAddress("mu8diele12Pass", &in->mu8diele12Pass);
+  tree->SetBranchAddress("mu8e23DZPass", &in->mu8e23DZPass);
+  tree->SetBranchAddress("mu8e23Pass", &in->mu8e23Pass);
+  tree->SetBranchAddress("muGlbIsoVetoPt10", &in->muGlbIsoVetoPt10);
+  tree->SetBranchAddress("muVeto5", &in->muVeto5);
+  tree->SetBranchAddress("muVetoZTTp001dxyz", &in->muVetoZTTp001dxyz);
+  tree->SetBranchAddress("muVetoZTTp001dxyzR0", &in->muVetoZTTp001dxyzR0);
+  tree->SetBranchAddress("nTruePU", &in->nTruePU);
+  tree->SetBranchAddress("npNLO", &in->npNLO);
+  tree->SetBranchAddress("numGenJets", &in->numGenJets);
+  tree->SetBranchAddress("nvtx", &in->nvtx);
+  tree->SetBranchAddress("processID", &in->processID);
+  tree->SetBranchAddress("puppiMetEt", &in->puppiMetEt);
+  tree->SetBranchAddress("puppiMetPhi", &in->puppiMetPhi);
+  tree->SetBranchAddress("pvChi2", &in->pvChi2);
+  tree->SetBranchAddress("pvDX", &in->pvDX);
+  tree->SetBranchAddress("pvDY", &in->pvDY);
+  tree->SetBranchAddress("pvDZ", &in->pvDZ);
+  tree->SetBranchAddress("pvIsFake", &in->pvIsFake);
+  tree->SetBranchAddress("pvIsValid", &in->pvIsValid);
+  tree->SetBranchAddress("pvNormChi2", &in->pvNormChi2);
+  tree->SetBranchAddress("pvRho", &in->pvRho);
+  tree->SetBranchAddress("pvX", &in->pvX);
+  tree->SetBranchAddress("pvY", &in->pvY);
+  tree->SetBranchAddress("pvZ", &in->pvZ);
+  tree->SetBranchAddress("pvndof", &in->pvndof);
+  tree->SetBranchAddress("raw_pfMetEt", &in->raw_pfMetEt);
+  tree->SetBranchAddress("raw_pfMetPhi", &in->raw_pfMetPhi);
+  tree->SetBranchAddress("recoilDaught", &in->recoilDaught);
+  tree->SetBranchAddress("recoilWithMet", &in->recoilWithMet);
+  tree->SetBranchAddress("rho", &in->rho);
+  tree->SetBranchAddress("run", &in->run);
+  tree->SetBranchAddress("singleE25eta2p1TightPass", &in->singleE25eta2p1TightPass);
+  tree->SetBranchAddress("singleIsoMu22Pass", &in->singleIsoMu22Pass);
+  tree->SetBranchAddress("singleIsoMu22eta2p1Pass", &in->singleIsoMu22eta2p1Pass);
+  tree->SetBranchAddress("singleIsoTkMu22Pass", &in->singleIsoTkMu22Pass);
+  tree->SetBranchAddress("singleIsoTkMu22eta2p1Pass", &in->singleIsoTkMu22eta2p1Pass);
+  tree->SetBranchAddress("singleMu19eta2p1LooseTau20Pass", &in->singleMu19eta2p1LooseTau20Pass);
+  tree->SetBranchAddress("singleMu19eta2p1LooseTau20singleL1Pass", &in->singleMu19eta2p1LooseTau20singleL1Pass);
+  tree->SetBranchAddress("tAgainstElectronLooseMVA6", &in->tAgainstElectronLooseMVA6);
+  tree->SetBranchAddress("tAgainstElectronLooseMVA62018", &in->tAgainstElectronLooseMVA62018);
+  tree->SetBranchAddress("tAgainstElectronMVA6Raw", &in->tAgainstElectronMVA6Raw);
+  tree->SetBranchAddress("tAgainstElectronMVA6Raw2018", &in->tAgainstElectronMVA6Raw2018);
+  tree->SetBranchAddress("tAgainstElectronMVA6category", &in->tAgainstElectronMVA6category);
+  tree->SetBranchAddress("tAgainstElectronMVA6category2018", &in->tAgainstElectronMVA6category2018);
+  tree->SetBranchAddress("tAgainstElectronMediumMVA6", &in->tAgainstElectronMediumMVA6);
+  tree->SetBranchAddress("tAgainstElectronMediumMVA62018", &in->tAgainstElectronMediumMVA62018);
+  tree->SetBranchAddress("tAgainstElectronTightMVA6", &in->tAgainstElectronTightMVA6);
+  tree->SetBranchAddress("tAgainstElectronTightMVA62018", &in->tAgainstElectronTightMVA62018);
+  tree->SetBranchAddress("tAgainstElectronVLooseMVA6", &in->tAgainstElectronVLooseMVA6);
+  tree->SetBranchAddress("tAgainstElectronVLooseMVA62018", &in->tAgainstElectronVLooseMVA62018);
+  tree->SetBranchAddress("tAgainstElectronVTightMVA6", &in->tAgainstElectronVTightMVA6);
+  tree->SetBranchAddress("tAgainstElectronVTightMVA62018", &in->tAgainstElectronVTightMVA62018);
+  tree->SetBranchAddress("tAgainstMuonLoose3", &in->tAgainstMuonLoose3);
+  tree->SetBranchAddress("tAgainstMuonTight3", &in->tAgainstMuonTight3);
+  tree->SetBranchAddress("tByCombinedIsolationDeltaBetaCorrRaw3Hits", &in->tByCombinedIsolationDeltaBetaCorrRaw3Hits);
+  tree->SetBranchAddress("tByIsolationMVArun2v1DBdR03oldDMwLTraw", &in->tByIsolationMVArun2v1DBdR03oldDMwLTraw);
+  tree->SetBranchAddress("tByIsolationMVArun2v1DBnewDMwLTraw", &in->tByIsolationMVArun2v1DBnewDMwLTraw);
+  tree->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &in->tByIsolationMVArun2v1DBoldDMwLTraw);
+  tree->SetBranchAddress("tByLooseCombinedIsolationDeltaBetaCorr3Hits", &in->tByLooseCombinedIsolationDeltaBetaCorr3Hits);
+  tree->SetBranchAddress("tByLooseIsolationMVArun2v1DBdR03oldDMwLT", &in->tByLooseIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByLooseIsolationMVArun2v1DBnewDMwLT", &in->tByLooseIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &in->tByLooseIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tByMediumCombinedIsolationDeltaBetaCorr3Hits", &in->tByMediumCombinedIsolationDeltaBetaCorr3Hits);
+  tree->SetBranchAddress("tByMediumIsolationMVArun2v1DBdR03oldDMwLT", &in->tByMediumIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByMediumIsolationMVArun2v1DBnewDMwLT", &in->tByMediumIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &in->tByMediumIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tByPhotonPtSumOutsideSignalCone", &in->tByPhotonPtSumOutsideSignalCone);
+  tree->SetBranchAddress("tByTightCombinedIsolationDeltaBetaCorr3Hits", &in->tByTightCombinedIsolationDeltaBetaCorr3Hits);
+  tree->SetBranchAddress("tByTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByTightIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByTightIsolationMVArun2v1DBnewDMwLT", &in->tByTightIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &in->tByTightIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tByVLooseIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVLooseIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByVLooseIsolationMVArun2v1DBnewDMwLT", &in->tByVLooseIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tByVTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVTightIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByVTightIsolationMVArun2v1DBnewDMwLT", &in->tByVTightIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &in->tByVTightIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tByVVTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVVTightIsolationMVArun2v1DBdR03oldDMwLT);
+  tree->SetBranchAddress("tByVVTightIsolationMVArun2v1DBnewDMwLT", &in->tByVVTightIsolationMVArun2v1DBnewDMwLT);
+  tree->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &in->tByVVTightIsolationMVArun2v1DBoldDMwLT);
+  tree->SetBranchAddress("tCharge", &in->tCharge);
+  tree->SetBranchAddress("tChargedIsoPtSum", &in->tChargedIsoPtSum);
+  tree->SetBranchAddress("tChargedIsoPtSumdR03", &in->tChargedIsoPtSumdR03);
+  tree->SetBranchAddress("tComesFromHiggs", &in->tComesFromHiggs);
+  tree->SetBranchAddress("tDecayMode", &in->tDecayMode);
+  tree->SetBranchAddress("tDecayModeFinding", &in->tDecayModeFinding);
+  tree->SetBranchAddress("tDecayModeFindingNewDMs", &in->tDecayModeFindingNewDMs);
+  tree->SetBranchAddress("tDeepTau2017v1VSeraw", &in->tDeepTau2017v1VSeraw);
+  tree->SetBranchAddress("tDeepTau2017v1VSjetraw", &in->tDeepTau2017v1VSjetraw);
+  tree->SetBranchAddress("tDeepTau2017v1VSmuraw", &in->tDeepTau2017v1VSmuraw);
+  tree->SetBranchAddress("tDpfTau2016v0VSallraw", &in->tDpfTau2016v0VSallraw);
+  tree->SetBranchAddress("tDpfTau2016v1VSallraw", &in->tDpfTau2016v1VSallraw);
+  tree->SetBranchAddress("tEta", &in->tEta);
+  tree->SetBranchAddress("tFootprintCorrection", &in->tFootprintCorrection);
+  tree->SetBranchAddress("tFootprintCorrectiondR03", &in->tFootprintCorrectiondR03);
+  tree->SetBranchAddress("tGenCharge", &in->tGenCharge);
+  tree->SetBranchAddress("tGenDecayMode", &in->tGenDecayMode);
+  tree->SetBranchAddress("tGenEnergy", &in->tGenEnergy);
+  tree->SetBranchAddress("tGenEta", &in->tGenEta);
+  tree->SetBranchAddress("tGenJetEta", &in->tGenJetEta);
+  tree->SetBranchAddress("tGenJetPt", &in->tGenJetPt);
+  tree->SetBranchAddress("tGenMotherEnergy", &in->tGenMotherEnergy);
+  tree->SetBranchAddress("tGenMotherEta", &in->tGenMotherEta);
+  tree->SetBranchAddress("tGenMotherPdgId", &in->tGenMotherPdgId);
+  tree->SetBranchAddress("tGenMotherPhi", &in->tGenMotherPhi);
+  tree->SetBranchAddress("tGenMotherPt", &in->tGenMotherPt);
+  tree->SetBranchAddress("tGenPdgId", &in->tGenPdgId);
+  tree->SetBranchAddress("tGenPhi", &in->tGenPhi);
+  tree->SetBranchAddress("tGenPt", &in->tGenPt);
+  tree->SetBranchAddress("tGenStatus", &in->tGenStatus);
+  tree->SetBranchAddress("tJetArea", &in->tJetArea);
+  tree->SetBranchAddress("tJetBtag", &in->tJetBtag);
+  tree->SetBranchAddress("tJetDR", &in->tJetDR);
+  tree->SetBranchAddress("tJetEtaEtaMoment", &in->tJetEtaEtaMoment);
+  tree->SetBranchAddress("tJetEtaPhiMoment", &in->tJetEtaPhiMoment);
+  tree->SetBranchAddress("tJetEtaPhiSpread", &in->tJetEtaPhiSpread);
+  tree->SetBranchAddress("tJetHadronFlavour", &in->tJetHadronFlavour);
+  tree->SetBranchAddress("tJetPFCISVBtag", &in->tJetPFCISVBtag);
+  tree->SetBranchAddress("tJetPartonFlavour", &in->tJetPartonFlavour);
+  tree->SetBranchAddress("tJetPhiPhiMoment", &in->tJetPhiPhiMoment);
+  tree->SetBranchAddress("tJetPt", &in->tJetPt);
+  tree->SetBranchAddress("tL1IsoTauMatch", &in->tL1IsoTauMatch);
+  tree->SetBranchAddress("tL1IsoTauPt", &in->tL1IsoTauPt);
+  tree->SetBranchAddress("tLeadTrackPt", &in->tLeadTrackPt);
+  tree->SetBranchAddress("tLooseDeepTau2017v1VSe", &in->tLooseDeepTau2017v1VSe);
+  tree->SetBranchAddress("tLooseDeepTau2017v1VSjet", &in->tLooseDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tLooseDeepTau2017v1VSmu", &in->tLooseDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tLowestMll", &in->tLowestMll);
+  tree->SetBranchAddress("tMass", &in->tMass);
+  tree->SetBranchAddress("tMatchesDoubleMediumCombinedIsoTau35Path", &in->tMatchesDoubleMediumCombinedIsoTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleMediumHPSTau35Filter", &in->tMatchesDoubleMediumHPSTau35Filter);
+  tree->SetBranchAddress("tMatchesDoubleMediumHPSTau35Path", &in->tMatchesDoubleMediumHPSTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleMediumHPSTau40Filter", &in->tMatchesDoubleMediumHPSTau40Filter);
+  tree->SetBranchAddress("tMatchesDoubleMediumHPSTau40Path", &in->tMatchesDoubleMediumHPSTau40Path);
+  tree->SetBranchAddress("tMatchesDoubleMediumIsoTau35Path", &in->tMatchesDoubleMediumIsoTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleMediumTau35Filter", &in->tMatchesDoubleMediumTau35Filter);
+  tree->SetBranchAddress("tMatchesDoubleMediumTau35Path", &in->tMatchesDoubleMediumTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleMediumTau40Filter", &in->tMatchesDoubleMediumTau40Filter);
+  tree->SetBranchAddress("tMatchesDoubleMediumTau40Path", &in->tMatchesDoubleMediumTau40Path);
+  tree->SetBranchAddress("tMatchesDoubleTightHPSTau35Filter", &in->tMatchesDoubleTightHPSTau35Filter);
+  tree->SetBranchAddress("tMatchesDoubleTightHPSTau35Path", &in->tMatchesDoubleTightHPSTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleTightHPSTau40Filter", &in->tMatchesDoubleTightHPSTau40Filter);
+  tree->SetBranchAddress("tMatchesDoubleTightHPSTau40Path", &in->tMatchesDoubleTightHPSTau40Path);
+  tree->SetBranchAddress("tMatchesDoubleTightTau35Filter", &in->tMatchesDoubleTightTau35Filter);
+  tree->SetBranchAddress("tMatchesDoubleTightTau35Path", &in->tMatchesDoubleTightTau35Path);
+  tree->SetBranchAddress("tMatchesDoubleTightTau40Filter", &in->tMatchesDoubleTightTau40Filter);
+  tree->SetBranchAddress("tMatchesDoubleTightTau40Path", &in->tMatchesDoubleTightTau40Path);
+  tree->SetBranchAddress("tMatchesEle24HPSTau30Filter", &in->tMatchesEle24HPSTau30Filter);
+  tree->SetBranchAddress("tMatchesEle24HPSTau30Path", &in->tMatchesEle24HPSTau30Path);
+  tree->SetBranchAddress("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter);
+  tree->SetBranchAddress("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path);
+  tree->SetBranchAddress("tMatchesIsoMu19Tau20Filter", &in->tMatchesIsoMu19Tau20Filter);
+  tree->SetBranchAddress("tMatchesIsoMu19Tau20Path", &in->tMatchesIsoMu19Tau20Path);
+  tree->SetBranchAddress("tMatchesIsoMu19Tau20SingleL1Filter", &in->tMatchesIsoMu19Tau20SingleL1Filter);
+  tree->SetBranchAddress("tMatchesIsoMu19Tau20SingleL1Path", &in->tMatchesIsoMu19Tau20SingleL1Path);
+  tree->SetBranchAddress("tMatchesIsoMu20HPSTau27Filter", &in->tMatchesIsoMu20HPSTau27Filter);
+  tree->SetBranchAddress("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
+  tree->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
+  tree->SetBranchAddress("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
+  tree->SetBranchAddress("tMediumDeepTau2017v1VSe", &in->tMediumDeepTau2017v1VSe);
+  tree->SetBranchAddress("tMediumDeepTau2017v1VSjet", &in->tMediumDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tMediumDeepTau2017v1VSmu", &in->tMediumDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tNChrgHadrIsolationCands", &in->tNChrgHadrIsolationCands);
+  tree->SetBranchAddress("tNChrgHadrSignalCands", &in->tNChrgHadrSignalCands);
+  tree->SetBranchAddress("tNGammaSignalCands", &in->tNGammaSignalCands);
+  tree->SetBranchAddress("tNNeutralHadrSignalCands", &in->tNNeutralHadrSignalCands);
+  tree->SetBranchAddress("tNSignalCands", &in->tNSignalCands);
+  tree->SetBranchAddress("tNearestZMass", &in->tNearestZMass);
+  tree->SetBranchAddress("tNeutralIsoPtSum", &in->tNeutralIsoPtSum);
+  tree->SetBranchAddress("tNeutralIsoPtSumWeight", &in->tNeutralIsoPtSumWeight);
+  tree->SetBranchAddress("tNeutralIsoPtSumWeightdR03", &in->tNeutralIsoPtSumWeightdR03);
+  tree->SetBranchAddress("tNeutralIsoPtSumdR03", &in->tNeutralIsoPtSumdR03);
+  tree->SetBranchAddress("tPVDXY", &in->tPVDXY);
+  tree->SetBranchAddress("tPVDZ", &in->tPVDZ);
+  tree->SetBranchAddress("tPhi", &in->tPhi);
+  tree->SetBranchAddress("tPhotonPtSumOutsideSignalCone", &in->tPhotonPtSumOutsideSignalCone);
+  tree->SetBranchAddress("tPhotonPtSumOutsideSignalConedR03", &in->tPhotonPtSumOutsideSignalConedR03);
+  tree->SetBranchAddress("tPt", &in->tPt);
+  tree->SetBranchAddress("tPuCorrPtSum", &in->tPuCorrPtSum);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTLoose", &in->tRerunMVArun2v2DBoldDMwLTLoose);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTMedium", &in->tRerunMVArun2v2DBoldDMwLTMedium);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVLoose", &in->tRerunMVArun2v2DBoldDMwLTVLoose);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVLoose", &in->tRerunMVArun2v2DBoldDMwLTVVLoose);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight);
+  tree->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &in->tRerunMVArun2v2DBoldDMwLTraw);
+  tree->SetBranchAddress("tTightDeepTau2017v1VSe", &in->tTightDeepTau2017v1VSe);
+  tree->SetBranchAddress("tTightDeepTau2017v1VSjet", &in->tTightDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tTightDeepTau2017v1VSmu", &in->tTightDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tTightDpfTau2016v0VSall", &in->tTightDpfTau2016v0VSall);
+  tree->SetBranchAddress("tTightDpfTau2016v1VSall", &in->tTightDpfTau2016v1VSall);
+  tree->SetBranchAddress("tVLooseDeepTau2017v1VSe", &in->tVLooseDeepTau2017v1VSe);
+  tree->SetBranchAddress("tVLooseDeepTau2017v1VSjet", &in->tVLooseDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tVLooseDeepTau2017v1VSmu", &in->tVLooseDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tVTightDeepTau2017v1VSe", &in->tVTightDeepTau2017v1VSe);
+  tree->SetBranchAddress("tVTightDeepTau2017v1VSjet", &in->tVTightDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tVTightDeepTau2017v1VSmu", &in->tVTightDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tVVLooseDeepTau2017v1VSe", &in->tVVLooseDeepTau2017v1VSe);
+  tree->SetBranchAddress("tVVLooseDeepTau2017v1VSjet", &in->tVVLooseDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tVVLooseDeepTau2017v1VSmu", &in->tVVLooseDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tVVTightDeepTau2017v1VSe", &in->tVVTightDeepTau2017v1VSe);
+  tree->SetBranchAddress("tVVTightDeepTau2017v1VSjet", &in->tVVTightDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tVVTightDeepTau2017v1VSmu", &in->tVVTightDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tVVVLooseDeepTau2017v1VSe", &in->tVVVLooseDeepTau2017v1VSe);
+  tree->SetBranchAddress("tVVVLooseDeepTau2017v1VSjet", &in->tVVVLooseDeepTau2017v1VSjet);
+  tree->SetBranchAddress("tVVVLooseDeepTau2017v1VSmu", &in->tVVVLooseDeepTau2017v1VSmu);
+  tree->SetBranchAddress("tVZ", &in->tVZ);
+  tree->SetBranchAddress("tZTTGenDR", &in->tZTTGenDR);
+  tree->SetBranchAddress("tZTTGenEta", &in->tZTTGenEta);
+  tree->SetBranchAddress("tZTTGenMatching", &in->tZTTGenMatching);
+  tree->SetBranchAddress("tZTTGenPhi", &in->tZTTGenPhi);
+  tree->SetBranchAddress("tZTTGenPt", &in->tZTTGenPt);
+  tree->SetBranchAddress("tauVetoPt20Loose3HitsVtx", &in->tauVetoPt20Loose3HitsVtx);
+  tree->SetBranchAddress("tauVetoPt20TightMVALTVtx", &in->tauVetoPt20TightMVALTVtx);
+  tree->SetBranchAddress("topQuarkPt1", &in->topQuarkPt1);
+  tree->SetBranchAddress("topQuarkPt2", &in->topQuarkPt2);
+  tree->SetBranchAddress("tripleEPass", &in->tripleEPass);
+  tree->SetBranchAddress("tripleMu10_5_5Pass", &in->tripleMu10_5_5Pass);
+  tree->SetBranchAddress("tripleMu12_10_5Pass", &in->tripleMu12_10_5Pass);
+  tree->SetBranchAddress("type1_pfMetEt", &in->type1_pfMetEt);
+  tree->SetBranchAddress("type1_pfMetPhi", &in->type1_pfMetPhi);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown", &in->type1_pfMet_shiftedPhi_JetEnDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnUp", &in->type1_pfMet_shiftedPhi_JetEnUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to3Down", &in->type1_pfMet_shiftedPhi_JetEta0to3Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to3Up", &in->type1_pfMet_shiftedPhi_JetEta0to3Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to5Down", &in->type1_pfMet_shiftedPhi_JetEta0to5Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to5Up", &in->type1_pfMet_shiftedPhi_JetEta0to5Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta3to5Down", &in->type1_pfMet_shiftedPhi_JetEta3to5Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta3to5Up", &in->type1_pfMet_shiftedPhi_JetEta3to5Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeBalDown", &in->type1_pfMet_shiftedPhi_JetRelativeBalDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeBalUp", &in->type1_pfMet_shiftedPhi_JetRelativeBalUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeSampleDown", &in->type1_pfMet_shiftedPhi_JetRelativeSampleDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeSampleUp", &in->type1_pfMet_shiftedPhi_JetRelativeSampleUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetResDown", &in->type1_pfMet_shiftedPhi_JetResDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetResUp", &in->type1_pfMet_shiftedPhi_JetResUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetTotalDown", &in->type1_pfMet_shiftedPhi_JetTotalDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetTotalUp", &in->type1_pfMet_shiftedPhi_JetTotalUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnDown", &in->type1_pfMet_shiftedPhi_UnclusteredEnDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnUp", &in->type1_pfMet_shiftedPhi_UnclusteredEnUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnDown", &in->type1_pfMet_shiftedPt_JetEnDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnUp", &in->type1_pfMet_shiftedPt_JetEnUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to3Down", &in->type1_pfMet_shiftedPt_JetEta0to3Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to3Up", &in->type1_pfMet_shiftedPt_JetEta0to3Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to5Down", &in->type1_pfMet_shiftedPt_JetEta0to5Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to5Up", &in->type1_pfMet_shiftedPt_JetEta0to5Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta3to5Down", &in->type1_pfMet_shiftedPt_JetEta3to5Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta3to5Up", &in->type1_pfMet_shiftedPt_JetEta3to5Up);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeBalDown", &in->type1_pfMet_shiftedPt_JetRelativeBalDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeBalUp", &in->type1_pfMet_shiftedPt_JetRelativeBalUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeSampleDown", &in->type1_pfMet_shiftedPt_JetRelativeSampleDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeSampleUp", &in->type1_pfMet_shiftedPt_JetRelativeSampleUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetResDown", &in->type1_pfMet_shiftedPt_JetResDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetResUp", &in->type1_pfMet_shiftedPt_JetResUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetTotalDown", &in->type1_pfMet_shiftedPt_JetTotalDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetTotalUp", &in->type1_pfMet_shiftedPt_JetTotalUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnDown", &in->type1_pfMet_shiftedPt_UnclusteredEnDown);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnUp", &in->type1_pfMet_shiftedPt_UnclusteredEnUp);
+  tree->SetBranchAddress("vbfDeta", &in->vbfDeta);
+  tree->SetBranchAddress("vbfJetVeto20", &in->vbfJetVeto20);
+  tree->SetBranchAddress("vbfJetVeto30", &in->vbfJetVeto30);
+  tree->SetBranchAddress("vbfMass", &in->vbfMass);
+  tree->SetBranchAddress("vbfMassWoNoisyJets", &in->vbfMassWoNoisyJets);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEC2Down", &in->vbfMassWoNoisyJets_JetEC2Down);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEC2Up", &in->vbfMassWoNoisyJets_JetEC2Up);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to3Down", &in->vbfMassWoNoisyJets_JetEta0to3Down);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to3Up", &in->vbfMassWoNoisyJets_JetEta0to3Up);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to5Down", &in->vbfMassWoNoisyJets_JetEta0to5Down);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta0to5Up", &in->vbfMassWoNoisyJets_JetEta0to5Up);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta3to5Down", &in->vbfMassWoNoisyJets_JetEta3to5Down);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetEta3to5Up", &in->vbfMassWoNoisyJets_JetEta3to5Up);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeBalDown", &in->vbfMassWoNoisyJets_JetRelativeBalDown);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeBalUp", &in->vbfMassWoNoisyJets_JetRelativeBalUp);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeSampleDown", &in->vbfMassWoNoisyJets_JetRelativeSampleDown);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetRelativeSampleUp", &in->vbfMassWoNoisyJets_JetRelativeSampleUp);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetTotalDown", &in->vbfMassWoNoisyJets_JetTotalDown);
+  tree->SetBranchAddress("vbfMassWoNoisyJets_JetTotalUp", &in->vbfMassWoNoisyJets_JetTotalUp);
+  tree->SetBranchAddress("vbfMass_JetEC2Down", &in->vbfMass_JetEC2Down);
+  tree->SetBranchAddress("vbfMass_JetEC2Up", &in->vbfMass_JetEC2Up);
+  tree->SetBranchAddress("vbfMass_JetEta0to3Down", &in->vbfMass_JetEta0to3Down);
+  tree->SetBranchAddress("vbfMass_JetEta0to3Up", &in->vbfMass_JetEta0to3Up);
+  tree->SetBranchAddress("vbfMass_JetEta0to5Down", &in->vbfMass_JetEta0to5Down);
+  tree->SetBranchAddress("vbfMass_JetEta0to5Up", &in->vbfMass_JetEta0to5Up);
+  tree->SetBranchAddress("vbfMass_JetEta3to5Down", &in->vbfMass_JetEta3to5Down);
+  tree->SetBranchAddress("vbfMass_JetEta3to5Up", &in->vbfMass_JetEta3to5Up);
+  tree->SetBranchAddress("vbfMass_JetRelativeBalDown", &in->vbfMass_JetRelativeBalDown);
+  tree->SetBranchAddress("vbfMass_JetRelativeBalUp", &in->vbfMass_JetRelativeBalUp);
+  tree->SetBranchAddress("vbfMass_JetRelativeSampleDown", &in->vbfMass_JetRelativeSampleDown);
+  tree->SetBranchAddress("vbfMass_JetRelativeSampleUp", &in->vbfMass_JetRelativeSampleUp);
+  tree->SetBranchAddress("vbfMass_JetTotalDown", &in->vbfMass_JetTotalDown);
+  tree->SetBranchAddress("vbfMass_JetTotalUp", &in->vbfMass_JetTotalUp);
+  tree->SetBranchAddress("vbfNJets20", &in->vbfNJets20);
+  tree->SetBranchAddress("vbfNJets30", &in->vbfNJets30);
+  tree->SetBranchAddress("vbfj1eta", &in->vbfj1eta);
+  tree->SetBranchAddress("vbfj1pt", &in->vbfj1pt);
+  tree->SetBranchAddress("vbfj2eta", &in->vbfj2eta);
+  tree->SetBranchAddress("vbfj2pt", &in->vbfj2pt);
+  tree->SetBranchAddress("vispX", &in->vispX);
+  tree->SetBranchAddress("vispY", &in->vispY);
+  tree->SetBranchAddress("idx", &in->idx);
 }
 
 #endif  // ROOT_SRC_ETAU_TREE_2017_H_
