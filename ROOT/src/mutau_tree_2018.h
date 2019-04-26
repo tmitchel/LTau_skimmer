@@ -121,8 +121,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
 
     auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;  // good in 2017 & 2018
     auto Mu27 = in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;  // no Pass in 2018
-    // don't know if I need TightTau or what
-    auto Cross = in->Mu20TightTau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
+    auto Cross = in->Mu20LooseTau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
 
     if (Mu24 || Mu27 || Cross)
       cutflow->Fill(2., 1.);
@@ -244,7 +243,7 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = in->mZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
     njets = in->jetVeto30;
-    nbtag = in->bjetDeepCSVVeto20Medium_2018_DR0;
+    nbtag = in->bjetDeepCSVVeto20Medium_2018_DR0p5;
     njetspt20 = in->jetVeto20;
 
     // TLorentzVector ele, tau;
@@ -473,11 +472,11 @@ void mutau_tree2018::set_branches() {
   // new branches
   tree->SetBranchAddress("Run", &Run);
   tree->SetBranchAddress("Lumi", &Lumi);
-  tree->SetBranchAddress("gen_match_1", &in->mZTTGenMatching);
-  tree->SetBranchAddress("gen_match_2", &in->tZTTGenMatching);
-  tree->SetBranchAddress("njets", &in->jetVeto30);
-  tree->SetBranchAddress("nbtag", &in->bjetDeepCSVVeto20Medium_2018_DR0);
-  tree->SetBranchAddress("njetspt20", &in->jetVeto20);
+  tree->SetBranchAddress("gen_match_1", &gen_match_1);
+  tree->SetBranchAddress("gen_match_2", &gen_match_2);
+  tree->SetBranchAddress("njets", &njets);
+  tree->SetBranchAddress("nbtag", &nbtag);
+  tree->SetBranchAddress("njetspt20", &njetspt20);
   tree->SetBranchAddress("met_px", &met_px);
   tree->SetBranchAddress("met_py", &met_py);
   tree->SetBranchAddress("extraelec_veto", &extraelec_veto);

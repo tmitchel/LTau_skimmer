@@ -102,11 +102,11 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
-    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
-    auto IsoMu22 = in->mMatchesIsoMu22Path && in->mIsoMu22Filter && in->singleIsoMu22Pass;
-    auto IsoTkMu22 = in->mMatchesIsoTkMu22Path && in->mIsoTkMu22Filter && in->singleIsoTkMu22Pass;
-    auto Cross = in->mMatchesMu19Tau20sL1Path && in->mMatchesMu19Tau20sL1Filter && in->tMatchesMu19Tau20sL1Path && in->tMatchesMu19Tau20sL1Filter && in->singleMu19eta2p1LooseTau20singleL1Pass;
+    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mMatchesIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
+    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mMatchesIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
+    auto IsoMu22 = in->mMatchesIsoMu22Path && in->mMatchesIsoMu22Filter && in->singleIsoMu22Pass;
+    auto IsoTkMu22 = in->mMatchesIsoTkMu22Path && in->mMatchesIsoTkMu22Filter && in->singleIsoTkMu22Pass;
+    auto Cross = in->mMatchesIsoMu19Tau20SingleL1Path && in->mMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path && in->tMatchesIsoMu19Tau20SingleL1Filter && in->singleMu19eta2p1LooseTau20singleL1Pass;
 
     if (isEmbed || IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) {
       cutflow->Fill(2., 1.);
@@ -234,7 +234,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = in->mZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
     njets = in->jetVeto30;
-    nbtag = in->bjetDeepCSVVeto20Medium_2016_DR0;
+    nbtag = in->bjetDeepCSVVeto20Medium_2016_DR0p5;
     njetspt20 = in->jetVeto20;
 
     // TLorentzVector mu, tau;
@@ -460,11 +460,11 @@ void mutau_tree2016::set_branches() {
   // new branches
   tree->SetBranchAddress("Run", &Run);
   tree->SetBranchAddress("Lumi", &Lumi);
-  tree->SetBranchAddress("gen_match_1", &in->mZTTGenMatching);
-  tree->SetBranchAddress("gen_match_2", &in->tZTTGenMatching);
-  tree->SetBranchAddress("njets", &in->jetVeto30);
-  tree->SetBranchAddress("nbtag", &in->bjetDeepCSVVeto20Medium_2016_DR0);
-  tree->SetBranchAddress("njetspt20", &in->jetVeto20);
+  tree->SetBranchAddress("gen_match_1", &gen_match_1);
+  tree->SetBranchAddress("gen_match_2", &gen_match_2);
+  tree->SetBranchAddress("njets", &njets);
+  tree->SetBranchAddress("nbtag", &nbtag);
+  tree->SetBranchAddress("njetspt20", &njetspt20);
   tree->SetBranchAddress("met_px", &met_px);
   tree->SetBranchAddress("met_py", &met_py);
   tree->SetBranchAddress("extraelec_veto", &extraelec_veto);

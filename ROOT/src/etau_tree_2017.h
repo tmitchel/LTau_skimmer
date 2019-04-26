@@ -121,15 +121,14 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
     auto Ele27 = in->eMatchesEle27Filter && in->eMatchesEle27Path && in->Ele27WPTightPass;
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
-    // in->Ele24LooseHPSTau30Pass || in->Ele24LooseHPSTau30TightIDPass || in->Ele24LooseTau30Pass || in->Ele24LooseTau30TightIDPass options
-    auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24Tau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
+    auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
     if (isEmbed || (Ele27 || Ele32 || Ele35 || Cross))
       cutflow->Fill(2., 1.);
     else
       continue;
 
-    if (!isEmbed || (in->Ele27WPTightPass || in->Ele32WPTightPass || in->Ele35WPTightPass || in->Ele24Tau30Pass))
+    if (!isEmbed || (in->Ele27WPTightPass || in->Ele32WPTightPass || in->Ele35WPTightPass || in->Ele24LooseTau30Pass))
       cutflow->Fill(3., 1.);
     else
       continue;
@@ -239,7 +238,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
     njets = in->jetVeto30;
-    nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0;
+    nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0p5;
     njetspt20 = in->jetVeto20;
 
     // TLorentzVector ele, tau;
@@ -467,11 +466,11 @@ void etau_tree2017::set_branches() {
   // new branches
   tree->SetBranchAddress("Run", &Run);
   tree->SetBranchAddress("Lumi", &Lumi);
-  tree->SetBranchAddress("gen_match_1", &in->eZTTGenMatching);
-  tree->SetBranchAddress("gen_match_2", &in->tZTTGenMatching);
-  tree->SetBranchAddress("njets", &in->jetVeto30);
-  tree->SetBranchAddress("nbtag", &in->bjetDeepCSVVeto20Medium_2017_DR0);
-  tree->SetBranchAddress("njetspt20", &in->jetVeto20);
+  tree->SetBranchAddress("gen_match_1", &gen_match_1);
+  tree->SetBranchAddress("gen_match_2", &gen_match_2);
+  tree->SetBranchAddress("njets", &njets);
+  tree->SetBranchAddress("nbtag", &nbtag);
+  tree->SetBranchAddress("njetspt20", &njetspt20);
   tree->SetBranchAddress("met_px", &met_px);
   tree->SetBranchAddress("met_py", &met_py);
   tree->SetBranchAddress("extraelec_veto", &extraelec_veto);

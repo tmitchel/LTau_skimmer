@@ -136,8 +136,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    // in->eMVAIsoWP80 && in->eMVANoisoWP80 options
-    if (in->eMVANonTrigWP80 && in->ePassesConversionVeto && in->eMissingHits < 2) {
+    if (in->eMVANoisoWP80 && in->ePassesConversionVeto && in->eMissingHits < 2) {
       cutflow->Fill(5., 1.);  // electron quality selection
     } else {
       continue;
@@ -249,7 +248,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
     njets = in->jetVeto30;
-    nbtag = in->bjetDeepCSVVeto20Medium_2016_DR0;
+    nbtag = in->bjetDeepCSVVeto20Medium_2016_DR0p5;
     njetspt20 = in->jetVeto20;
 
     // TLorentzVector ele, tau;

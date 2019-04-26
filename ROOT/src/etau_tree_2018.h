@@ -122,7 +122,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
     // in->Ele24LooseHPSTau30Pass || in->Ele24LooseHPSTau30TightIDPass || in->Ele24LooseTau30Pass || in->Ele24LooseTau30TightIDPass options
-    auto Cross = in->Ele24TightTau30Pass && in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
+    auto Cross = in->Ele24LooseTau30Pass && in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
     if (isEmbed || (Ele27 || Ele32 || Ele35 || Cross))
       cutflow->Fill(2., 1.);
@@ -239,7 +239,7 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
     njets = in->jetVeto30;
-    nbtag = in->bjetDeepCSVVeto20Medium_2018_DR0;
+    nbtag = in->bjetDeepCSVVeto20Medium_2018_DR0p5;
     njetspt20 = in->jetVeto20;
 
     // TLorentzVector ele, tau;
@@ -468,11 +468,11 @@ void etau_tree2018::set_branches() {
   // new branches
   tree->SetBranchAddress("Run", &Run);
   tree->SetBranchAddress("Lumi", &Lumi);
-  tree->SetBranchAddress("gen_match_1", &in->eZTTGenMatching);
-  tree->SetBranchAddress("gen_match_2", &in->tZTTGenMatching);
-  tree->SetBranchAddress("njets", &in->jetVeto30);
-  tree->SetBranchAddress("nbtag", &in->bjetDeepCSVVeto20Medium_2018_DR0);
-  tree->SetBranchAddress("njetspt20", &in->jetVeto20);
+  tree->SetBranchAddress("gen_match_1", &gen_match_1);
+  tree->SetBranchAddress("gen_match_2", &gen_match_2);
+  tree->SetBranchAddress("njets", &njets);
+  tree->SetBranchAddress("nbtag", &nbtag);
+  tree->SetBranchAddress("njetspt20", &njetspt20);
   tree->SetBranchAddress("met_px", &met_px);
   tree->SetBranchAddress("met_py", &met_py);
   tree->SetBranchAddress("extraelec_veto", &extraelec_veto);
