@@ -10,7 +10,7 @@ parser.add_argument('-p', '--prefix', action='store',
 parser.add_argument('-l', '--lepton', action='store',
                     help='which lepton (mt or et)')
 parser.add_argument('-j', '--job', action='store',
-                    help='job type [dataMu, dataEl, sig, bkg1, bkg2, embedMu, embedEl]')
+                    help='job type [dataMu, dataEl, sig, ggh, bkg1, bkg2, embedMu, embedEl]')
 args = parser.parse_args()
 
 test_batch = {
@@ -18,7 +18,7 @@ test_batch = {
 }
 
 bkg_samples_batch1 = {
-    "DYJets1_lowM_v2": ["DY1JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", 'Z'],
+    # "DYJets1_lowM_v2": ["DY1JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", 'Z'],
     "DYJets1_v1": ["DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1", 'Z'],
     "DYJets2_lowM_v2": ["DY2JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", 'Z'],
     "DYJets2_v1": ["DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", 'Z'],
@@ -51,7 +51,7 @@ bkg_samples_batch2 = {
     "Tbar-tW": ["ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1", '0'],
     "T-tW": ["ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1", '0'],
     "TT_v1": ["TT_TuneCUETP8M2T4_13TeV-powheg-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1", '0'],
-    "TT_v11": ["TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-evtgen_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v11", '0'],
+    # "TT_v11": ["TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-evtgen_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v11", '0'],
     "VV_v2": ["VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", '0'],
     "VV_ext_v2": ["VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2", '0'],
     "WW1l1nu2q": ["WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", '0'],
@@ -63,50 +63,53 @@ bkg_samples_batch2 = {
     "ZZ4l": ["ZZTo4L_13TeV-amcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2", '0'],
 }
 
+ggh_samples = {
+   'ggh125_JHU_sm' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_sm_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
+   'ggh125_JHU_ps' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_pseudoscalar_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext3-v2', 'Z'],
+   'ggh125_JHU_maxmix' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
+   'ggh125_minlo' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_minlo_CUEDown' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_CUETP8M1Down_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_minlo_CUEUp' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_CUETP8M1Up_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_minlo_DownPS' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_DownPS_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_minlo_UpPS' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_UpPS_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_inc_nominal' : ['GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_inc_ps_prod' : ['GluGluToPseudoscalarHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_inc_maxmix_prod' : ['GluGluToMaxmixHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_twojet_nominal' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_twojet_ps_prod' : ['GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_twojet_maxmix_prod' : ['GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+}
+
 sig_samples = {
-    "ggH125_v1": ["GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1", 'Z'],
-    "VBF125_v2": ["VBFHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", 'Z'],
-    "WPlus125_v2": ["WplusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", '0'],
-    "WMinus125_v2": ["WminusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", '0'],
-    "ZH125_v2": ["ZHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2", '0'],
-}
+   'vbf125_powheg_v2' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_powheg_ext_v2' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_forcedmu_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext5-v2', 'Z'],
+   'vbf125_JHU_l1int' : ['VBFHiggs0L1f05ph0_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_JHU_a3' : ['VBFHiggs0M_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_JHU_a3int' : ['VBFHiggs0Mf05ph0_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_JHU_a2' : ['VBFHiggs0PH_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_JHU_a2int' : ['VBFHiggs0PHf05ph0_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'vbf125_JHU_a1' : ['VBFHiggs0PM_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'ggh125_powheg_v1' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_powheg_v3' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3', 'Z'],
+   'ggh125_toWW_powheg' : ['GluGluHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
 
-# Need updated
-ac_samples = {
-    "vbf_a1": ['VBFHiggs0PM_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_a2": ['VBFHiggs0PH_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_a2int": ['VBFHiggs0PHf05ph0_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_a3": ['VBFHiggs0M_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_a3int": ['VBFHiggs0Mf05ph0_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_l1": ['VBFHiggs0L1_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "vbf_l1int": ['VBFHiggs0L1f05ph0_M-125_13TeV-JHUGenV6_v6-v1', 'Z'],
-    "wh_a1": ['WHiggs0PM_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "wh_a2": ['WHiggs0PH_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "wh_a2int": ['WHiggs0PHfWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "wh_a3": ['WHiggs0M_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "wh_a3int": ['WHiggs0MfWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "wh_l1": ['WHiggs0L1_Undecayed_M-125_13TeV-JHUgenV6_v6-v1', '0'],
-    "wh_l1int": ['WHiggs0L1fWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_a1": ['ZHiggs0PM_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_a2": ['ZHiggs0PH_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_a2int": ['ZHiggs0PHfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_a3": ['ZHiggs0M_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_a3int": ['ZHiggs0MfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_l1": ['ZHiggs0L1_Undecayed_M-125_13TeV-JHUgenV6_v6-v2', '0'],
-    "zh_l1int": ['ZHiggs0L1fZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v6-v1', '0'],
-    "ggh_a1": ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_sm_JHU_v6-v1', 'Z'],
-    "ggh_a3": ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_pseudoscalar_JHU_v6-v1', 'Z'],
-    "ggh_a3int": ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v6-v1', 'Z'],
-}
-
-# Need updated
-madgraph_v2_samples = {
-    "ggH_TwoJet_madgraph": ["GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
-    "ggH_PS_TwoJet_madgraph": ["GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
-    "ggH_Maxmix_TwoJet_madgraph": ["GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
-    "ggH_PS_madgraph": ["GluGluToPseudoscalarHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
-    "ggH_Maxmix_madgraph": ["GluGluToMaxmixHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
-    "ggH_madgraph": ["GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v6-v1", 'Z'],
+   'wh125_JHU_l1int' : ['WHiggs0L1fWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wh125_JHU_a3' : ['WHiggs0M_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wh125_JHU_a3int' : ['WHiggs0MfWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wh125_JHU_a2' : ['WHiggs0PH_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wh125_JHU_a2int' : ['WHiggs0PHfWH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wh125_JHU_a1' : ['WHiggs0PM_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wplus125_powheg' : ['WminusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'wminus125_powheg' : ['WplusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_powheg' : ['ZHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_l1' : ['ZHiggs0L1_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_l1int' : ['ZHiggs0L1fZH05ph0_HToTauTau_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_a3' : ['ZHiggs0M_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_a3int' : ['ZHiggs0MfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
+   'zh125_JHU_a2' : ['ZHiggs0PH_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_a1' : ['ZHiggs0PM_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'tth125_JHU_a3' : ['ttHiggs0MToTauTau_M-125_13TeV-JHUGenV7_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
+   'tth125_JHU_a3int' : ['ttHiggs0Mf05ph0ToTauTau_M-125_13TeV-JHUGenV7_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
 }
 
 el_data_samples = {
@@ -155,21 +158,18 @@ mu_embedded_samples = {
 prefix = args.prefix
 jobType = args.job
 
-bkg_pref = "/hdfs/store/user/abdollah/FSA_MC_2016"
-sig_pref = bkg_pref
-el_data_pref = "/hdfs/store/user/abdollah/FSA_Data_et_2016"
-mu_data_pref = "/hdfs/store/user/abdollah/FSA_Data_mt_2016"
+bkg_pref = "/hdfs/store/user/abdollah/FSA_MC_2016/"
+el_data_pref = "/hdfs/store/user/abdollah/FSA_Data_et_2016/"
+mu_data_pref = "/hdfs/store/user/abdollah/FSA_Data_mt_2016/"
+ggh_pref = '/hdfs/store/user/ymaravin/SMHTT_2016/'
+sig_pref = '/hdfs/store/user/abdollah/FSA_Signal_2016/'
 
 el_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v5/'
 mu_embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_mt_v5/'
-ggH_pref = '/hdfs/store/user/truggles/SM-HTT_HTXS_ggH_aug31_v1/'
-ac_pref = '/hdfs/store/user/truggles/aHTT_signals_aug16/'
-ac_ggH_pref = '/hdfs/store/user/truggles/aHTT_signals_ggH_nov11/'
-madgraph_v2_pref = '/hdfs/store/user/ymaravin/ggH_2016_jan21/'
 
 settings = {
     'sig': [sig_pref, sig_samples],
-    'ac': [ac_pref, ac_samples],
+    'ggh': [ggh_pref, ggh_samples],
     'dataMu': [mu_data_pref, mu_data_samples],
     'dataEl': [el_data_pref, el_data_samples],
     'embedMu': [mu_embed_pref, mu_embedded_samples],
@@ -177,7 +177,6 @@ settings = {
     'bkg1': [bkg_pref, bkg_samples_batch1],
     'bkg2': [bkg_pref, bkg_samples_batch2],
     'test': [bkg_pref, test_batch],
-    'madgraph': [madgraph_v2_pref, madgraph_v2_samples],
 }
 
 pref = settings[args.job][0]
@@ -192,10 +191,6 @@ for sample in sorted(samples.keys()):
     recoil = samples[sample][1]
     path = samples[sample][0]
     pref = settings[args.job][0]
-    if 'ggHtoTauTau125' in sample and args.job == 'sig':
-        pref = ggH_pref
-    elif 'ggh_' in sample and args.job == 'ac':
-        pref = ac_ggH_pref
 
     command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i input_file.root -o \'$OUTPUT\'' % (
         pref+path, jobType, recoil, '2016', lep)
