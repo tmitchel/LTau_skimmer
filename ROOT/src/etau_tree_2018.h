@@ -466,8 +466,8 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //////////////////////////////////////////////////////////////////
 void etau_tree2018::set_branches() {
   // new branches
-  tree->SetBranchAddress("Run", &Run);
-  tree->SetBranchAddress("Lumi", &Lumi);
+  tree->SetBranchAddress("run", &Run);
+  tree->SetBranchAddress("lumi", &Lumi);
   tree->SetBranchAddress("gen_match_1", &gen_match_1);
   tree->SetBranchAddress("gen_match_2", &gen_match_2);
   tree->SetBranchAddress("njets", &njets);
@@ -517,6 +517,14 @@ void etau_tree2018::set_branches() {
   tree->SetBranchAddress("phi_2", &phi_2);
   tree->SetBranchAddress("eta_2", &eta_2);
 
+  // SVFit and MELA branches
+  tree->SetBranchAddress("q_1", &in->eCharge);
+  tree->SetBranchAddress("q_2", &in->tCharge);
+  tree->SetBranchAddress("jeta_1", &in->j1eta);
+  tree->SetBranchAddress("jphi_1", &in->j1phi);
+  tree->SetBranchAddress("jeta_2", &in->j2eta);
+  tree->SetBranchAddress("jphi_2", &in->j2phi);
+  
   // copy the rest
   tree->SetBranchAddress("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
   tree->SetBranchAddress("DoubleMediumHPSTau35TightIDPass", &in->DoubleMediumHPSTau35TightIDPass);

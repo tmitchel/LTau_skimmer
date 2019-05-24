@@ -243,7 +243,8 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->mZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
-    njets = in->jetVeto30;
+    // njets = in->jetVeto30;
+    njets = in->jetVeto30WoNoisyJets_JetEC2Down;  // temporary
     nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0p5;
     njetspt20 = in->jetVeto20;
 
@@ -470,8 +471,8 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //////////////////////////////////////////////////////////////////
 void mutau_tree2017::set_branches() {
   // new branches
-  tree->SetBranchAddress("Run", &Run);
-  tree->SetBranchAddress("Lumi", &Lumi);
+  tree->SetBranchAddress("run", &Run);
+  tree->SetBranchAddress("lumi", &Lumi);
   tree->SetBranchAddress("gen_match_1", &gen_match_1);
   tree->SetBranchAddress("gen_match_2", &gen_match_2);
   tree->SetBranchAddress("njets", &njets);
@@ -520,6 +521,14 @@ void mutau_tree2017::set_branches() {
   tree->SetBranchAddress("pt_2", &pt_2);
   tree->SetBranchAddress("phi_2", &phi_2);
   tree->SetBranchAddress("eta_2", &eta_2);
+
+  // SVFit and MELA branches
+  tree->SetBranchAddress("q_1", &in->mCharge);
+  tree->SetBranchAddress("q_2", &in->tCharge);
+  tree->SetBranchAddress("jeta_1", &in->j1eta);
+  tree->SetBranchAddress("jphi_1", &in->j1phi);
+  tree->SetBranchAddress("jeta_2", &in->j2eta);
+  tree->SetBranchAddress("jphi_2", &in->j2phi);
 
   // copy the rest
   tree->SetBranchAddress("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
