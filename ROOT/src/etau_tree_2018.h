@@ -520,8 +520,10 @@ void etau_tree2018::set_branches() {
   // SVFit and MELA branches
   tree->Branch("q_1", &in->eCharge);
   tree->Branch("q_2", &in->tCharge);
+  tree->Branch("jpt_1", &in->j1pt);
   tree->Branch("jeta_1", &in->j1eta);
   tree->Branch("jphi_1", &in->j1phi);
+  tree->Branch("jpt_2", &in->j2pt);
   tree->Branch("jeta_2", &in->j2eta);
   tree->Branch("jphi_2", &in->j2phi);
   
