@@ -3,8 +3,8 @@
 // general includes
 #include <dirent.h>
 #include <sys/types.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -20,9 +20,11 @@
 #include "ltau_skimmer/ROOT/src/base_tree.h"
 #include "ltau_skimmer/ROOT/src/etau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/etau_tree_2017.h"
+#include "ltau_skimmer/ROOT/src/etau_tree_2018.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
-#include "ltau_skimmer/json/single_include/nlohmann/json.hpp"
+#include "ltau_skimmer/ROOT/src/mutau_tree_2018.h"
+#include "ltau_skimmer/ROOT/src/json.hpp"
 
 using json = nlohmann::json;
 
@@ -37,6 +39,7 @@ int main(int argc, char *argv[]) {
   std::string dir_name = parser.Option("-d");
   std::string job_type = parser.Option("-j");
   std::string inrecoil = parser.Option("-r");
+  std::string real_fname = parser.Option("-n");
 
   // recoil corrections
   int recoil(0);
@@ -69,6 +72,9 @@ int main(int argc, char *argv[]) {
     recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root";
   } else if (year == "2017") {
     recoilname = "HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root";
+  } else if (year == "2018") {
+    // using 2017 PU reweighting for now
+    recoilname = "HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root";
   }
 
   RecoilCorrector recoilPFMetCorrector(recoilname.c_str());
@@ -76,9 +82,9 @@ int main(int argc, char *argv[]) {
   TH1F *cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
 
   auto open_file = new TFile(ifile.c_str(), "READ");
-  auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton+"/final/Ntuple").c_str()));
-  auto evt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton+"/eventCount").c_str())->Clone());
-  auto wt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton+"/summedWeights").c_str())->Clone());
+  auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton + "/final/Ntuple").c_str()));
+  auto evt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton + "/eventCount").c_str())->Clone());
+  auto wt_count = reinterpret_cast<TH1F *>(open_file->Get((lepton + "/summedWeights").c_str())->Clone());
 
   nevents->SetBinContent(1, evt_count->Integral());
   nevents->SetBinContent(2, wt_count->Integral());
@@ -88,7 +94,16 @@ int main(int argc, char *argv[]) {
   base_tree *skimmer = nullptr;
   std::string originalName = "Not Found";
 
-  if (year == "2017") {
+  if (year == "2016") {
+    if (lepton == "et") {
+      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+    } else if (lepton == "mt") {
+      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+    } else {
+      std::cerr << "bad options, my dude." << std::endl;
+      return -1;
+    }
+  } else if (year == "2017") {
     if (lepton == "et") {
       skimmer = new etau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
     } else if (lepton == "mt") {
@@ -108,21 +123,24 @@ int main(int argc, char *argv[]) {
       std::cout << "Reading JSON" << std::endl;
       // read the file stream into our json object
       ntupleMap >> j;
-      std::string tmpName = open_file->GetName();
-      auto searchName = tmpName.substr(10);
+      std::cout << "before strip " << real_fname << std::endl;
+      auto searchName = real_fname.substr(real_fname.find("/store/"), std::string::npos);
+      std::cout << "Searching for " << searchName << std::endl;
       for (json::iterator it = j.begin(); it != j.end(); ++it) {
         for (auto ntuple : it.value()) {
           if (std::string(ntuple).find(searchName) != std::string::npos) {
             originalName = it.key();
+            std::cout << "found name " << originalName << " from " << searchName << std::endl;
+            break;
           }
         }
       }
     }
-  } else if (year == "2016") {
+  } else if (year == "2018") {
     if (lepton == "et") {
-      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
     } else if (lepton == "mt") {
-      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
     } else {
       std::cerr << "bad options, my dude." << std::endl;
       return -1;
@@ -138,7 +156,7 @@ int main(int argc, char *argv[]) {
 
   open_file->Close();
   fout->cd();
-  if (!local) {  
+  if (!local) {
     TNamed dbName("MiniAOD_name", originalName.c_str());
     dbName.Write();
   }
@@ -148,7 +166,7 @@ int main(int argc, char *argv[]) {
   fout->Close();
 
   std::cout << "\n"
-              << events << " events saved in the tree.\n"
-              << std::endl;
+            << events << " events saved in the tree.\n"
+            << std::endl;
   return 0;
 }

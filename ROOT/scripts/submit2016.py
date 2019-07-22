@@ -1,5 +1,6 @@
 import os
 import subprocess
+import condor_handler as ch
 from argparse import ArgumentParser
 
 parser = ArgumentParser(
@@ -193,9 +194,10 @@ for sample in sorted(samples.keys()):
         pref = ggH_pref
     elif 'ggh_' in sample and args.job == 'ac':
         pref = ac_ggH_pref
-    subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s -y %s' %
-                    (sample, pref+path, prefix, jobType, recoil, lep, '2016'), shell=True)
-
+    #subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s -l %s -y %s' %
+    #                (sample, pref+path, prefix, jobType, recoil, lep, '2016'), shell=True)
+    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i input_file.root -o \'$OUTPUT\'' % (pref+path, jobType, recoil, '2016', lep) 
+    ch.submit_command(command, prefix, pref+path, sample)
 
 other_bkg = {
     # "ggH_WW125"    : ["GluGluHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v6-v1", '0'],
