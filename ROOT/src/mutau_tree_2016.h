@@ -256,8 +256,8 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     met_px = in->type1_pfMetEt * cos(in->type1_pfMetPhi);
     met_py = in->type1_pfMetEt * sin(in->type1_pfMetPhi);
 
-    extraelec_veto = in->eVetoZTTp001dxyzR0 > 1;
-    extramuon_veto = in->muVetoZTTp001dxyzR0 > 0;
+    extraelec_veto = in->eVetoZTTp001dxyzR0 > 0;
+    extramuon_veto = in->muVetoZTTp001dxyzR0 > 1;
     dilepton_veto = in->dimuonVeto > 0;
 
     // TLorentzVector ele, tau;
