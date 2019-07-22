@@ -222,9 +222,11 @@ class mutau_input_branches {
   Float_t jb2pt_2017;
   Float_t jb2pt_2018;
   Float_t jetVeto20;
+  Float_t jetVeto20WoNoisyJets;
   Float_t jetVeto20_JetEnDown;
   Float_t jetVeto20_JetEnUp;
   Float_t jetVeto30;
+  Float_t jetVeto30WoNoisyJets;
   Float_t jetVeto30WoNoisyJets_JetEC2Down;
   Float_t jetVeto30WoNoisyJets_JetEC2Up;
   Float_t jetVeto30WoNoisyJets_JetEta0to3Down;
@@ -917,9 +919,11 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("jb2pt_2017", &jb2pt_2017);
   tree->SetBranchAddress("jb2pt_2018", &jb2pt_2018);
   tree->SetBranchAddress("jetVeto20", &jetVeto20);
+  tree->SetBranchAddress("jetVeto20WoNoisyJets", &jetVeto20WoNoisyJets);
   tree->SetBranchAddress("jetVeto20_JetEnDown", &jetVeto20_JetEnDown);
   tree->SetBranchAddress("jetVeto20_JetEnUp", &jetVeto20_JetEnUp);
   tree->SetBranchAddress("jetVeto30", &jetVeto30);
+  tree->SetBranchAddress("jetVeto30WoNoisyJets", &jetVeto30WoNoisyJets);
   tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEC2Down", &jetVeto30WoNoisyJets_JetEC2Down);
   tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEC2Up", &jetVeto30WoNoisyJets_JetEC2Up);
   tree->SetBranchAddress("jetVeto30WoNoisyJets_JetEta0to3Down", &jetVeto30WoNoisyJets_JetEta0to3Down);
