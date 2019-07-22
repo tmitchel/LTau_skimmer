@@ -29,7 +29,8 @@ class etau_tree2017 : public virtual base_tree {
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
-  Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
+  Int_t gen_match_1, gen_match_2;
+  Float_t njets, nbtag, njetspt20;
   Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
   Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp,
       pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
@@ -237,10 +238,9 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // convert from Float_t in FSA to Int_t for analyzer
     gen_match_1 = in->eZTTGenMatching;
     gen_match_2 = in->tZTTGenMatching;
-    // njets = in->jetVeto30;
-    njets = in->jetVeto30WoNoisyJets_JetEC2Down;  // temporary
+    njets = in->jetVeto30WoNoisyJets;
     nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0p5;
-    njetspt20 = in->jetVeto20;
+    njetspt20 = in->jetVeto20WoNoisyJets;
 
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
@@ -281,7 +281,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,          // generator Z/W/Higgs py (float)
           in->vispX,          // generator visible Z/W/Higgs px (float)
           in->vispY,          // generator visible Z/W/Higgs py (float)
-          in->jetVeto30 + 1,  // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,       // corrected type I pf met px (float)
           pfmetcorr_ey);      // corrected type I pf met py (float)
 
@@ -292,7 +292,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30 + 1,    // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,    // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -303,7 +303,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30 + 1,    // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,    // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -314,7 +314,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30 + 1,      // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,      // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -325,7 +325,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30 + 1,      // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets + 1,      // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
 
@@ -337,7 +337,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,      // generator Z/W/Higgs py (float)
           in->vispX,      // generator visible Z/W/Higgs px (float)
           in->vispY,      // generator visible Z/W/Higgs py (float)
-          in->jetVeto30,  // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,  // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex,   // corrected type I pf met px (float)
           pfmetcorr_ey);  // corrected type I pf met py (float)
 
@@ -348,7 +348,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
 
@@ -359,7 +359,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,            // generator Z/W/Higgs py (float)
           in->vispX,            // generator visible Z/W/Higgs px (float)
           in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30,        // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,        // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
 
@@ -370,7 +370,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
 
@@ -381,7 +381,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
           in->genpY,              // generator Z/W/Higgs py (float)
           in->vispX,              // generator visible Z/W/Higgs px (float)
           in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30,          // number of jets (hadronic jet multiplicity) (int)
+          in->jetVeto30WoNoisyJets,          // number of jets (hadronic jet multiplicity) (int)
           pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
           pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
     }
@@ -860,9 +860,11 @@ void etau_tree2017::set_branches() {
   tree->Branch("jb2pt_2017", &in->jb2pt_2017);
   tree->Branch("jb2pt_2018", &in->jb2pt_2018);
   tree->Branch("jetVeto20", &in->jetVeto20);
+  tree->Branch("jetVeto20WoNoisyJets", &in->jetVeto20WoNoisyJets);
   tree->Branch("jetVeto20_JetEnDown", &in->jetVeto20_JetEnDown);
   tree->Branch("jetVeto20_JetEnUp", &in->jetVeto20_JetEnUp);
   tree->Branch("jetVeto30", &in->jetVeto30);
+  tree->Branch("jetVeto30WoNoisyJets", &in->jetVeto30WoNoisyJets);
   tree->Branch("jetVeto30WoNoisyJets_JetEC2Down", &in->jetVeto30WoNoisyJets_JetEC2Down);
   tree->Branch("jetVeto30WoNoisyJets_JetEC2Up", &in->jetVeto30WoNoisyJets_JetEC2Up);
   tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Down", &in->jetVeto30WoNoisyJets_JetEta0to3Down);
