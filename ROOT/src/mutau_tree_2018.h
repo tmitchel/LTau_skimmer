@@ -89,11 +89,11 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     if (isMC && !isEmbed) {
       if (in->tZTTGenMatching == 5) {
         if (in->tDecayMode == 0) {
-          tau *= 1.007;
+          tau *= 0.987;
         } else if (in->tDecayMode == 1) {
-          tau *= 0.998;
+          tau *= 0.995;
         } else if (in->tDecayMode == 10) {
-          tau *= 1.001;
+          tau *= 0.988;
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
@@ -400,11 +400,11 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     if (isMC && !isEmbed) {
       // met correction due to tau energy scale
       if (in->tZTTGenMatching == 5) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
