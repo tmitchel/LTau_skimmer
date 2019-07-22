@@ -24,9 +24,6 @@
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2018.h"
-#include "ltau_skimmer/ROOT/src/json.hpp"
-
-using json = nlohmann::json;
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
