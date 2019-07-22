@@ -69,12 +69,11 @@ int main(int argc, char *argv[]) {
 
   std::string recoilname;
   if (year == "2016") {
-    recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root";
+    recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2016_legacy.root";
   } else if (year == "2017") {
     recoilname = "HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root";
   } else if (year == "2018") {
-    // using 2017 PU reweighting for now
-    recoilname = "HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root";
+    recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2018.root";
   }
 
   RecoilCorrector recoilPFMetCorrector(recoilname.c_str());
@@ -113,29 +112,15 @@ int main(int argc, char *argv[]) {
       return -1;
     }
 
-    std::cout << local << std::endl;
-
-    if (!local) {
-      // open the JSON file
-      std::ifstream ntupleMap("CMSSW_9_4_0/bin/slc6_amd64_gcc630/fileMap.json");
-      json j;
-
-      std::cout << "Reading JSON" << std::endl;
-      // read the file stream into our json object
-      ntupleMap >> j;
-      std::cout << "before strip " << real_fname << std::endl;
-      auto searchName = real_fname.substr(real_fname.find("/store/"), std::string::npos);
-      std::cout << "Searching for " << searchName << std::endl;
-      for (json::iterator it = j.begin(); it != j.end(); ++it) {
-        for (auto ntuple : it.value()) {
-          if (std::string(ntuple).find(searchName) != std::string::npos) {
-            originalName = it.key();
-            std::cout << "found name " << originalName << " from " << searchName << std::endl;
-            break;
-          }
-        }
+    auto dir = reinterpret_cast<TDirectoryFile *>(open_file->Get(lepton.c_str()));
+    // get name for PU reweighting
+    for (auto key : *(dir->GetListOfKeys())) {
+      std::string name = key->GetName();
+      if (name.find("#MINIAODSIM") != std::string::npos) {
+        originalName = name;
       }
     }
+
   } else if (year == "2018") {
     if (lepton == "et") {
       skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
