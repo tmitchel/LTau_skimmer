@@ -28,7 +28,8 @@ class etau_tree2018 : public virtual base_tree {
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
-  Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
+  Int_t gen_match_1, gen_match_2;
+  Float_t njets, nbtag, njetspt20;
   Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
   Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp,
       pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
