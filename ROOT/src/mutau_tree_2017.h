@@ -28,8 +28,7 @@ class mutau_tree2017 : public virtual base_tree {
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
-  Int_t gen_match_1, gen_match_2;
-  Float_t njets, nbtag, njetspt20;
+  Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
   Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp,
       pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
@@ -475,9 +474,6 @@ void mutau_tree2017::set_branches() {
   tree->Branch("lumi", &Lumi);
   tree->Branch("gen_match_1", &gen_match_1);
   tree->Branch("gen_match_2", &gen_match_2);
-  tree->Branch("njets", &njets);
-  tree->Branch("nbtag", &nbtag);
-  tree->Branch("njetspt20", &njetspt20);
   tree->Branch("met_px", &met_px);
   tree->Branch("met_py", &met_py);
   tree->Branch("extraelec_veto", &extraelec_veto);
@@ -531,6 +527,11 @@ void mutau_tree2017::set_branches() {
   tree->Branch("jpt_2", &in->j2pt);
   tree->Branch("jeta_2", &in->j2eta);
   tree->Branch("jphi_2", &in->j2phi);
+  tree->Branch("l2_decayMode", &in->tDecayMode);
+  tree->Branch("njets", &njets);
+  tree->Branch("nbtag", &nbtag);
+  tree->Branch("njetspt20", &njetspt20);
+
 
   // copy the rest
   tree->Branch("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
