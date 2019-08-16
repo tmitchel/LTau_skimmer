@@ -108,13 +108,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float el_pt_min(26), tau_pt_min;
-    if (!isMC || in->tZTTGenMatching > 4) {
-      tau_pt_min = 29.5;
-    } else {
-      tau_pt_min = 27.0;
-    }
-
+    float el_pt_min(26), tau_pt_min(20);
     cutflow->Fill(1., 1.);
 
     // apply event selection
@@ -150,7 +144,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if ((in->tByVLooseIsolationMVArun2v1DBoldDMwLT || in->tRerunMVArun2v2DBoldDMwLTLoose) && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if ((in->tByVLooseIsolationMVArun2v1DBoldDMwLT || in->tRerunMVArun2v2DBoldDMwLTVLoose) && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
