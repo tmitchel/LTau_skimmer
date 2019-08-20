@@ -61,7 +61,7 @@ def need_big_boi(bigboi):
     return command
 
 
-def submit_command(command, jobName, input_sample_dirs, output_sample_name=None, dryrun=False, extra_inputs=None, bigboi=False, use_input=''):
+def submit_command(command, jobName, input_sample_dir, output_sample_name=None, dryrun=False, extra_inputs=None, bigboi=False, use_input=''):
     '''
     Submit a command to run on Wisconsin Condor
 
@@ -131,8 +131,7 @@ def submit_command(command, jobName, input_sample_dirs, output_sample_name=None,
 
     # create file list
     filelist = ['{}/{}'.format(input_sample_dir, x)
-                for x in os.listdir(input_sample_dir)
-                for input_sample_dir in input_sample_dirs]
+                for x in os.listdir(input_sample_dir)]
     filesperjob = 1
     input_name = '{}/{}.txt'.format(dag_dir+'inputs', output_sample_name)
     with open(input_name, 'w') as file:
