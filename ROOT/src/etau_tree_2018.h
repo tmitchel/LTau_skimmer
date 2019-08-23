@@ -84,6 +84,9 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     // apply TES
     if (isMC && !isEmbed) {
       if (in->tZTTGenMatching == 5) {
@@ -138,7 +141,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->ePt > 25. && fabs(in->eEta) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
+    if (in->ePt > 25. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
       cutflow->Fill(4., 1.);  // electron kinematic selection
     else
       continue;
@@ -252,10 +255,6 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     nbtag = in->bjetDeepCSVVeto20Medium_2018_DR0p5;
     njetspt20 = in->jetVeto20;
 
-    // TLorentzVector ele, tau;
-    ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
-    tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
-
     met_px = in->type1_pfMetEt * cos(in->type1_pfMetPhi);
     met_py = in->type1_pfMetEt * sin(in->type1_pfMetPhi);
 
@@ -267,11 +266,15 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
     MET.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
+
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     // not in ntuples yet
-    // MET_UESUp.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnUp, 0, type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
-    // MET_UESDown.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnDown, 0, type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
-    // MET_JESUp.SetPtEtaPhiM(type1_pfMet_shiftedPt_JetEnUp, 0, type1_pfMet_shiftedPhi_JetEnUp, 0);
-    // MET_JESDown.SetPtEtaPhiM(type1_pfMet_shiftedPt_JetEnDown, 0, type1_pfMet_shiftedPhi_JetEnDown, 0);
+    MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
+    MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
+    MET_JESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
+    MET_JESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
 
     pfmetcorr_ex = MET.Px();
     pfmetcorr_ey = MET.Py();
