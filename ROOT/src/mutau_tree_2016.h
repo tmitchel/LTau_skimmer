@@ -129,7 +129,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
     }
 
     if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
-      cutflow->Fill(3., 1.);  // electron kinematic selection
+      cutflow->Fill(3., 1.);  // muon kinematic selection
     } else {
       continue;
     }

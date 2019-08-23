@@ -128,7 +128,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->ePt > 26. && fabs(in->eEta) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
+    if (in->ePt > 26. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
       cutflow->Fill(4., 1.);  // electron kinematic selection
     } else {
       continue;
