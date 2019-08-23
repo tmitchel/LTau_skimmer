@@ -119,8 +119,6 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float el_pt_min(25.), tau_pt_min(23.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 

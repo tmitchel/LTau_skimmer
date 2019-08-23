@@ -120,8 +120,6 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float mu_pt_min(21.), tau_pt_min(23.);
-
     cutflow->Fill(1., 1.);
 
     auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;
