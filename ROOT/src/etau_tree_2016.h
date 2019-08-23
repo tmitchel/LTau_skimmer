@@ -83,6 +83,9 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     // apply TES
     if (isMC) {
       if (in->tZTTGenMatching == 5) {
@@ -260,6 +263,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
+
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     MET.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
     MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
     MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
