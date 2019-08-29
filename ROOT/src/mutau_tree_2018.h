@@ -76,6 +76,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
 
   std::cout << "Starting the skim..." << std::endl;
 
+  bool isData = !isEmbed && !isMC;
   Int_t nevt = (Int_t)original->GetEntries();
   for (auto ievt = 0; ievt < nevt; ievt++) {
     original->GetEntry(ievt);
@@ -127,17 +128,32 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     auto Mu27 = in->IsoMu27Pass && in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;
     auto Cross_base = in->mMatchesIsoMu20HPSTau27Filter && in->mMatchesIsoMu20HPSTau27Path
                       && in->tMatchesIsoMu20HPSTau27Filter && in->tMatchesIsoMu20HPSTau27Path;
-    auto Cross_v1 = Cross_base && in->Mu20LooseHPSTau27Pass && in->run < 317509 && !isMC && !isEmbed;
-    auto Cross_v2 = Cross_base && in->Mu20LooseHPSTau27TightIDPass && (isMC || (in->run > 317509 && !isMC && !isEmbed));
+    auto Cross_v1 = Cross_base && in->Mu20LooseHPSTau27Pass && in->run < 317509 && isData;
+    auto Cross_v2 = Cross_base && in->Mu20LooseHPSTau27TightIDPass && (isMC || (in->run > 317509 && isData));
+    auto Mu24_emb = in->mMatchEmbeddedFilterMu24;
+    auto Mu27_emb = in->mMatchEmbeddedFilterMu27;
+    auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2018 && in->tMatchEmbeddedFilterMu20HPSTau27;
 
-    if (Mu27 && in->mPt > 28) {
-      cutflow->Fill(2., 1.);
-    } else if (Mu24 && in->mPt > 25) {
-      cutflow->Fill(2., 1.);
-    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
-      cutflow->Fill(2., 1.);
+    if (isEmbed) {
+      if (Mu27_emb && in->mPt > 28) {
+        cutflow->Fill(2., 1.);
+      } else if (Mu24_emb && in->mPt > 25) {
+        cutflow->Fill(2., 1.);
+      } else if (Cross_emb && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
+        cutflow->Fill(2., 1.);
+      } else {
+        continue;
+      }
     } else {
-      continue;
+      if (Mu27 && in->mPt > 28) {
+        cutflow->Fill(2., 1.);
+      } else if (Mu24 && in->mPt > 25) {
+        cutflow->Fill(2., 1.);
+      } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
+        cutflow->Fill(2., 1.);
+      } else {
+        continue;
+      }
     }
 
     if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
@@ -145,16 +161,8 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     else
       continue;
 
-    bool goodglob = in->mIsGlobal && in->mNormalizedChi2 < 3 && in->mChi2LocalPosition < 12 && in->mTrkKink < 20;
-    bool isMedium = in->mPFIDLoose && in->mValidFraction > 0.49 && in->mSegmentCompatibility > (goodglob ? 0.303 : 0.451);
-
     if (in->mPFIDMedium)
       cutflow->Fill(4., 1.);  // muon quality selection
-    else
-      continue;
-
-    if (isMC || isEmbed || isMedium)
-      cutflow->Fill(5., 1.);  // muon quality selection
     else
       continue;
 
