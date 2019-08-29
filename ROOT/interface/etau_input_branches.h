@@ -103,6 +103,9 @@ class etau_input_branches {
   Float_t bjetDeepCSVVeto20Tight_2016_DR0p5;
   Float_t bjetDeepCSVVeto20Tight_2017_DR0p5;
   Float_t bjetDeepCSVVeto20Tight_2018_DR0p5;
+  Float_t bweight_2016;
+  Float_t bweight_2017;
+  Float_t bweight_2018;
   Float_t charge;
   Float_t dielectronVeto;
   Float_t dimu9ele9Pass;
@@ -798,6 +801,9 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2016_DR0p5", &bjetDeepCSVVeto20Tight_2016_DR0p5);
   tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2017_DR0p5", &bjetDeepCSVVeto20Tight_2017_DR0p5);
   tree->SetBranchAddress("bjetDeepCSVVeto20Tight_2018_DR0p5", &bjetDeepCSVVeto20Tight_2018_DR0p5);
+  tree->SetBranchAddress("bweight_2016", &bweight_2016);
+  tree->SetBranchAddress("bweight_2017", &bweight_2017);
+  tree->SetBranchAddress("bweight_2018", &bweight_2018);
   tree->SetBranchAddress("charge", &charge);
   tree->SetBranchAddress("dielectronVeto", &dielectronVeto);
   tree->SetBranchAddress("dimu9ele9Pass", &dimu9ele9Pass);
