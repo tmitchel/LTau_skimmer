@@ -310,6 +310,10 @@ class mutau_input_branches {
   Float_t mMatchesMu8e23DZPath;
   Float_t mMatchesMu8e23Filter;
   Float_t mMatchesMu8e23Path;
+  Float_t mMatchEmbeddedFilterMu20Tau27_2017;
+  Float_t mMatchEmbeddedFilterMu20Tau27_2018;
+  Float_t mMatchEmbeddedFilterMu24;
+  Float_t mMatchEmbeddedFilterMu27;
   Float_t mMiniIsoLoose;
   Float_t mMiniIsoMedium;
   Float_t mMiniIsoTight;
@@ -519,6 +523,8 @@ class mutau_input_branches {
   Float_t tMatchesIsoMu20HPSTau27Path;
   Float_t tMatchesIsoMu20Tau27Filter;
   Float_t tMatchesIsoMu20Tau27Path;
+  Float_t tMatchEmbeddedFilterMu20HPSTau27;
+  Float_t tMatchEmbeddedFilterMu20Tau27;
   Float_t tMediumDeepTau2017v1VSe;
   Float_t tMediumDeepTau2017v1VSjet;
   Float_t tMediumDeepTau2017v1VSmu;
@@ -993,6 +999,10 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("mMatchesMu8e23DZPath", &mMatchesMu8e23DZPath);
   tree->SetBranchAddress("mMatchesMu8e23Filter", &mMatchesMu8e23Filter);
   tree->SetBranchAddress("mMatchesMu8e23Path", &mMatchesMu8e23Path);
+  tree->SetBranchAddress("mMatchEmbeddedFilterMu20Tau27_2017", &mMatchEmbeddedFilterMu20Tau27_2017);
+  tree->SetBranchAddress("mMatchEmbeddedFilterMu20Tau27_2018", &mMatchEmbeddedFilterMu20Tau27_2018);
+  tree->SetBranchAddress("mMatchEmbeddedFilterMu24", &mMatchEmbeddedFilterMu24);
+  tree->SetBranchAddress("mMatchEmbeddedFilterMu27", &mMatchEmbeddedFilterMu27);
   tree->SetBranchAddress("mMiniIsoLoose", &mMiniIsoLoose);
   tree->SetBranchAddress("mMiniIsoMedium", &mMiniIsoMedium);
   tree->SetBranchAddress("mMiniIsoTight", &mMiniIsoTight);
@@ -1202,6 +1212,8 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("tMatchesIsoMu20HPSTau27Path", &tMatchesIsoMu20HPSTau27Path);
   tree->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
   tree->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
+  tree->SetBranchAddress("tMatchEmbeddedFilterMu20HPSTau27", &tMatchEmbeddedFilterMu20HPSTau27);
+  tree->SetBranchAddress("tMatchEmbeddedFilterMu20Tau27", &tMatchEmbeddedFilterMu20Tau27);
   tree->SetBranchAddress("tMediumDeepTau2017v2VSe", &tMediumDeepTau2017v2VSe);
   tree->SetBranchAddress("tMediumDeepTau2017v2VSjet", &tMediumDeepTau2017v2VSjet);
   tree->SetBranchAddress("tMediumDeepTau2017v2VSmu", &tMediumDeepTau2017v2VSmu);

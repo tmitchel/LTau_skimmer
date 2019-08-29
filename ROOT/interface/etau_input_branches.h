@@ -199,6 +199,10 @@ class etau_input_branches {
   Float_t eMatchesEle32Path;
   Float_t eMatchesEle35Filter;
   Float_t eMatchesEle35Path;
+  Float_t eMatchEmbeddedFilterEle24Tau30;
+  Float_t eMatchEmbeddedFilterEle27;
+  Float_t eMatchEmbeddedFilterEle32;
+  Float_t eMatchEmbeddedFilterEle35;
   Float_t eMissingHits;
   Float_t eNearMuonVeto;
   Float_t eNearestMuonDR;
@@ -551,6 +555,7 @@ class etau_input_branches {
   Float_t tMatchesIsoMu20HPSTau27Path;
   Float_t tMatchesIsoMu20Tau27Filter;
   Float_t tMatchesIsoMu20Tau27Path;
+  Float_t tMatchEmbeddedFilterEle24Tau30;
   Float_t tMediumDeepTau2017v1VSe;
   Float_t tMediumDeepTau2017v1VSjet;
   Float_t tMediumDeepTau2017v1VSmu;
@@ -889,6 +894,10 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("eMatchesEle32Path", &eMatchesEle32Path);
   tree->SetBranchAddress("eMatchesEle35Filter", &eMatchesEle35Filter);
   tree->SetBranchAddress("eMatchesEle35Path", &eMatchesEle35Path);
+  tree->SetBranchAddress("eMatchEmbeddedFilterEle24Tau30", &eMatchEmbeddedFilterEle24Tau30);
+  tree->SetBranchAddress("eMatchEmbeddedFilterEle27", &eMatchEmbeddedFilterEle27);
+  tree->SetBranchAddress("eMatchEmbeddedFilterEle32", &eMatchEmbeddedFilterEle32);
+  tree->SetBranchAddress("eMatchEmbeddedFilterEle35", &eMatchEmbeddedFilterEle35);
   tree->SetBranchAddress("eMissingHits", &eMissingHits);
   tree->SetBranchAddress("eNearMuonVeto", &eNearMuonVeto);
   tree->SetBranchAddress("eNearestMuonDR", &eNearestMuonDR);
@@ -1241,6 +1250,7 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("tMatchesIsoMu20HPSTau27Path", &tMatchesIsoMu20HPSTau27Path);
   tree->SetBranchAddress("tMatchesIsoMu20Tau27Filter", &tMatchesIsoMu20Tau27Filter);
   tree->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
+  tree->SetBranchAddress("tMatchEmbeddedFilterEle24Tau30", &tMatchEmbeddedFilterEle24Tau30);
   tree->SetBranchAddress("tMediumDeepTau2017v1VSe", &tMediumDeepTau2017v1VSe);
   tree->SetBranchAddress("tMediumDeepTau2017v1VSjet", &tMediumDeepTau2017v1VSjet);
   tree->SetBranchAddress("tMediumDeepTau2017v1VSmu", &tMediumDeepTau2017v1VSmu);
