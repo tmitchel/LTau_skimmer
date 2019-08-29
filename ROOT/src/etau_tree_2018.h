@@ -75,6 +75,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
   int best_evt(-1);
   std::pair<float, float> eleCandidate, tauCandidate;
 
+  bool isData = !isEmbed && !isMC;
   Int_t nevt = (Int_t)original->GetEntries();
   for (auto ievt = 0; ievt < nevt; ievt++) {
     original->GetEntry(ievt);
@@ -130,15 +131,30 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     auto Cross_base = in->eMatchesEle24HPSTau30Filter && in->eMatchesEle24HPSTau30Path && in->tMatchesEle24HPSTau30Filter && in->tMatchesEle24HPSTau30Path;
     auto Cross_v1 = Cross_base && in->Ele24LooseHPSTau30Pass && in->run < 317509 && !isMC && !isEmbed;
     auto Cross_v2 = Cross_base && in->Ele24LooseHPSTau30TightIDPass && (isMC || (in->run > 317509 && !isMC && !isEmbed));
+    auto Ele32_emb = in->eMatchEmbeddedFilterEle32;
+    auto Ele35_emb = in->eMatchEmbeddedFilterEle35;
+    auto Cross_emb = in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30;
 
-    if (Ele35 && in->ePt > 36) {
-      cutflow->Fill(2., 1.);
-    } else if (Ele32 && in->ePt > 33) {
-      cutflow->Fill(2., 1.);
-    } else if ((Cross_v1 || Cross_v2) && in->ePt > 25 && fabs(in->eEta) < 2.1 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
-      cutflow->Fill(2., 1.);
+    if (isEmbed) {
+      if (Ele35_emb && in->ePt > 36) {
+        cutflow->Fill(2., 1.);
+      } else if (Ele32_emb && in->ePt > 33) {
+        cutflow->Fill(2., 1.);
+      } else if (Cross_emb && in->ePt > 25 && fabs(in->eEta) < 2.1 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+        cutflow->Fill(2., 1.);
+      } else {
+        continue;
+      }
     } else {
-      continue;
+      if (Ele35 && in->ePt > 36) {
+        cutflow->Fill(2., 1.);
+      } else if (Ele32 && in->ePt > 33) {
+        cutflow->Fill(2., 1.);
+      } else if ((Cross_v1 || Cross_v2) && in->ePt > 25 && fabs(in->eEta) < 2.1 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+        cutflow->Fill(2., 1.);
+      } else {
+        continue;
+      }
     }
 
     if (in->ePt > 25. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
@@ -146,7 +162,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     else
       continue;
 
-    if (in->eMVANoisoWP90 && in->ePassesConversionVeto && in->eMissingHits < 2)
+    if (in->eMVANoisoWP80 && in->ePassesConversionVeto && in->eMissingHits < 2)
       cutflow->Fill(5., 1.);  // electron quality selection
     else
       continue;
