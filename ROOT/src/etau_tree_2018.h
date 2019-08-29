@@ -656,6 +656,9 @@ void etau_tree2018::set_branches() {
   tree->Branch("bjetDeepCSVVeto20Tight_2016_DR0p5", &in->bjetDeepCSVVeto20Tight_2016_DR0p5);
   tree->Branch("bjetDeepCSVVeto20Tight_2017_DR0p5", &in->bjetDeepCSVVeto20Tight_2017_DR0p5);
   tree->Branch("bjetDeepCSVVeto20Tight_2018_DR0p5", &in->bjetDeepCSVVeto20Tight_2018_DR0p5);
+  tree->Branch("bweight_2016", &in->bweight_2016);
+  tree->Branch("bweight_2017", &in->bweight_2017);
+  tree->Branch("bweight_2018", &in->bweight_2018);
   tree->Branch("charge", &in->charge);
   tree->Branch("dielectronVeto", &in->dielectronVeto);
   tree->Branch("dimu9ele9Pass", &in->dimu9ele9Pass);
