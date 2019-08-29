@@ -84,6 +84,9 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     // apply TES
     if (isMC && !isEmbed) {
       if (in->tZTTGenMatching == 5) {
@@ -96,9 +99,15 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
-          tau *= 1.003;
+          tau *= 0.982;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.036;
+          tau *= 1.018;
+        }
+      } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
+        if (in->tDecayMode == 0) {
+          tau *= 0.998;
+        } else if (in->tDecayMode == 1) {
+          tau *= 0.992;
         }
       }
     } else if (isEmbed) {
@@ -113,37 +122,34 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float el_pt_min(25.), tau_pt_min(23.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto Ele27 = in->eMatchesEle27Filter && in->eMatchesEle27Path && in->Ele27WPTightPass;
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
     auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
-    if (isEmbed || (Ele27 || Ele32 || Ele35 || Cross))
+    if (Ele35 && in->ePt > 36) {
       cutflow->Fill(2., 1.);
-    else
+    } else if (Ele32 && in->ePt > 33) {
+      cutflow->Fill(2., 1.);
+    } else if (Cross && in->ePt > 25 && in->ePt < 33 && fabs(in->eEta) < 2.1 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+      cutflow->Fill(2., 1.);
+    } else {
       continue;
+    }
 
-    if (!isEmbed || (in->Ele27WPTightPass || in->Ele32WPTightPass || in->Ele35WPTightPass || in->Ele24LooseTau30Pass))
-      cutflow->Fill(3., 1.);
-    else
-      continue;
-
-    if (in->ePt > el_pt_min && fabs(in->eEta) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
+    if (in->ePt > 25. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
       cutflow->Fill(4., 1.);  // electron kinematic selection
     else
       continue;
 
-    if (in->eMVANoisoWP90 && in->ePassesConversionVeto && in->eMissingHits < 2)
+    if (in->eMVANoisoWP80 && in->ePassesConversionVeto && in->eMissingHits < 2)
       cutflow->Fill(5., 1.);  // electron quality selection
     else
       continue;
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2)
+    if (tau.Pt() > 30. && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2)
       cutflow->Fill(6., 1.);  // tau kinematic selection
     else
       continue;
@@ -162,6 +168,12 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
       cutflow->Fill(9., 1.);  // vetos
     else
       continue;
+
+    if (in->e_t_DR > 0.5) {
+      cutflow->Fill(10., 1.);
+    } else {
+      continue;
+    }
 
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -241,10 +253,6 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     nbtag = in->bjetDeepCSVVeto20Medium_2017_DR0p5;
     njetspt20 = in->jetVeto20WoNoisyJets;
 
-    // TLorentzVector ele, tau;
-    ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
-    tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
-
     met_px = in->type1_pfMetEt * cos(in->type1_pfMetPhi);
     met_py = in->type1_pfMetEt * sin(in->type1_pfMetPhi);
 
@@ -255,6 +263,10 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
+
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     MET.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
     MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
     MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
@@ -401,11 +413,18 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_UESDown, tau);
+        tau *= sf;
+      } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_UESDown, tau);
         tau *= sf;
       }
     } else if (isEmbed) {

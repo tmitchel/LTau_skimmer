@@ -95,39 +95,41 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
-          tau *= 1.00;
+          tau *= 0.995;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.095;
+          tau *= 1.06;
         }
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
         if (in->tDecayMode == 0) {
-          tau *= 0.998;
+          tau *= 1.00;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.015;
+          tau *= 0.995;
         }
       }
     }
 
-    // set minimums
-    float mu_pt_min(20. / 1.05), tau_pt_min(20.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mMatchesIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
-    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mMatchesIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
     auto IsoMu22 = in->mMatchesIsoMu22Path && in->mMatchesIsoMu22Filter && in->singleIsoMu22Pass;
     auto IsoTkMu22 = in->mMatchesIsoTkMu22Path && in->mMatchesIsoTkMu22Filter && in->singleIsoTkMu22Pass;
-    auto Cross = in->mMatchesIsoMu19Tau20SingleL1Path && in->mMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path && in->tMatchesIsoMu19Tau20SingleL1Filter && in->singleMu19eta2p1LooseTau20singleL1Pass;
+    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mMatchesIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
+    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mMatchesIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
+    auto Cross_v1 = in->singleMu19eta2p1LooseTau20Pass && in->mMatchesIsoMu19Tau20Filter && in->mMatchesIsoMu19Tau20Path
+                    && in->tMatchesIsoMu19Tau20Filter && in->tMatchesIsoMu19Tau20Path;
+    auto Cross_v2 = in->singleMu19eta2p1LooseTau20singleL1Pass &&in->mMatchesIsoMu19Tau20SingleL1Filter && in->mMatchesIsoMu19Tau20SingleL1Path
+                    && in->tMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path;
 
-    if (isEmbed || IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) {
+    if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && in->mPt > 23 && fabs(in->mEta) < 2.1) {
+      cutflow->Fill(2., 1.);
+    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 23 && fabs(in->mEta) < 2.1) {
       cutflow->Fill(2., 1.);
     } else {
       continue;
     }
 
-    if (in->mPt > mu_pt_min && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
-      cutflow->Fill(3., 1.);  // electron kinematic selection
+    if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
+      cutflow->Fill(3., 1.);  // muon kinematic selection
     } else {
       continue;
     }
@@ -141,13 +143,13 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
+    if (tau.Pt() > 30. && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
       cutflow->Fill(6., 1.);  // tau kinematic selection
     } else {
       continue;
     }
 
-    if ((in->tByVLooseIsolationMVArun2v1DBoldDMwLT || in->tRerunMVArun2v2DBoldDMwLTVLoose) && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
@@ -181,10 +183,10 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
       muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefaultR04);
-      tauCandidate = std::make_pair(in->tPt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
     } else {  // not a new event
       std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefaultR04);
-      std::pair<float, float> currTauCandidate(in->tPt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
 
       // clause 1, select the pair that has most isolated tau lepton 1
       if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;
@@ -409,18 +411,18 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.994, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       }
     }
@@ -531,33 +533,8 @@ void mutau_tree2016::set_branches() {
   tree->Branch("njets", &njets);
   tree->Branch("nbtag", &nbtag);
   tree->Branch("njetspt20", &njetspt20);
-  
+
   // copy the rest
-  tree->Branch("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
-  tree->Branch("DoubleMediumHPSTau35TightIDPass", &in->DoubleMediumHPSTau35TightIDPass);
-  tree->Branch("DoubleMediumHPSTau40Pass", &in->DoubleMediumHPSTau40Pass);
-  tree->Branch("DoubleMediumHPSTau40TightIDPass", &in->DoubleMediumHPSTau40TightIDPass);
-  tree->Branch("DoubleMediumTau35Pass", &in->DoubleMediumTau35Pass);
-  tree->Branch("DoubleMediumTau35TightIDPass", &in->DoubleMediumTau35TightIDPass);
-  tree->Branch("DoubleMediumTau40Pass", &in->DoubleMediumTau40Pass);
-  tree->Branch("DoubleMediumTau40TightIDPass", &in->DoubleMediumTau40TightIDPass);
-  tree->Branch("DoubleTightHPSTau35Pass", &in->DoubleTightHPSTau35Pass);
-  tree->Branch("DoubleTightHPSTau35TightIDPass", &in->DoubleTightHPSTau35TightIDPass);
-  tree->Branch("DoubleTightHPSTau40Pass", &in->DoubleTightHPSTau40Pass);
-  tree->Branch("DoubleTightHPSTau40TightIDPass", &in->DoubleTightHPSTau40TightIDPass);
-  tree->Branch("DoubleTightTau35Pass", &in->DoubleTightTau35Pass);
-  tree->Branch("DoubleTightTau35TightIDPass", &in->DoubleTightTau35TightIDPass);
-  tree->Branch("DoubleTightTau40Pass", &in->DoubleTightTau40Pass);
-  tree->Branch("DoubleTightTau40TightIDPass", &in->DoubleTightTau40TightIDPass);
-  tree->Branch("Ele24LooseHPSTau30Pass", &in->Ele24LooseHPSTau30Pass);
-  tree->Branch("Ele24LooseHPSTau30TightIDPass", &in->Ele24LooseHPSTau30TightIDPass);
-  tree->Branch("Ele24LooseTau30Pass", &in->Ele24LooseTau30Pass);
-  tree->Branch("Ele24LooseTau30TightIDPass", &in->Ele24LooseTau30TightIDPass);
-  tree->Branch("Ele27WPTightPass", &in->Ele27WPTightPass);
-  tree->Branch("Ele32WPTightPass", &in->Ele32WPTightPass);
-  tree->Branch("Ele35WPTightPass", &in->Ele35WPTightPass);
-  tree->Branch("Ele38WPTightPass", &in->Ele38WPTightPass);
-  tree->Branch("Ele40WPTightPass", &in->Ele40WPTightPass);
   tree->Branch("EmbPtWeight", &in->EmbPtWeight);
   tree->Branch("Eta", &in->Eta);
   tree->Branch("Flag_BadChargedCandidateFilter", &in->Flag_BadChargedCandidateFilter);
@@ -606,12 +583,6 @@ void mutau_tree2016::set_branches() {
   tree->Branch("Rivet_stage1_cat_pTjet25GeV", &in->Rivet_stage1_cat_pTjet25GeV);
   tree->Branch("Rivet_stage1_cat_pTjet30GeV", &in->Rivet_stage1_cat_pTjet30GeV);
   tree->Branch("Rivet_stage1p1_cat", &in->Rivet_stage1p1_cat);
-  tree->Branch("VBFDoubleLooseHPSTau20Pass", &in->VBFDoubleLooseHPSTau20Pass);
-  tree->Branch("VBFDoubleLooseTau20Pass", &in->VBFDoubleLooseTau20Pass);
-  tree->Branch("VBFDoubleMediumHPSTau20Pass", &in->VBFDoubleMediumHPSTau20Pass);
-  tree->Branch("VBFDoubleMediumTau20Pass", &in->VBFDoubleMediumTau20Pass);
-  tree->Branch("VBFDoubleTightHPSTau20Pass", &in->VBFDoubleTightHPSTau20Pass);
-  tree->Branch("VBFDoubleTightTau20Pass", &in->VBFDoubleTightTau20Pass);
   tree->Branch("bjetDeepCSVVeto20Loose_2016_DR0p5", &in->bjetDeepCSVVeto20Loose_2016_DR0p5);
   tree->Branch("bjetDeepCSVVeto20Loose_2017_DR0p5", &in->bjetDeepCSVVeto20Loose_2017_DR0p5);
   tree->Branch("bjetDeepCSVVeto20Loose_2018_DR0p5", &in->bjetDeepCSVVeto20Loose_2018_DR0p5);
@@ -628,14 +599,9 @@ void mutau_tree2016::set_branches() {
   tree->Branch("dielectronVeto", &in->dielectronVeto);
   tree->Branch("dimu9ele9Pass", &in->dimu9ele9Pass);
   tree->Branch("dimuonVeto", &in->dimuonVeto);
-  tree->Branch("doubleE25Pass", &in->doubleE25Pass);
-  tree->Branch("doubleE33Pass", &in->doubleE33Pass);
-  tree->Branch("doubleE_23_12Pass", &in->doubleE_23_12Pass);
   tree->Branch("doubleMuDZminMass3p8Pass", &in->doubleMuDZminMass3p8Pass);
   tree->Branch("doubleMuDZminMass8Pass", &in->doubleMuDZminMass8Pass);
   tree->Branch("doubleMuSingleEPass", &in->doubleMuSingleEPass);
-  tree->Branch("doubleTau35Pass", &in->doubleTau35Pass);
-  tree->Branch("doubleTauCmbIso35RegPass", &in->doubleTauCmbIso35RegPass);
   tree->Branch("eVetoHZZPt5", &in->eVetoHZZPt5);
   tree->Branch("eVetoZTTp001dxyz", &in->eVetoZTTp001dxyz);
   tree->Branch("eVetoZTTp001dxyzR0", &in->eVetoZTTp001dxyzR0);
@@ -949,7 +915,6 @@ void mutau_tree2016::set_branches() {
   tree->Branch("recoilWithMet", &in->recoilWithMet);
   tree->Branch("rho", &in->rho);
   tree->Branch("run", &in->run);
-  tree->Branch("singleE25eta2p1TightPass", &in->singleE25eta2p1TightPass);
   tree->Branch("singleIsoMu22Pass", &in->singleIsoMu22Pass);
   tree->Branch("singleIsoMu22eta2p1Pass", &in->singleIsoMu22eta2p1Pass);
   tree->Branch("singleIsoTkMu22Pass", &in->singleIsoTkMu22Pass);
@@ -1047,28 +1012,6 @@ void mutau_tree2016::set_branches() {
   tree->Branch("tLooseDeepTau2017v1VSmu", &in->tLooseDeepTau2017v1VSmu);
   tree->Branch("tLowestMll", &in->tLowestMll);
   tree->Branch("tMass", &in->tMass);
-  tree->Branch("tMatchesDoubleMediumCombinedIsoTau35Path", &in->tMatchesDoubleMediumCombinedIsoTau35Path);
-  tree->Branch("tMatchesDoubleMediumHPSTau35Filter", &in->tMatchesDoubleMediumHPSTau35Filter);
-  tree->Branch("tMatchesDoubleMediumHPSTau35Path", &in->tMatchesDoubleMediumHPSTau35Path);
-  tree->Branch("tMatchesDoubleMediumHPSTau40Filter", &in->tMatchesDoubleMediumHPSTau40Filter);
-  tree->Branch("tMatchesDoubleMediumHPSTau40Path", &in->tMatchesDoubleMediumHPSTau40Path);
-  tree->Branch("tMatchesDoubleMediumIsoTau35Path", &in->tMatchesDoubleMediumIsoTau35Path);
-  tree->Branch("tMatchesDoubleMediumTau35Filter", &in->tMatchesDoubleMediumTau35Filter);
-  tree->Branch("tMatchesDoubleMediumTau35Path", &in->tMatchesDoubleMediumTau35Path);
-  tree->Branch("tMatchesDoubleMediumTau40Filter", &in->tMatchesDoubleMediumTau40Filter);
-  tree->Branch("tMatchesDoubleMediumTau40Path", &in->tMatchesDoubleMediumTau40Path);
-  tree->Branch("tMatchesDoubleTightHPSTau35Filter", &in->tMatchesDoubleTightHPSTau35Filter);
-  tree->Branch("tMatchesDoubleTightHPSTau35Path", &in->tMatchesDoubleTightHPSTau35Path);
-  tree->Branch("tMatchesDoubleTightHPSTau40Filter", &in->tMatchesDoubleTightHPSTau40Filter);
-  tree->Branch("tMatchesDoubleTightHPSTau40Path", &in->tMatchesDoubleTightHPSTau40Path);
-  tree->Branch("tMatchesDoubleTightTau35Filter", &in->tMatchesDoubleTightTau35Filter);
-  tree->Branch("tMatchesDoubleTightTau35Path", &in->tMatchesDoubleTightTau35Path);
-  tree->Branch("tMatchesDoubleTightTau40Filter", &in->tMatchesDoubleTightTau40Filter);
-  tree->Branch("tMatchesDoubleTightTau40Path", &in->tMatchesDoubleTightTau40Path);
-  tree->Branch("tMatchesEle24HPSTau30Filter", &in->tMatchesEle24HPSTau30Filter);
-  tree->Branch("tMatchesEle24HPSTau30Path", &in->tMatchesEle24HPSTau30Path);
-  tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter);
-  tree->Branch("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path);
   tree->Branch("tMatchesIsoMu19Tau20Filter", &in->tMatchesIsoMu19Tau20Filter);
   tree->Branch("tMatchesIsoMu19Tau20Path", &in->tMatchesIsoMu19Tau20Path);
   tree->Branch("tMatchesIsoMu19Tau20SingleL1Filter", &in->tMatchesIsoMu19Tau20SingleL1Filter);

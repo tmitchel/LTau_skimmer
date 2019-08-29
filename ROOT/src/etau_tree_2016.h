@@ -83,6 +83,9 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     // apply TES
     if (isMC) {
       if (in->tZTTGenMatching == 5) {
@@ -95,20 +98,19 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
-          tau *= 1.00;
+          tau *= 0.995;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.095;
+          tau *= 1.06;
         }
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
         if (in->tDecayMode == 0) {
-          tau *= 0.998;
+          tau *= 1.00;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.015;
+          tau *= 0.995;
         }
       }
     }
 
-    float el_pt_min(26), tau_pt_min(20);
     cutflow->Fill(1., 1.);
 
     // apply event selection
@@ -126,7 +128,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->ePt > el_pt_min && fabs(in->eEta) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
+    if (in->ePt > 26. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
       cutflow->Fill(4., 1.);  // electron kinematic selection
     } else {
       continue;
@@ -138,13 +140,13 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
+    if (tau.Pt() > 30. && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
       cutflow->Fill(6., 1.);  // tau kinematic selection
     } else {
       continue;
     }
 
-    if ((in->tByVLooseIsolationMVArun2v1DBoldDMwLT || in->tRerunMVArun2v2DBoldDMwLTVLoose) && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
@@ -178,10 +180,10 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
       eleCandidate = std::make_pair(in->ePt, in->eIsoDB03);
-      tauCandidate = std::make_pair(in->Pt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      tauCandidate = std::make_pair(in->Pt, in->tRerunMVArun2v2DBoldDMwLTraw);
     } else {  // not a new event
       std::pair<float, float> currEleCandidate(in->ePt, in->eIsoDB03);
-      std::pair<float, float> currTauCandidate(in->tPt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
 
       // clause 1, select the pair that has most isolated tau lepton 1
       if (currEleCandidate.second - eleCandidate.second > 0.0001) best_evt = ievt;
@@ -261,6 +263,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
+
+    // electron energy scale
+    ele *= in->eCorrectedEt / ele.Energy();
+
     MET.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
     MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
     MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
@@ -407,18 +413,18 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.994, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       }
     }
