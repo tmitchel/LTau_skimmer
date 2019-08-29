@@ -134,7 +134,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
       cutflow->Fill(2., 1.);
     } else if (Mu24 && in->mPt > 25) {
       cutflow->Fill(2., 1.);
-    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(tau.Eta()) < 2.1) {
+    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
       cutflow->Fill(2., 1.);
     } else {
       continue;

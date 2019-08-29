@@ -133,7 +133,7 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
       cutflow->Fill(2., 1.);
     } else if (Ele32 && in->ePt > 33) {
       cutflow->Fill(2., 1.);
-    } else if (Cross && in->ePt > 25 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+    } else if (Cross && in->ePt > 25 && in->ePt < 33 && fabs(in->eEta) < 2.1 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
       cutflow->Fill(2., 1.);
     } else {
       continue;
