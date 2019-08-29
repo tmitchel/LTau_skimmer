@@ -132,7 +132,7 @@ jobType = args.job
 bkg_pref = '/hdfs/store/user/caillol/SMHTT_2018_legacy_MC_17jul/'
 bkg2_pref = '/hdfs/store/user/caillol/SMHTT_2018_legacy_MC_25jul/'
 data_pref = '/hdfs/store/user/caillol/SMHTT_2018_data/'
-embed_pref = '/hdfs/store/user/caillol/SMHTT_2018_embedded/'
+embed_pref = '/hdfs/store/user/caillol/SMHTT_2018_embedded_triggerFilters/'
 # Need updated
 # sig_pref = bkg_pref
 # ac_pref = '/hdfs/store/user/ymaravin/ac2017_v2/'
