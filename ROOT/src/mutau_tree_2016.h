@@ -134,10 +134,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    bool goodglob = in->mIsGlobal && in->mNormalizedChi2 < 3 && in->mChi2LocalPosition < 12 && in->mTrkKink < 20;
-    bool isMedium = in->mPFIDLoose && in->mValidFraction > 0.49 && in->mSegmentCompatibility > (goodglob ? 0.303 : 0.451);
-
-    if (in->mPFIDMedium || isMedium) {
+    if (in->mPFIDMedium) {
       cutflow->Fill(4., 1.);  // muon quality selection
     } else {
       continue;
