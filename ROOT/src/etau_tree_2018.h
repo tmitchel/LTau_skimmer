@@ -129,8 +129,8 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
     auto Cross_base = in->eMatchesEle24HPSTau30Filter && in->eMatchesEle24HPSTau30Path && in->tMatchesEle24HPSTau30Filter && in->tMatchesEle24HPSTau30Path;
-    auto Cross_v1 = Cross_base && in->Ele24LooseHPSTau30Pass && in->run < 317509 && !isMC && !isEmbed;
-    auto Cross_v2 = Cross_base && in->Ele24LooseHPSTau30TightIDPass && (isMC || (in->run > 317509 && !isMC && !isEmbed));
+    auto Cross_v1 = Cross_base && in->Ele24LooseHPSTau30Pass && in->run < 317509 && isData;
+    auto Cross_v2 = Cross_base && in->Ele24LooseHPSTau30TightIDPass && (isMC || (in->run > 317509 && isData));
     auto Ele32_emb = in->eMatchEmbeddedFilterEle32;
     auto Ele35_emb = in->eMatchEmbeddedFilterEle35;
     auto Cross_emb = in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30;
