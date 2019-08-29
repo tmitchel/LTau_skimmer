@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   // set flag for MC or data
   bool isMC(true);
-  if (job_type == "data") {
+  if (job_type == "data" || job_type == "dataEl" || job_type == "dataMu") {
     isMC = false;
   }
 

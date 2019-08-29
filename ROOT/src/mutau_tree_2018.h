@@ -97,9 +97,15 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
-          tau *= 1.003;
+          tau *= 0.968;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.036;
+          tau *= 1.026;
+        }
+      } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
+        if (in->tDecayMode == 0) {
+          tau *= 0.998;
+        } else if (in->tDecayMode == 1) {
+          tau *= 0.990;
         }
       }
     } else if (isEmbed) {
@@ -114,21 +120,27 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
       }
     }
 
-    float mu_pt_min(21.), tau_pt_min(23.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;  // good in 2017 & 2018
-    auto Mu27 = in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;  // no Pass in 2018
-    auto Cross = in->Mu20LooseTau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
+    auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;
+    auto Mu27 = in->IsoMu27Pass && in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;
+    auto Cross_base = in->mMatchesIsoMu20HPSTau27Filter && in->mMatchesIsoMu20HPSTau27Path
+                      && in->tMatchesIsoMu20HPSTau27Filter && in->tMatchesIsoMu20HPSTau27Path;
+    auto Cross_v1 = Cross_base && in->Mu20LooseHPSTau27Pass && in->run < 317509 && !isMC && !isEmbed;
+    auto Cross_v2 = Cross_base && in->Mu20LooseHPSTau27TightIDPass && (isMC || (in->run > 317509 && !isMC && !isEmbed));
 
-    if (Mu24 || Mu27 || Cross)
+    if (Mu27 && in->mPt > 28) {
       cutflow->Fill(2., 1.);
-    else
+    } else if (Mu24 && in->mPt > 25) {
+      cutflow->Fill(2., 1.);
+    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
+      cutflow->Fill(2., 1.);
+    } else {
       continue;
+    }
 
-    if (in->mPt > mu_pt_min && fabs(in->mEta) < 2.1 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
+    if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
       cutflow->Fill(3., 1.);  // electron kinematic selection
     else
       continue;
@@ -146,7 +158,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     else
       continue;
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2)
+    if (tau.Pt() > 30. && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2)
       cutflow->Fill(6., 1.);  // tau kinematic selection
     else
       continue;
@@ -165,6 +177,12 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
       cutflow->Fill(9., 1.);  // vetos
     else
       continue;
+
+    if (in->m_t_DR > 0.5) {
+      cutflow->Fill(10., 1.);
+    } else {
+      continue;
+    }
 
     // implement new sorting per
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -261,11 +279,10 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     mu.SetPtEtaPhiM(in->mPt, in->mEta, in->mPhi, in->mMass);
     tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
     MET.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
-    // not in ntuples yet
-    // MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
-    // MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
-    // MET_JESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
-    // MET_JESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
+    MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
+    MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
+    MET_JESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
+    MET_JESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
 
     pfmetcorr_ex = MET.Px();
     pfmetcorr_ey = MET.Py();
@@ -407,11 +424,18 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.987, 0.995, 0.988, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.003, 1.036, 1.000, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.968, 1.026, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.968, 1.026, 1.000, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.968, 1.026, 1.000, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.968, 1.026, 1.000, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.968, 1.026, 1.000, MET_UESDown, tau);
+        tau *= sf;
+      } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 0.990, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.990, 1.000, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.990, 1.000, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.990, 1.000, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.990, 1.000, MET_UESDown, tau);
         tau *= sf;
       }
     } else if (isEmbed) {

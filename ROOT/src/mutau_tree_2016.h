@@ -95,39 +95,41 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         }
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         if (in->tDecayMode == 0) {
-          tau *= 1.00;
+          tau *= 0.995;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.095;
+          tau *= 1.06;
         }
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
         if (in->tDecayMode == 0) {
-          tau *= 0.998;
+          tau *= 1.00;
         } else if (in->tDecayMode == 1) {
-          tau *= 1.015;
+          tau *= 0.995;
         }
       }
     }
 
-    // set minimums
-    float mu_pt_min(20. / 1.05), tau_pt_min(20.);
-
     cutflow->Fill(1., 1.);
     // apply event selection
 
-    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mMatchesIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
-    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mMatchesIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
     auto IsoMu22 = in->mMatchesIsoMu22Path && in->mMatchesIsoMu22Filter && in->singleIsoMu22Pass;
     auto IsoTkMu22 = in->mMatchesIsoTkMu22Path && in->mMatchesIsoTkMu22Filter && in->singleIsoTkMu22Pass;
-    auto Cross = in->mMatchesIsoMu19Tau20SingleL1Path && in->mMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path && in->tMatchesIsoMu19Tau20SingleL1Filter && in->singleMu19eta2p1LooseTau20singleL1Pass;
+    auto IsoMu22eta2p1 = in->mMatchesIsoMu22eta2p1Path && in->mMatchesIsoMu22eta2p1Filter && in->singleIsoMu22eta2p1Pass;
+    auto IsoTkMu22eta2p1 = in->mMatchesIsoTkMu22eta2p1Path && in->mMatchesIsoTkMu22eta2p1Filter && in->singleIsoTkMu22eta2p1Pass;
+    auto Cross_v1 = in->singleMu19eta2p1LooseTau20Pass && in->mMatchesIsoMu19Tau20Filter && in->mMatchesIsoMu19Tau20Path
+                    && in->tMatchesIsoMu19Tau20Filter && in->tMatchesIsoMu19Tau20Path;
+    auto Cross_v2 = in->singleMu19eta2p1LooseTau20singleL1Pass &&in->mMatchesIsoMu19Tau20SingleL1Filter && in->mMatchesIsoMu19Tau20SingleL1Path
+                    && in->tMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path;
 
-    if (isEmbed || IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1 || Cross) {
+    if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && in->mPt > 23 && fabs(in->mEta) < 2.1) {
+      cutflow->Fill(2., 1.);
+    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 23 && fabs(in->mEta) < 2.1) {
       cutflow->Fill(2., 1.);
     } else {
       continue;
     }
 
-    if (in->mPt > mu_pt_min && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
-      cutflow->Fill(3., 1.);  // electron kinematic selection
+    if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
+      cutflow->Fill(3., 1.);  // muon kinematic selection
     } else {
       continue;
     }
@@ -141,13 +143,13 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
+    if (tau.Pt() > 30. && fabs(tau.Eta()) < 2.3 && fabs(in->tPVDZ) < 0.2) {
       cutflow->Fill(6., 1.);  // tau kinematic selection
     } else {
       continue;
     }
 
-    if ((in->tByVLooseIsolationMVArun2v1DBoldDMwLT || in->tRerunMVArun2v2DBoldDMwLTVLoose) && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
@@ -181,10 +183,10 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
       muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefaultR04);
-      tauCandidate = std::make_pair(in->tPt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
     } else {  // not a new event
       std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefaultR04);
-      std::pair<float, float> currTauCandidate(in->tPt, in->tByIsolationMVArun2v1DBoldDMwLTraw);
+      std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
 
       // clause 1, select the pair that has most isolated tau lepton 1
       if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;
@@ -409,18 +411,18 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.994, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 1.00, 1.095, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.995, 1.06, 1.00, MET_UESDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-        auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_JESDown, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESUp, tau);
-        do_tes_met_corr(in->tDecayMode, 0.998, 1.015, 1.00, MET_UESDown, tau);
+        auto sf = do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_JESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.00, 0.995, 1.00, MET_UESDown, tau);
         tau *= sf;
       }
     }
