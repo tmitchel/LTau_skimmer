@@ -50,7 +50,8 @@ class etau_tree2018 : public virtual base_tree {
   Float_t get_efake_sf(Float_t);
   Float_t get_mfake_sf(Float_t);
   void do_met_corr_nom(Float_t, energy_scale, TLorentzVector, TLorentzVector*);
-  void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);  TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
+  void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);
+  TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
 
 //////////////////////////////////////////////////////////////////
