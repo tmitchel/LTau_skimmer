@@ -13,8 +13,6 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 
-enum energy_scale { tes, efake, mfake };
-
 class etau_tree2016 : public virtual base_tree {
  private:
   TTree *tree, *original;

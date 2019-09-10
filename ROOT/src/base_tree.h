@@ -7,6 +7,8 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 
+enum energy_scale { tes, efake, mfake };
+
 class base_tree {
  protected:
   Int_t recoil;
