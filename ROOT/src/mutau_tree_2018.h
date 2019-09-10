@@ -35,7 +35,7 @@ class mutau_tree2018 : public virtual base_tree {
   Float_t met_Eta0to3Up, met_Eta0to3Down, met_Eta0to5Up, met_Eta0to5Down, met_Eta3to5Up, met_Eta3to5Down, met_EC2Up, met_EC2Down,
           met_RelBalUp, met_RelBalDown, met_RelSamUp, met_RelSamDown;
   Float_t metphi_Eta0to3Up, metphi_Eta0to3Down, metphi_Eta0to5Up, metphi_Eta0to5Down, metphi_Eta3to5Up, metphi_Eta3to5Down,
-          metphi_EC2Up, metphi_EC2Down, metphi_RelBalUp, metphi_RelBalDown, metphi_RelSamUp, metphi_RelSamDown;  Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
+          metphi_EC2Up, metphi_EC2Down, metphi_RelBalUp, metphi_RelBalDown, metphi_RelSamUp, metphi_RelSamDown;
   Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
   // Member functions
