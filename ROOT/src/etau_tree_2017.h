@@ -20,7 +20,8 @@ class etau_tree2017 : public virtual base_tree {
   etau_input_branches* in;
   bool isMC, isEmbed;
   std::vector<Int_t> good_events;
-  TLorentzVector ele, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
+  TLorentzVector ele, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown, MET_Eta0to3Up, MET_Eta0to3Down, MET_Eta0to5Up, MET_Eta0to5Down,
+                MET_Eta3to5Up, MET_Eta3to5Down, MET_EC2Up, MET_EC2Down, MET_RelBalUp, MET_RelBalDown, MET_RelSamUp, MET_RelSamDown;
 
  public:
   // Member variables
@@ -31,9 +32,11 @@ class etau_tree2017 : public virtual base_tree {
   // // Constructed while running
   Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
-  Float_t pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp,
-      pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
+  Float_t met_Eta0to3Up, met_Eta0to3Down, met_Eta0to5Up, met_Eta0to5Down, met_Eta3to5Up, met_Eta3to5Down, met_EC2Up, met_EC2Down,
+          met_RelBalUp, met_RelBalDown, met_RelSamUp, met_RelSamDown;
+  Float_t metphi_Eta0to3Up, metphi_Eta0to3Down, metphi_Eta0to5Up, metphi_Eta0to5Down, metphi_Eta3to5Up, metphi_Eta3to5Down,
+          metphi_EC2Up, metphi_EC2Down, metphi_RelBalUp, metphi_RelBalDown, metphi_RelSamUp, metphi_RelSamDown;
   Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
   // Member functions
@@ -127,7 +130,8 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
 
     auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
     auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
-    auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
+    auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass 
+                  && in->tMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter;
 
     if (Ele35 && in->ePt > 36) {
       cutflow->Fill(2., 1.);
@@ -272,136 +276,101 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
     MET_JESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
     MET_JESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
+    MET_Eta0to3Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to3Up, 0, in->type1_pfMet_shiftedPhi_JetEta0to3Up, 0);
+    MET_Eta0to3Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to3Down, 0, in->type1_pfMet_shiftedPhi_JetEta0to3Down, 0);
+    MET_Eta0to5Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to5Up, 0, in->type1_pfMet_shiftedPhi_JetEta0to5Up, 0);
+    MET_Eta0to5Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to5Down, 0, in->type1_pfMet_shiftedPhi_JetEta0to5Down, 0);
+    MET_Eta3to5Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta3to5Up, 0, in->type1_pfMet_shiftedPhi_JetEta3to5Up, 0);
+    MET_Eta3to5Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta3to5Down, 0, in->type1_pfMet_shiftedPhi_JetEta3to5Down, 0);
+    MET_EC2Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Up, 0, in->type1_pfMet_shiftedPhi_JetEC2Up, 0);
+    MET_EC2Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Down, 0, in->type1_pfMet_shiftedPhi_JetEC2Down, 0);
+    MET_RelBalUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalUp, 0);
+    MET_RelBalDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalDown, 0);
+    MET_RelSamUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleUp, 0);
+    MET_RelSamDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleDown, 0);
 
-    pfmetcorr_ex = MET.Px();
-    pfmetcorr_ey = MET.Py();
-    pfmetcorr_ex_UESUp = MET_UESUp.Px();
-    pfmetcorr_ey_UESUp = MET_UESUp.Py();
-    pfmetcorr_ex_UESDown = MET_UESDown.Px();
-    pfmetcorr_ey_UESDown = MET_UESDown.Py();
-    pfmetcorr_ex_JESUp = MET_JESUp.Px();
-    pfmetcorr_ey_JESUp = MET_JESUp.Py();
-    pfmetcorr_ex_JESDown = MET_JESDown.Px();
-    pfmetcorr_ey_JESDown = MET_JESDown.Py();
-
+    auto jet_for_correction = in->jetVeto30;
     if (recoil == 1) {
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET.Px(),           // uncorrected type I pf met px (float)
-          MET.Py(),           // uncorrected type I pf met py (float)
-          in->genpX,          // generator Z/W/Higgs px (float)
-          in->genpY,          // generator Z/W/Higgs py (float)
-          in->vispX,          // generator visible Z/W/Higgs px (float)
-          in->vispY,          // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,       // corrected type I pf met px (float)
-          pfmetcorr_ey);      // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_JESUp.Px(),       // uncorrected type I pf met px (float)
-          MET_JESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,            // generator Z/W/Higgs px (float)
-          in->genpY,            // generator Z/W/Higgs py (float)
-          in->vispX,            // generator visible Z/W/Higgs px (float)
-          in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,    // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
-          pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_UESUp.Px(),       // uncorrected type I pf met px (float)
-          MET_UESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,            // generator Z/W/Higgs px (float)
-          in->genpY,            // generator Z/W/Higgs py (float)
-          in->vispX,            // generator visible Z/W/Higgs px (float)
-          in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,    // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
-          pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_JESDown.Px(),       // uncorrected type I pf met px (float)
-          MET_JESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,              // generator Z/W/Higgs px (float)
-          in->genpY,              // generator Z/W/Higgs py (float)
-          in->vispX,              // generator visible Z/W/Higgs px (float)
-          in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,      // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
-          pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_UESDown.Px(),       // uncorrected type I pf met px (float)
-          MET_UESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,              // generator Z/W/Higgs px (float)
-          in->genpY,              // generator Z/W/Higgs py (float)
-          in->vispX,              // generator visible Z/W/Higgs px (float)
-          in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets + 1,      // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
-          pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
-
-    } else if (recoil == 2) {
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET.Px(),       // uncorrected type I pf met px (float)
-          MET.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,      // generator Z/W/Higgs px (float)
-          in->genpY,      // generator Z/W/Higgs py (float)
-          in->vispX,      // generator visible Z/W/Higgs px (float)
-          in->vispY,      // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,  // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex,   // corrected type I pf met px (float)
-          pfmetcorr_ey);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_JESUp.Px(),       // uncorrected type I pf met px (float)
-          MET_JESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,            // generator Z/W/Higgs px (float)
-          in->genpY,            // generator Z/W/Higgs py (float)
-          in->vispX,            // generator visible Z/W/Higgs px (float)
-          in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,        // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_JESUp,   // corrected type I pf met px (float)
-          pfmetcorr_ey_JESUp);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_UESUp.Px(),       // uncorrected type I pf met px (float)
-          MET_UESUp.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,            // generator Z/W/Higgs px (float)
-          in->genpY,            // generator Z/W/Higgs py (float)
-          in->vispX,            // generator visible Z/W/Higgs px (float)
-          in->vispY,            // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,        // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_UESUp,   // corrected type I pf met px (float)
-          pfmetcorr_ey_UESUp);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_JESDown.Px(),       // uncorrected type I pf met px (float)
-          MET_JESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,              // generator Z/W/Higgs px (float)
-          in->genpY,              // generator Z/W/Higgs py (float)
-          in->vispX,              // generator visible Z/W/Higgs px (float)
-          in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,          // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_JESDown,   // corrected type I pf met px (float)
-          pfmetcorr_ey_JESDown);  // corrected type I pf met py (float)
-
-      recoilPFMetCorrector.CorrectByMeanResolution(
-          MET_UESDown.Px(),       // uncorrected type I pf met px (float)
-          MET_UESDown.Py(),       // uncorrected type I pf met py (float)
-          in->genpX,              // generator Z/W/Higgs px (float)
-          in->genpY,              // generator Z/W/Higgs py (float)
-          in->vispX,              // generator visible Z/W/Higgs px (float)
-          in->vispY,              // generator visible Z/W/Higgs py (float)
-          in->jetVeto30WoNoisyJets,          // number of jets (hadronic jet multiplicity) (int)
-          pfmetcorr_ex_UESDown,   // corrected type I pf met px (float)
-          pfmetcorr_ey_UESDown);  // corrected type I pf met py (float)
+      jet_for_correction += 1;
     }
 
+    // comments on this one apply to all others as well
+    recoilPFMetCorrector.CorrectByMeanResolution(
+        MET.Px(),            // uncorrected type I pf met px (float)
+        MET.Py(),            // uncorrected type I pf met py (float)
+        in->genpX,           // generator Z/W/Higgs px (float)
+        in->genpY,           // generator Z/W/Higgs py (float)
+        in->vispX,           // generator visible Z/W/Higgs px (float)
+        in->vispY,           // generator visible Z/W/Higgs py (float)
+        jet_for_correction,  // number of jets (hadronic jet multiplicity) (int)
+        pfmetcorr_ex,        // corrected type I pf met px (float)
+        pfmetcorr_ey);       // corrected type I pf met py (float)
     MET.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
-    MET_UESUp.SetPxPyPzE(pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, 0, sqrt(pfmetcorr_ex_UESUp * pfmetcorr_ex_UESUp + pfmetcorr_ey_UESUp * pfmetcorr_ey_UESUp));
-    MET_UESDown.SetPxPyPzE(pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, 0, sqrt(pfmetcorr_ex_UESDown * pfmetcorr_ex_UESDown + pfmetcorr_ey_UESDown * pfmetcorr_ey_UESDown));
-    MET_JESUp.SetPxPyPzE(pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, 0, sqrt(pfmetcorr_ex_JESUp * pfmetcorr_ex_JESUp + pfmetcorr_ey_JESUp * pfmetcorr_ey_JESUp));
-    MET_JESDown.SetPxPyPzE(pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown, 0, sqrt(pfmetcorr_ex_JESDown * pfmetcorr_ex_JESDown + pfmetcorr_ey_JESDown * pfmetcorr_ey_JESDown));
+
+    // JES
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_JESUp.Px(), MET_JESUp.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_UESUp.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_JESDown.Px(), MET_JESDown.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_JESDown.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_UESDown.Px(), MET_UESDown.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_UESDown.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_UESDown.Px(), MET_UESDown.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_UESDown.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta0to3Up.Px(), MET_Eta0to3Up.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta0to3Up.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta0to3Down.Px(), MET_Eta0to3Down.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta0to3Down.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta0to5Up.Px(), MET_Eta0to5Up.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta0to5Up.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta0to5Down.Px(), MET_Eta0to5Down.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta0to5Down.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta3to5Up.Px(), MET_Eta3to5Up.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta3to5Up.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_Eta3to5Down.Px(), MET_Eta3to5Down.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_Eta3to5Down.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_EC2Up.Px(), MET_EC2Up.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_EC2Up.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_EC2Down.Px(), MET_EC2Down.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_EC2Down.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_RelBalUp.Px(), MET_RelBalUp.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_RelBalUp.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_RelBalDown.Px(), MET_RelBalDown.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_RelBalDown.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_RelSamUp.Px(), MET_RelSamUp.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_RelSamUp.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
+
+    recoilPFMetCorrector.CorrectByMeanResolution(MET_RelSamDown.Px(), MET_RelSamDown.Py(), in->genpX, in->genpY,
+                                                  in->vispX, in->vispY, jet_for_correction, pfmetcorr_ex, pfmetcorr_ey);
+    MET_RelSamDown.SetPxPyPzE(pfmetcorr_ex, pfmetcorr_ey, 0, sqrt(pfmetcorr_ex * pfmetcorr_ex + pfmetcorr_ey * pfmetcorr_ey));
 
     if (isMC && !isEmbed) {
       // met correction due to tau energy scale
@@ -411,6 +380,18 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_JESDown, tau);
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESUp, tau);
         do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_UESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_EC2Up, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_EC2Down, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta0to3Up, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta0to3Down, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta0to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta0to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta3to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_Eta3to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_RelBalUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_RelBalDown, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_RelSamUp, tau);
+        do_tes_met_corr(in->tDecayMode, 1.007, 0.998, 1.001, MET_RelSamDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         auto sf = do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET, tau);
@@ -418,6 +399,18 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_JESDown, tau);
         do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_UESUp, tau);
         do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_UESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_EC2Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_EC2Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta0to3Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta0to3Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta0to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta0to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta3to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_Eta3to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_RelBalUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_RelBalDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_RelSamUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.982, 1.018, 1.00, MET_RelSamDown, tau);
         tau *= sf;
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
         auto sf = do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET, tau);
@@ -425,6 +418,18 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_JESDown, tau);
         do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_UESUp, tau);
         do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_UESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_EC2Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_EC2Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta0to3Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta0to3Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta0to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta0to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta3to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_Eta3to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_RelBalUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_RelBalDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_RelSamUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.998, 0.992, 1.00, MET_RelSamDown, tau);
         tau *= sf;
       }
     } else if (isEmbed) {
@@ -434,6 +439,18 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_JESDown, tau);
         do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESUp, tau);
         do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_UESDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_EC2Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_EC2Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta0to3Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta0to3Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta0to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta0to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta3to5Up, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_Eta3to5Down, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_RelBalUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_RelBalDown, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_RelSamUp, tau);
+        do_tes_met_corr(in->tDecayMode, 0.975, 0.975 * 1.051, 0.975 * 0.975 * 0.975, MET_RelSamDown, tau);
         tau *= sf;
       }
     }
@@ -447,10 +464,35 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     met_JESDown = MET_JESDown.Pt();
     met_UESUp = MET_UESUp.Pt();
     met_UESDown = MET_UESDown.Pt();
+    met_EC2Up = MET_EC2Up.Pt();
+    met_EC2Down = MET_EC2Down.Pt();
+    met_Eta0to3Up = MET_Eta0to3Up.Pt();
+    met_Eta0to3Down = MET_Eta0to3Down.Pt();
+    met_Eta0to5Up = MET_Eta0to5Up.Pt();
+    met_Eta0to5Down = MET_Eta0to5Down.Pt();
+    met_Eta3to5Up = MET_Eta3to5Up.Pt();
+    met_Eta3to5Down = MET_Eta3to5Down.Pt();
+    met_RelBalUp = MET_RelBalUp.Pt();
+    met_RelBalDown = MET_RelBalDown.Pt();
+    met_RelSamUp = MET_RelSamUp.Pt();
+    met_RelSamDown = MET_RelSamDown.Pt();
+
     metphi_JESUp = MET_JESUp.Phi();
     metphi_JESDown = MET_JESDown.Phi();
     metphi_UESUp = MET_UESUp.Phi();
     metphi_UESDown = MET_UESDown.Phi();
+    metphi_EC2Up = MET_EC2Up.Phi();
+    metphi_EC2Down = MET_EC2Down.Phi();
+    metphi_Eta0to3Up = MET_Eta0to3Up.Phi();
+    metphi_Eta0to3Down = MET_Eta0to3Down.Phi();
+    metphi_Eta0to5Up = MET_Eta0to5Up.Phi();
+    metphi_Eta0to5Down = MET_Eta0to5Down.Phi();
+    metphi_Eta3to5Up = MET_Eta3to5Up.Phi();
+    metphi_Eta3to5Down = MET_Eta3to5Down.Phi();
+    metphi_RelBalUp = MET_RelBalUp.Phi();
+    metphi_RelBalDown = MET_RelBalDown.Phi();
+    metphi_RelSamUp = MET_RelSamUp.Phi();
+    metphi_RelSamDown = MET_RelSamDown.Phi();
 
     m_1 = ele.M();
     px_1 = ele.Px();
@@ -492,16 +534,6 @@ void etau_tree2017::set_branches() {
   tree->Branch("extraelec_veto", &extraelec_veto);
   tree->Branch("extramuon_veto", &extramuon_veto);
   tree->Branch("dilepton_veto", &dilepton_veto);
-  tree->Branch("pfmetcorr_ex", &pfmetcorr_ex);
-  tree->Branch("pfmetcorr_ey", &pfmetcorr_ey);
-  tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp);
-  tree->Branch("pfmetcorr_ey_UESUp", &pfmetcorr_ey_UESUp);
-  tree->Branch("pfmetcorr_ex_UESDown", &pfmetcorr_ex_UESDown);
-  tree->Branch("pfmetcorr_ey_UESDown", &pfmetcorr_ey_UESDown);
-  tree->Branch("pfmetcorr_ex_JESUp", &pfmetcorr_ex_JESUp);
-  tree->Branch("pfmetcorr_ey_JESUp", &pfmetcorr_ey_JESUp);
-  tree->Branch("pfmetcorr_ex_JESDown", &pfmetcorr_ex_JESDown);
-  tree->Branch("pfmetcorr_ey_JESDown", &pfmetcorr_ey_JESDown);
   tree->Branch("met", &met);
   tree->Branch("metphi", &metphi);
   tree->Branch("met_px", &met_px);
@@ -510,10 +542,34 @@ void etau_tree2017::set_branches() {
   tree->Branch("met_JESDown", &met_JESDown);
   tree->Branch("met_UESUp", &met_UESUp);
   tree->Branch("met_UESDown", &met_UESDown);
+  tree->Branch("met_JetEC2Up", &met_EC2Up);
+  tree->Branch("met_JetEC2Down", &met_EC2Down);
+  tree->Branch("met_JetEta0to3Up", &met_Eta0to3Up);
+  tree->Branch("met_JetEta0to3Down", &met_Eta0to3Down);
+  tree->Branch("met_JetEta0to5Up", &met_Eta0to5Up);
+  tree->Branch("met_JetEta0to5Down", &met_Eta0to5Down);
+  tree->Branch("met_JetEta3to5Up", &met_Eta3to5Up);
+  tree->Branch("met_JetEta3to5Down", &met_Eta3to5Down);
+  tree->Branch("met_JetRelativeBalUp", &met_RelBalUp);
+  tree->Branch("met_JetRelativeBalDown", &met_RelBalDown);
+  tree->Branch("met_JetRelativeSampleUp", &met_RelSamUp);
+  tree->Branch("met_JetRelativeSampleDown", &met_RelSamDown);
   tree->Branch("metphi_JESUp", &metphi_JESUp);
   tree->Branch("metphi_JESDown", &metphi_JESDown);
   tree->Branch("metphi_UESUp", &metphi_UESUp);
   tree->Branch("metphi_UESDown", &metphi_UESDown);
+  tree->Branch("metphi_JetEC2Up", &metphi_EC2Up);
+  tree->Branch("metphi_JetEC2Down", &metphi_EC2Down);
+  tree->Branch("metphi_JetEta0to3Up", &metphi_Eta0to3Up);
+  tree->Branch("metphi_JetEta0to3Down", &metphi_Eta0to3Down);
+  tree->Branch("metphi_JetEta0to5Up", &metphi_Eta0to5Up);
+  tree->Branch("metphi_JetEta0to5Down", &metphi_Eta0to5Down);
+  tree->Branch("metphi_JetEta3to5Up", &metphi_Eta3to5Up);
+  tree->Branch("metphi_JetEta3to5Down", &metphi_Eta3to5Down);
+  tree->Branch("metphi_JetRelativeBalUp", &metphi_RelBalUp);
+  tree->Branch("metphi_JetRelativeBalDown", &metphi_RelBalDown);
+  tree->Branch("metphi_JetRelativeSampleUp", &metphi_RelSamUp);
+  tree->Branch("metphi_JetRelativeSampleDown", &metphi_RelSamDown);
   tree->Branch("m_1", &m_1);
   tree->Branch("px_1", &px_1);
   tree->Branch("py_1", &py_1);

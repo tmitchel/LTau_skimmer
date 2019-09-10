@@ -622,6 +622,8 @@ class etau_input_branches {
   Float_t tripleMu12_10_5Pass;
   Float_t type1_pfMetEt;
   Float_t type1_pfMetPhi;
+  Float_t type1_pfMet_shiftedPhi_JetEC2Down;
+  Float_t type1_pfMet_shiftedPhi_JetEC2Up;
   Float_t type1_pfMet_shiftedPhi_JetEnDown;
   Float_t type1_pfMet_shiftedPhi_JetEnUp;
   Float_t type1_pfMet_shiftedPhi_JetEta0to3Down;
@@ -640,6 +642,8 @@ class etau_input_branches {
   Float_t type1_pfMet_shiftedPhi_JetTotalUp;
   Float_t type1_pfMet_shiftedPhi_UnclusteredEnDown;
   Float_t type1_pfMet_shiftedPhi_UnclusteredEnUp;
+  Float_t type1_pfMet_shiftedPt_JetEC2Down;
+  Float_t type1_pfMet_shiftedPt_JetEC2Up;
   Float_t type1_pfMet_shiftedPt_JetEnDown;
   Float_t type1_pfMet_shiftedPt_JetEnUp;
   Float_t type1_pfMet_shiftedPt_JetEta0to3Down;
@@ -1320,6 +1324,8 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("tripleMu12_10_5Pass", &tripleMu12_10_5Pass);
   tree->SetBranchAddress("type1_pfMetEt", &type1_pfMetEt);
   tree->SetBranchAddress("type1_pfMetPhi", &type1_pfMetPhi);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEC2Down", &type1_pfMet_shiftedPhi_JetEC2Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEC2Up", &type1_pfMet_shiftedPhi_JetEC2Up);  
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown", &type1_pfMet_shiftedPhi_JetEnDown);
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnUp", &type1_pfMet_shiftedPhi_JetEnUp);
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to3Down", &type1_pfMet_shiftedPhi_JetEta0to3Down);
@@ -1338,6 +1344,8 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetTotalUp", &type1_pfMet_shiftedPhi_JetTotalUp);
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnDown", &type1_pfMet_shiftedPhi_UnclusteredEnDown);
   tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnUp", &type1_pfMet_shiftedPhi_UnclusteredEnUp);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEC2Down", &type1_pfMet_shiftedPt_JetEC2Down);
+  tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEC2Up", &type1_pfMet_shiftedPt_JetEC2Up);
   tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnDown", &type1_pfMet_shiftedPt_JetEnDown);
   tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnUp", &type1_pfMet_shiftedPt_JetEnUp);
   tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to3Down", &type1_pfMet_shiftedPt_JetEta0to3Down);
