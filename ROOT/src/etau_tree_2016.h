@@ -343,26 +343,26 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     }
 
     // do recoil corrections on all met
-    for (int i = 0; i < mets.size(); i++) {
+    for (unsigned i = 0; i < mets.size(); i++) {
       do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
     }
 
     if (isMC) {
       // met correction due to tau energy scale
       if (in->tZTTGenMatching == 5) {
-        for (int i = 0; i < mets.size(); i++) {
+        for (unsigned i = 0; i < mets.size(); i++) {
           do_met_corr_nom(in->tDecayMode, tes, tau, mets.at(i));
         }
         tau *= get_tes_sf(in->tDecayMode);
       } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
         // electron -> tau fake energy scale
-        for (int i = 0; i < mets.size(); i++) {
+        for (unsigned i = 0; i < mets.size(); i++) {
           do_met_corr_nom(in->tDecayMode, efake, tau, mets.at(i));
         }
         tau *= get_efake_sf(in->tDecayMode);
       } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
         // muon -> tau fake energy scale
-        for (int i = 0; i < mets.size(); i++) {
+        for (unsigned i = 0; i < mets.size(); i++) {
           do_met_corr_nom(in->tDecayMode, mfake, tau, mets.at(i));
         }
         tau *= get_mfake_sf(in->tDecayMode);
