@@ -30,6 +30,7 @@ class etau_tree2017 : public virtual base_tree {
   Float_t placeholder;  // for all branches not present in 2018
 
   // // Constructed while running
+  Int_t era;
   Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
   Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
@@ -64,7 +65,8 @@ etau_tree2017::etau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEm
                                                                                                   in(new etau_input_branches(Original)),
                                                                                                   isMC(IsMC),
                                                                                                   isEmbed(IsEmbed),
-                                                                                                  recoil(rec) {}
+                                                                                                  recoil(rec),
+                                                                                                  era(2017) {}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -525,6 +527,7 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 //////////////////////////////////////////////////////////////////
 void etau_tree2017::set_branches() {
   // new branches
+  tree->Branch("era", &era);
   tree->Branch("run", &Run);
   tree->Branch("lumi", &Lumi);
   tree->Branch("gen_match_1", &gen_match_1);
