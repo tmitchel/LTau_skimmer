@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
   RecoilCorrector recoilPFMetCorrector(recoilname.c_str());
   MEtSys metSys(recoilSysname.c_str());
   TH1F *nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
-  TH1F *cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
+  TH1F *cutflow = new TH1F("cutflow", "cutflow", 15, 0.5, 15.5);
 
   auto open_file = new TFile(ifile.c_str(), "READ");
   auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton + "/final/Ntuple").c_str()));
