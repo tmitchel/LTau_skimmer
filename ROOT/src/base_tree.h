@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include "RecoilCorrector.h"
+#include "HTT-utilities/RecoilCorrections/interface/RecoilCorrector.h"
+#include "HTT-utilities/RecoilCorrections/interface/MEtSys.h"
 #include "TLorentzVector.h"
 #include "TTree.h"
 
@@ -24,7 +25,7 @@ class base_tree {
   virtual ~base_tree() {}
   virtual void do_skimming(TH1F*) = 0;
   virtual void set_branches() = 0;
-  virtual TTree* fill_tree(RecoilCorrector recoilPFMetCorrector) = 0;
+  virtual TTree* fill_tree(RecoilCorrector, MEtSys) = 0;
 };
 
 #endif  // ROOT_SRC_BASE_TREE_H_
