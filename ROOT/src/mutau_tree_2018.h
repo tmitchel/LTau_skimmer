@@ -181,12 +181,12 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2)
+        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayMode != 5 && in->tDecayMode != 6 && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
             continue;
 
-        if (in->tAgainstMuonTight3 > 0.5 && in->tAgainstElectronVLooseMVA6 > 0.5)
+        if (in->tAgainstMuonTight3 > 0.5 && in->tAgainstElectronVLooseMVA62018 > 0.5)
             cutflow->Fill(8., 1.);  // tau against leptons
         else
             continue;
@@ -202,6 +202,12 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
             continue;
         }
 
+        if (in->mRelPFIsoDBDefault) {
+            cutflow->Fill(11., 1.);
+        } else {
+            continue;
+        }
+
         // implement new sorting per
         // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
         if (evt_now != evt_before) {  // new event, save the tau candidates
@@ -210,10 +216,10 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
 
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
-            muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefaultR04);
+            muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefault);
             tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
         } else {  // not a new event
-            std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefaultR04);
+            std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefault);
             std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
