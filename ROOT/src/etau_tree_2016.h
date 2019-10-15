@@ -134,13 +134,13 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->ePt > 26. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
+    if (ele.Pt() > 26. && fabs(ele.Eta()) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
       cutflow->Fill(4., 1.);  // electron kinematic selection
     } else {
       continue;
     }
 
-    if (in->eMVANoisoWP80 && in->ePassesConversionVeto && in->eMissingHits < 2) {
+    if (in->eMVANoisoWP90 && in->ePassesConversionVeto && in->eMissingHits < 2) {
       cutflow->Fill(5., 1.);  // electron quality selection
     } else {
       continue;
@@ -152,7 +152,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFindingNewDMs > 0 && fabs(in->tCharge) < 2) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
@@ -170,7 +170,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->e_t_DR > 0.5) {
+    if (ele.DeltaR(tau) > 0.5) {
       cutflow->Fill(10., 1.);
     } else {
       continue;

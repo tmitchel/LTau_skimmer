@@ -125,15 +125,15 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
     auto Cross_v2 = in->singleMu19eta2p1LooseTau20singleL1Pass &&in->mMatchesIsoMu19Tau20SingleL1Filter && in->mMatchesIsoMu19Tau20SingleL1Path
                     && in->tMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path;
 
-    if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && in->mPt > 23 && fabs(in->mEta) < 2.1) {
+    if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
       cutflow->Fill(2., 1.);
-    } else if ((Cross_v1 || Cross_v2) && in->mPt > 21 && in->mPt < 23 && fabs(in->mEta) < 2.1) {
+    } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
       cutflow->Fill(2., 1.);
     } else {
       continue;
     }
 
-    if (in->mPt > 21. && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
+    if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
       cutflow->Fill(3., 1.);  // muon kinematic selection
     } else {
       continue;
@@ -151,7 +151,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayModeFinding > 0 && fabs(in->tCharge) < 2) {
+    if (in->tRerunMVArun2v2DBoldDMwLTVLoose) {
       cutflow->Fill(7., 1.);  // tau quality selection
     } else {
       continue;
@@ -169,7 +169,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
       continue;
     }
 
-    if (in->m_t_DR > 0.5) {
+    if (mu.DeltaR(tau) > 0.5) {
       cutflow->Fill(10., 1.);
     } else {
       continue;
@@ -184,10 +184,10 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
 
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
-      muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefaultR04);
+      muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefault);
       tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
     } else {  // not a new event
-      std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefaultR04);
+      std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefault);
       std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
 
       // clause 1, select the pair that has most isolated tau lepton 1

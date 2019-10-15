@@ -166,7 +166,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     else
       continue;
 
-    if (in->eMVANoisoWP80 && in->ePassesConversionVeto && in->eMissingHits < 2)
+    if (in->eMVANoisoWP90 && in->ePassesConversionVeto && in->eMissingHits < 2)
       cutflow->Fill(5., 1.);  // electron quality selection
     else
       continue;
@@ -191,7 +191,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
     else
       continue;
 
-    if (in->e_t_DR > 0.5) {
+    if (ele.DeltaR(tau) > 0.) {
       cutflow->Fill(10., 1.);
     } else {
       continue;

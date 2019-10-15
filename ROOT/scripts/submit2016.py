@@ -81,8 +81,7 @@ ggh_samples = {
 sig_samples = {
    'ggh125_powheg' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3', 'Z'],
    
-   'vbf125_powheg_v1' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
-   'vbf125_powheg_v2' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_forcedmu_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext5-v2', 'Z'],
+   'vbf125_powheg' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
    'wplus125_powheg' : ['WminusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'wminus125_powheg' : ['WplusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'zh125_powheg' : ['ZHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
@@ -112,6 +111,12 @@ sig_samples = {
    'tth125_JHU_a3int-prod_nom-decay' : ['ttHiggs0Mf05ph0ToTauTau_M-125_13TeV-JHUGenV7_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
 }
 
+
+# data_MuonEG_Run2016B_v2  data_MuonEG_Run2016G             data_SingleElectron_Run2016D  data_SingleElectron_Run2016H  data_SingleMuon_Run2016E  data_Tau_Run2016D
+# data_MuonEG_Run2016C     data_MuonEG_Run2016H             data_SingleElectron_Run2016E  data_SingleMuon_Run2016B_v2   data_SingleMuon_Run2016F  data_Tau_Run2016E
+# data_MuonEG_Run2016D     data_SingleElectron_Run2016B_v2  data_SingleElectron_Run2016F  data_SingleMuon_Run2016C      data_SingleMuon_Run2016G  data_Tau_Run2016G
+# data_MuonEG_Run2016E     data_SingleElectron_Run2016C     data_SingleElectron_Run2016G  data_SingleMuon_Run2016D      data_SingleMuon_Run2016H  data_Tau_Run2016H
+
 el_data_samples = {
     "datasE-B_v1": ["data_SingleElectron_Run2016B_v1", '0'],
     "datasE-B_v2": ["data_SingleElectron_Run2016B_v2", '0'],
@@ -123,8 +128,28 @@ el_data_samples = {
     "datasE-H": ["data_SingleElectron_Run2016H", '0'],
 }
 
+el_data_samples_resub = {
+    "datasE-B_v2": ["data_SingleElectron_Run2016B_v2", '0'],
+    "datasE-C": ["data_SingleElectron_Run2016C", '0'],
+    "datasE-D": ["data_SingleElectron_Run2016D", '0'],
+    "datasE-E": ["data_SingleElectron_Run2016E", '0'],
+    "datasE-F": ["data_SingleElectron_Run2016F", '0'],
+    "datasE-G": ["data_SingleElectron_Run2016G", '0'],
+    "datasE-H": ["data_SingleElectron_Run2016H", '0'],
+}
+
 mu_data_samples = {
     "datasMu-B_v1": ["data_SingleMuon_Run2016B_v1", '0'],
+    "datasMu-B_v2": ["data_SingleMuon_Run2016B_v2", '0'],
+    "datasMu-C": ["data_SingleMuon_Run2016C", '0'],
+    "datasMu-D": ["data_SingleMuon_Run2016D", '0'],
+    "datasMu-E": ["data_SingleMuon_Run2016E", '0'],
+    "datasMu-F": ["data_SingleMuon_Run2016F", '0'],
+    "datasMu-G": ["data_SingleMuon_Run2016G", '0'],
+    "datasMu-H": ["data_SingleMuon_Run2016H", '0'],
+}
+
+mu_data_samples_resub = {
     "datasMu-B_v2": ["data_SingleMuon_Run2016B_v2", '0'],
     "datasMu-C": ["data_SingleMuon_Run2016C", '0'],
     "datasMu-D": ["data_SingleMuon_Run2016D", '0'],
@@ -160,6 +185,8 @@ jobType = args.job
 
 bkg_pref = "/hdfs/store/user/abdollah/FSA_MC_2016/"
 el_data_pref = "/hdfs/store/user/abdollah/FSA_Data_et_2016/"
+el_data_pref_v1 = '/hdfs/store/user/aloeliger/SMHTT_2016_data/'
+el_data_pref_v2 = '/hdfs/store/user/aloeliger/SMHTT_2016_data_Resub/'
 mu_data_pref = "/hdfs/store/user/abdollah/FSA_Data_mt_2016/"
 ggh_pref = '/hdfs/store/user/ymaravin/SMHTT_2016/'
 sig_pref = '/hdfs/store/user/abdollah/FSA_Signal_2016/'
@@ -171,7 +198,11 @@ settings = {
     'sig': [sig_pref, sig_samples],
     'ggh': [ggh_pref, ggh_samples],
     'dataMu': [mu_data_pref, mu_data_samples],
+    'dataMu_v1': [el_data_pref_v1, mu_data_samples],
+    'dataMu_v2': [el_data_pref_v2, mu_data_samples_resub],
     'dataEl': [el_data_pref, el_data_samples],
+    'dataEl_v1': [el_data_pref_v1, el_data_samples],
+    'dataEl_v2': [el_data_pref_v2, el_data_samples_resub],
     'embedMu': [mu_embed_pref, mu_embedded_samples],
     'embedEl': [el_embed_pref, el_embedded_samples],
     'bkg1': [bkg_pref, bkg_samples_batch1],
