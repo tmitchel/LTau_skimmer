@@ -149,7 +149,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && fabs(in->tCharge) < 2) {
+        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
             continue;
@@ -169,6 +169,12 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
 
         if (ele.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
+        } else {
+            continue;
+        }
+
+        if (in->eRelPFIsoRho < 0.5) {
+            cutflow->Fill(11., 1.);
         } else {
             continue;
         }

@@ -155,7 +155,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && fabs(in->tCharge) < 2) {
+        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayMode != 5 && in->tDecayMode != 6 && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
             continue;
@@ -175,6 +175,12 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
 
         if (mu.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
+        } else {
+            continue;
+        }
+
+        if (in->mRelPFIsoDBDefault < 0.5) {
+            cutflow->Fill(11., 1.);
         } else {
             continue;
         }
@@ -354,6 +360,11 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
             jet_for_correction += 1;
         }
 
+        // do recoil corrections on all met
+        for (unsigned i = 0; i < mets.size(); i++) {
+            do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
+        }
+
         float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
         metSys.ApplyMEtSys(MET_resp_Up.Px(), MET_resp_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
@@ -371,11 +382,6 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
         MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                  sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-
-        // do recoil corrections on all met
-        for (unsigned i = 0; i < mets.size(); i++) {
-            do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
-        }
 
         if (isMC) {
             // met correction due to tau energy scale
