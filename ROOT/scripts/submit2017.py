@@ -156,7 +156,11 @@ sig_samples_p3 = {
     'vbf125_JHU_a1-prod_ps-decay': ['VBFHiggs0PMToTauTauPseudoscalarDecay_M125_13TeV_JHUGenV7011_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
 }
 
-el_data_samples = {
+sig_samples = {
+
+}
+
+data_et_samples = {
     'datasE-B': ['data_SingleElectron_Run2017B-31Mar2018', '0'],
     'datasE-C': ['data_SingleElectron_Run2017C-31Mar2018', '0'],
     'datasE-D': ['data_SingleElectron_Run2017D-31Mar2018', '0'],
@@ -164,7 +168,7 @@ el_data_samples = {
     'datasE-F': ['data_SingleElectron_Run2017F-31Mar2018', '0'],
 }
 
-mu_data_samples = {
+data_mt_samples = {
     'datasMu-B': ['data_SingleMuon_Run2017B-31Mar2018', '0'],
     'datasMu-C': ['data_SingleMuon_Run2017C-31Mar2018', '0'],
     'datasMu-D': ['data_SingleMuon_Run2017D-31Mar2018', '0'],
@@ -172,7 +176,7 @@ mu_data_samples = {
     'datasMu-F': ['data_SingleMuon_Run2017F-31Mar2018', '0'],
 }
 
-el_embedded_samples = {
+embed_et_samples = {
     'embedEl-B': ['embedded_EmbeddingRun2017B_ElTauFinalState', '0'],
     'embedEl-C': ['embedded_EmbeddingRun2017C_ElTauFinalState', '0'],
     'embedEl-D': ['embedded_EmbeddingRun2017D_ElTauFinalState', '0'],
@@ -180,7 +184,7 @@ el_embedded_samples = {
     'embedEl-F': ['embedded_EmbeddingRun2017F_ElTauFinalState', '0'],
 }
 
-mu_embedded_samples = {
+embed_mt_samples = {
     'embedMu-B': ['embedded_EmbeddingRun2017B_MuTauFinalState', '0'],
     'embedMu-C': ['embedded_EmbeddingRun2017C_MuTauFinalState', '0'],
     'embedMu-D': ['embedded_EmbeddingRun2017D_MuTauFinalState', '0'],
@@ -191,30 +195,46 @@ mu_embedded_samples = {
 prefix = args.prefix
 jobType = args.job
 
-#bkg_pref = '/hdfs/store/user/ymaravin/SMHTT_2017_legacy_mc_v2/'
-sig_pref = '/hdfs/store/user/ymaravin/SMHTT_2017_legacy_signal_v2/'
-bkg_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v1/'
-data_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v2/'
-embed_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_embedded_v1/'
-sig_p1_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part1/'
-sig_p2_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part2/'
-sig_p3_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part3/'
+sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
+bkg_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
+embed_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_embedded_v3/"
+data_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v3/"
 
 settings = {
-    'sig_p1': [sig_p1_pref, sig_samples_p1],
-    'sig_p2': [sig_p2_pref, sig_samples_p2],
-    'sig_p3': [sig_p3_pref, sig_samples_p3],
-
-    'powheg': [bkg_pref, powheg],
-    'ac_signal': [ac_signal, sig_pref],
-    'dataMu': [data_pref, mu_data_samples],
-    'dataEl': [data_pref, el_data_samples],
-    'embedMu': [embed_pref, mu_embedded_samples],
-    'embedEl': [embed_pref, el_embedded_samples],
-    'bkg1': [bkg_pref, bkg_samples_batch1],
-    'bkg2': [bkg_pref, bkg_samples_batch2],
-    'test': [bkg_pref, test_batch],
+  'signal_mt': [sig_mt_pref, sig_samples],
+  'signal_et': [sig_et_pref, sig_samples],
+  'bkg_mt': [bkg_mt_pref, bkg_samples],
+  'bkg_et': [bkg_et_pref, bkg_samples],
+  'dataMu': [data_pref, data_mt_samples],
+  'dataEl': [data_pref, data_et_samples],
+  'embedMu': [embed_pref, embed_mt_samples],
+  'embedEl': [embed_pref, embed_et_samples],
 }
+
+# bkg_pref = '/hdfs/store/user/ymaravin/SMHTT_2017_legacy_mc_v2/'
+# sig_pref = '/hdfs/store/user/ymaravin/SMHTT_2017_legacy_signal_v2/'
+# bkg_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v1/'
+# data_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v2/'
+# embed_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_embedded_v1/'
+# sig_p1_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part1/'
+# sig_p2_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part2/'
+# sig_p3_pref = '/hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part3/'
+
+# settings = {
+#     'sig_p1': [sig_p1_pref, sig_samples_p1],
+#     'sig_p2': [sig_p2_pref, sig_samples_p2],
+#     'sig_p3': [sig_p3_pref, sig_samples_p3],
+# 
+#     'powheg': [bkg_pref, powheg],
+#     'ac_signal': [ac_signal, sig_pref],
+#     'dataMu': [data_pref, mu_data_samples],
+#     'dataEl': [data_pref, el_data_samples],
+#     'embedMu': [embed_pref, mu_embedded_samples],
+#     'embedEl': [embed_pref, el_embedded_samples],
+#     'bkg1': [bkg_pref, bkg_samples_batch1],
+#     'bkg2': [bkg_pref, bkg_samples_batch2],
+#     'test': [bkg_pref, test_batch],
+# }
 
 pref = settings[args.job][0]
 samples = settings[args.job][1]
