@@ -248,9 +248,9 @@ prefix = args.prefix
 jobType = args.job
 
 sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
-bkg_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
+bkg_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3_mt/"
 sig_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_et/"
-bkg_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_et/"
+bkg_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3_et/"
 embed_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_embedded_v3/"
 data_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v3/"
 

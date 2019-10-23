@@ -153,23 +153,23 @@ data_mt_samples = {
 }
 
 embed_et_samples = {
-    'embedEl-B': ['embedded_EmbeddingRun2017B_ElTauFinalState', '0'],
-    'embedEl-C': ['embedded_EmbeddingRun2017C_ElTauFinalState', '0'],
-    'embedEl-D': ['embedded_EmbeddingRun2017D_ElTauFinalState', '0'],
-    'embedEl-E': ['embedded_EmbeddingRun2017E_ElTauFinalState', '0'],
-    'embedEl-F': ['embedded_EmbeddingRun2017F_ElTauFinalState', '0'],
-    'embedEl-G': ['embedded_EmbeddingRun2017G_ElTauFinalState', '0'],
-    'embedEl-H': ['embedded_EmbeddingRun2017H_ElTauFinalState', '0'],
+    'embedEl-B': ['embedded_EmbeddingRun2016B_ElTauFinalState', '0'],
+    'embedEl-C': ['embedded_EmbeddingRun2016C_ElTauFinalState', '0'],
+    'embedEl-D': ['embedded_EmbeddingRun2016D_ElTauFinalState', '0'],
+    'embedEl-E': ['embedded_EmbeddingRun2016E_ElTauFinalState', '0'],
+    'embedEl-F': ['embedded_EmbeddingRun2016F_ElTauFinalState', '0'],
+    'embedEl-G': ['embedded_EmbeddingRun2016G_ElTauFinalState', '0'],
+    'embedEl-H': ['embedded_EmbeddingRun2016H_ElTauFinalState', '0'],
 }
 
 embed_mt_samples = {
-    'embedMu-B': ['embedded_EmbeddingRun2017B_MuTauFinalState', '0'],
-    'embedMu-C': ['embedded_EmbeddingRun2017C_MuTauFinalState', '0'],
-    'embedMu-D': ['embedded_EmbeddingRun2017D_MuTauFinalState', '0'],
-    'embedMu-E': ['embedded_EmbeddingRun2017E_MuTauFinalState', '0'],
-    'embedMu-F': ['embedded_EmbeddingRun2017F_MuTauFinalState', '0'],
-    'embedMu-G': ['embedded_EmbeddingRun2017G_MuTauFinalState', '0'],
-    'embedMu-H': ['embedded_EmbeddingRun2017H_MuTauFinalState', '0'],
+    'embedMu-B': ['embedded_EmbeddingRun2016B_MuTauFinalState', '0'],
+    'embedMu-C': ['embedded_EmbeddingRun2016C_MuTauFinalState', '0'],
+    'embedMu-D': ['embedded_EmbeddingRun2016D_MuTauFinalState', '0'],
+    'embedMu-E': ['embedded_EmbeddingRun2016E_MuTauFinalState', '0'],
+    'embedMu-F': ['embedded_EmbeddingRun2016F_MuTauFinalState', '0'],
+    'embedMu-G': ['embedded_EmbeddingRun2016G_MuTauFinalState', '0'],
+    'embedMu-H': ['embedded_EmbeddingRun2016H_MuTauFinalState', '0'],
 }
 
 prefix = args.prefix
@@ -178,8 +178,8 @@ jobType = args.job
 bkg_mt_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_mt/'
 bkg_et_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_et/'
 bkg_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep/'
-data_pref = ' /hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/'
-embed_pref = ' /hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
+data_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/'
+embed_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
 sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2016_legacy_signal_v3_mt/"
 sig_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2016_legacy_signal_v3_et/"
 

@@ -191,7 +191,7 @@ sig_pref = '/hdfs/store/user/ymaravin/SMHTT_2018/'
 settings = {
   'sig': [sig_pref, sig_samples],
   'bkg1': [bkg_pref1, bkg_samples_batch1],
-  'bkg2': [bkg_pref2, bkg_samples_batch1],
+  'bkg2': [bkg_pref2, bkg_samples_batch2],
   'dataMu': [data_pref, data_mt_samples],
   'dataEl': [data_pref, data_et_samples],
   'embedMu': [embed_pref, embed_mt_samples],
