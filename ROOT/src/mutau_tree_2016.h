@@ -118,7 +118,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
         // apply TES
-        if (isMC) {
+        if (isMC || isEmbed) {
             if (in->tZTTGenMatching == 5) {
                 tau *= get_tes_sf(in->tDecayMode);
             } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
@@ -406,7 +406,7 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
         MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                  sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
 
-        if (isMC) {
+        if (isMC || isEmbed) {
             // met correction due to tau energy scale
             if (in->tZTTGenMatching == 5) {
                 for (unsigned i = 0; i < mets.size(); i++) {
