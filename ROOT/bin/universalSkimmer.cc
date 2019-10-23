@@ -64,18 +64,22 @@ int main(int argc, char *argv[]) {
     treename = "mutau_tree";
   }
 
-  std::string recoilname;
+  std::string recoilname, recoilSysname;
   if (year == "2016") {
     recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2016_legacy.root";
+    recoilSysname = "HTT-utilities/RecoilCorrections/data/PFMEtSys_2016.root";
   } else if (year == "2017") {
     recoilname = "HTT-utilities/RecoilCorrections/data/Type1_PFMET_2017.root";
+    recoilSysname = "HTT-utilities/RecoilCorrections/data/PFMEtSys_2017.root";
   } else if (year == "2018") {
     recoilname = "HTT-utilities/RecoilCorrections/data/TypeI-PFMet_Run2018.root";
+    recoilSysname = "HTT-utilities/RecoilCorrections/data/PFMEtSys_2017.root";
   }
 
   RecoilCorrector recoilPFMetCorrector(recoilname.c_str());
+  MEtSys metSys(recoilSysname.c_str());
   TH1F *nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
-  TH1F *cutflow = new TH1F("cutflow", "cutflow", 10, 0.5, 10.5);
+  TH1F *cutflow = new TH1F("cutflow", "cutflow", 15, 0.5, 15.5);
 
   auto open_file = new TFile(ifile.c_str(), "READ");
   auto ntuple = reinterpret_cast<TTree *>(open_file->Get((lepton + "/final/Ntuple").c_str()));
@@ -133,7 +137,7 @@ int main(int argc, char *argv[]) {
   }
 
   skimmer->do_skimming(cutflow);
-  auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
+  auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector, metSys);
   events += skimmed_tree->GetEntries();
 
   open_file->Close();
