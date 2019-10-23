@@ -310,6 +310,7 @@ class mutau_input_branches {
   Float_t mMatchesMu8e23DZPath;
   Float_t mMatchesMu8e23Filter;
   Float_t mMatchesMu8e23Path;
+  Float_t mMatchEmbeddedFilterMu19Tau20_2016;
   Float_t mMatchEmbeddedFilterMu20Tau27_2017;
   Float_t mMatchEmbeddedFilterMu20Tau27_2018;
   Float_t mMatchEmbeddedFilterMu24;
@@ -517,6 +518,7 @@ class mutau_input_branches {
   Float_t tMatchesIsoMu20Tau27Path;
   Float_t tMatchEmbeddedFilterMu20HPSTau27;
   Float_t tMatchEmbeddedFilterMu20Tau27;
+  Float_t tMatchEmbeddedFilterMu19Tau20;
   Float_t tMediumDeepTau2017v2p1VSe;
   Float_t tMediumDeepTau2017v2p1VSjet;
   Float_t tMediumDeepTau2017v2p1VSmu;
@@ -968,6 +970,7 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("mMatchesMu8e23DZPath", &mMatchesMu8e23DZPath);
   tree->SetBranchAddress("mMatchesMu8e23Filter", &mMatchesMu8e23Filter);
   tree->SetBranchAddress("mMatchesMu8e23Path", &mMatchesMu8e23Path);
+  tree->SetBranchAddress("mMatchEmbeddedFilterMu19Tau20_2016", &mMatchEmbeddedFilterMu19Tau20_2016);
   tree->SetBranchAddress("mMatchEmbeddedFilterMu20Tau27_2017", &mMatchEmbeddedFilterMu20Tau27_2017);
   tree->SetBranchAddress("mMatchEmbeddedFilterMu20Tau27_2018", &mMatchEmbeddedFilterMu20Tau27_2018);
   tree->SetBranchAddress("mMatchEmbeddedFilterMu24", &mMatchEmbeddedFilterMu24);
@@ -1175,6 +1178,7 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("tMatchesIsoMu20Tau27Path", &tMatchesIsoMu20Tau27Path);
   tree->SetBranchAddress("tMatchEmbeddedFilterMu20HPSTau27", &tMatchEmbeddedFilterMu20HPSTau27);
   tree->SetBranchAddress("tMatchEmbeddedFilterMu20Tau27", &tMatchEmbeddedFilterMu20Tau27);
+  tree->SetBranchAddress("tMatchEmbeddedFilterMu19Tau20", &tMatchEmbeddedFilterMu19Tau20);
   tree->SetBranchAddress("tMediumDeepTau2017v2p1VSe", &tMediumDeepTau2017v2p1VSe);
   tree->SetBranchAddress("tMediumDeepTau2017v2p1VSjet", &tMediumDeepTau2017v2p1VSjet);
   tree->SetBranchAddress("tMediumDeepTau2017v2p1VSmu", &tMediumDeepTau2017v2p1VSmu);
