@@ -141,9 +141,9 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
             in->eMatchesEle24HPSTau30Filter && in->eMatchesEle24HPSTau30Path && in->tMatchesEle24HPSTau30Filter && in->tMatchesEle24HPSTau30Path;
         auto Cross_v1 = Cross_base && in->Ele24LooseHPSTau30Pass && in->run < 317509 && isData;
         auto Cross_v2 = Cross_base && in->Ele24LooseHPSTau30TightIDPass && (isMC || (in->run > 317509 && isData));
-        auto Ele32_emb = in->eMatchEmbeddedFilterEle32;
-        auto Ele35_emb = in->eMatchEmbeddedFilterEle35;
-        auto Cross_emb = in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30;
+        auto Ele32_emb = in->eMatchEmbeddedFilterEle32 || fabs(ele.Eta()) > 1.479;
+        auto Ele35_emb = in->eMatchEmbeddedFilterEle35 || fabs(ele.Eta()) > 1.479;
+        auto Cross_emb = (in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30) || fabs(ele.Eta()) > 1.479;
 
         // embedded has it's own trigger paths
         if (isEmbed) {
