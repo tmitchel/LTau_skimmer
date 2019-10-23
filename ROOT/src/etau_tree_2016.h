@@ -199,11 +199,11 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
 
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
-            eleCandidate = std::make_pair(in->ePt, in->eRelPFIsoRho);
+            eleCandidate = std::make_pair(ele.Pt(), in->eRelPFIsoRho);
             tauCandidate = std::make_pair(in->Pt, in->tRerunMVArun2v2DBoldDMwLTraw);
         } else {  // not a new event
-            std::pair<float, float> currEleCandidate(in->ePt, in->eRelPFIsoRho);
-            std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
+            std::pair<float, float> currEleCandidate(ele.Pt(), in->eRelPFIsoRho);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - eleCandidate.second > 0.0001) best_evt = ievt;
