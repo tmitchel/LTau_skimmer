@@ -136,6 +136,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         // apply event selection
         auto Ele25 = in->singleE25eta2p1TightPass && in->eMatchesEle25Path && in->eMatchesEle25Filter;
 
+        // embedded uses same as MC
         if (Ele25) {
             cutflow->Fill(2., 1.);
         } else {

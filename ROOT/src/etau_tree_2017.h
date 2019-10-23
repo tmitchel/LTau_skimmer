@@ -139,15 +139,31 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
         auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass && in->tMatchesEle24Tau30Path &&
                      in->tMatchesEle24Tau30Filter;
+        auto Ele32_emb = in->eMatchEmbeddedFilterEle32;
+        auto Ele35_emb = in->eMatchEmbeddedFilterEle35;
+        auto Cross_emb = in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30;
 
-        if (Ele35 && in->ePt > 36) {
-            cutflow->Fill(2., 1.);
-        } else if (Ele32 && in->ePt > 33) {
-            cutflow->Fill(2., 1.);
-        } else if (Cross && in->ePt > 25 && in->ePt < 33 && fabs(in->eEta) < 2.1 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
-            cutflow->Fill(2., 1.);
+        // embedded has it's own trigger paths
+        if (isEmbed) {
+            if (Ele35_emb && in->ePt > 36) {
+                cutflow->Fill(2., 1.);
+            } else if (Ele32_emb && in->ePt > 33) {
+                cutflow->Fill(2., 1.);
+            } else if (Cross_emb && in->ePt > 25 && fabs(in->eEta) < 2.1 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else {
+                continue;
+            }
         } else {
-            continue;
+            if (Ele35 && in->ePt > 36) {
+                cutflow->Fill(2., 1.);
+            } else if (Ele32 && in->ePt > 33) {
+                cutflow->Fill(2., 1.);
+            } else if (Cross && in->ePt > 25 && fabs(in->eEta) < 2.1 && in->ePt < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else {
+                continue;
+            }
         }
 
         if (in->ePt > 25. && fabs(in->eEta) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
