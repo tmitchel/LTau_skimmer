@@ -141,28 +141,28 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
         auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2017 && in->tMatchEmbeddedFilterMu20HPSTau27;
 
         if (isEmbed) {
-            if (Mu27_emb && in->mPt > 28) {
+            if (Mu27_emb && mu.Pt() > 28) {
                 cutflow->Fill(2., 1.);
-            } else if (Mu24_emb && in->mPt > 25) {
+            } else if (Mu24_emb && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross_emb && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
+            } else if (Cross_emb && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 31 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
             }
         } else {
-            if (Mu27 && in->mPt > 28) {
+            if (Mu27 && mu.Pt() > 28) {
                 cutflow->Fill(2., 1.);
-            } else if (Mu24 && in->mPt > 25) {
+            } else if (Mu24 && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross && in->mPt > 21 && in->mPt < 25 && tau.Pt() > 31 && fabs(in->mEta) < 2.1 && fabs(tau.Eta()) < 2.1) {
+            } else if (Cross && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 31 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
             }
         }
 
-        if (in->mPt > 21 && fabs(in->mEta) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
+        if (mu.Pt() > 21 && fabs(mu.Eta()) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
             cutflow->Fill(3., 1.);  // electron kinematic selection
         else
             continue;
@@ -212,11 +212,11 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
 
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
-            muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefault);
-            tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
+            muCandidate = std::make_pair(mu.Pt(), in->mRelPFIsoDBDefault);
+            tauCandidate = std::make_pair(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
         } else {  // not a new event
-            std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefault);
-            std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTraw);
+            std::pair<float, float> currEleCandidate(mu.Pt(), in->mRelPFIsoDBDefault);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;

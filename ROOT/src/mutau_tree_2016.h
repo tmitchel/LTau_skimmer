@@ -216,11 +216,11 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
 
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
-            muCandidate = std::make_pair(in->mPt, in->mRelPFIsoDBDefault);
-            tauCandidate = std::make_pair(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
+            muCandidate = std::make_pair(mu.Pt(), in->mRelPFIsoDBDefault);
+            tauCandidate = std::make_pair(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTVLoose);
         } else {  // not a new event
-            std::pair<float, float> currEleCandidate(in->mPt, in->mRelPFIsoDBDefault);
-            std::pair<float, float> currTauCandidate(in->tPt, in->tRerunMVArun2v2DBoldDMwLTVLoose);
+            std::pair<float, float> currEleCandidate(mu.Pt(), in->mRelPFIsoDBDefault);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTVLoose);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;
