@@ -83,7 +83,18 @@ mutau_tree2016::mutau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool Is
       efake_dm0_sf(0.995),
       efake_dm1_sf(1.060),
       mfake_dm0_sf(1.000),
-      mfake_dm1_sf(0.995) {}
+      mfake_dm1_sf(0.995) {
+    // set embedded TES
+    if (isEmbed) {
+        tes_dm0_sf = 0.975;
+        tes_dm1_sf = 0.975 * 1.051;
+        tes_dm10_sf = 0.975 * 0.975 * 0.975;
+        efake_dm0_sf = 1.;
+        efake_dm1_sf = 1.;
+        mfake_dm0_sf = 1.;
+        mfake_dm1_sf = 1.;
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
