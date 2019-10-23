@@ -83,7 +83,18 @@ etau_tree2016::etau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEm
       efake_dm0_sf(0.995),
       efake_dm1_sf(1.060),
       mfake_dm0_sf(1.000),
-      mfake_dm1_sf(0.995) {}
+      mfake_dm1_sf(0.995) {
+    // set embedded TES
+    if (isEmbed) {
+        tes_dm0_sf = 0.975;
+        tes_dm1_sf = 0.975 * 1.051;
+        tes_dm10_sf = 0.975 * 0.975 * 0.975;
+        efake_dm0_sf = 1.;
+        efake_dm1_sf = 1.;
+        mfake_dm0_sf = 1.;
+        mfake_dm1_sf = 1.;
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -110,7 +121,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         ele *= in->eCorrectedEt / ele.Energy();
 
         // apply TES
-        if (isMC) {
+        if (isMC || isEmbed) {
             if (in->tZTTGenMatching == 5) {
                 tau *= get_tes_sf(in->tDecayMode);
             } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
@@ -125,6 +136,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         // apply event selection
         auto Ele25 = in->singleE25eta2p1TightPass && in->eMatchesEle25Path && in->eMatchesEle25Filter;
 
+        // embedded uses same as MC
         if (Ele25) {
             cutflow->Fill(2., 1.);
         } else {
@@ -382,7 +394,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                  sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
 
-        if (isMC) {
+        if (isMC || isEmbed) {
             // met correction due to tau energy scale
             if (in->tZTTGenMatching == 5) {
                 for (unsigned i = 0; i < mets.size(); i++) {

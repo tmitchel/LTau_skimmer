@@ -83,7 +83,18 @@ mutau_tree2016::mutau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool Is
       efake_dm0_sf(0.995),
       efake_dm1_sf(1.060),
       mfake_dm0_sf(1.000),
-      mfake_dm1_sf(0.995) {}
+      mfake_dm1_sf(0.995) {
+    // set embedded TES
+    if (isEmbed) {
+        tes_dm0_sf = 0.975;
+        tes_dm1_sf = 0.975 * 1.051;
+        tes_dm10_sf = 0.975 * 0.975 * 0.975;
+        efake_dm0_sf = 1.;
+        efake_dm1_sf = 1.;
+        mfake_dm0_sf = 1.;
+        mfake_dm1_sf = 1.;
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -128,14 +139,26 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
                         in->tMatchesIsoMu19Tau20Filter && in->tMatchesIsoMu19Tau20Path;
         auto Cross_v2 = in->singleMu19eta2p1LooseTau20singleL1Pass && in->mMatchesIsoMu19Tau20SingleL1Filter &&
                         in->mMatchesIsoMu19Tau20SingleL1Path && in->tMatchesIsoMu19Tau20SingleL1Filter && in->tMatchesIsoMu19Tau20SingleL1Path;
+        auto Cross_emb = in->mMatchEmbeddedFilterMu19Tau20_2016 && in->tMatchEmbeddedFilterMu19Tau20;
 
-        if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
-            cutflow->Fill(2., 1.);
-        } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
-            cutflow->Fill(2., 1.);
+        if (isEmbed) {
+            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else if (Cross_emb && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else {
+                continue;
+            }
         } else {
-            continue;
+            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
+                cutflow->Fill(2., 1.);
+            } else {
+                continue;
+            }
         }
+
 
         if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
             cutflow->Fill(3., 1.);  // muon kinematic selection

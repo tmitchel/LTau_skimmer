@@ -145,6 +145,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
         auto Ele35_emb = in->eMatchEmbeddedFilterEle35;
         auto Cross_emb = in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30;
 
+        // embedded has it's own trigger paths
         if (isEmbed) {
             if (Ele35_emb && in->ePt > 36) {
                 cutflow->Fill(2., 1.);
