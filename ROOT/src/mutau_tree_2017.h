@@ -192,13 +192,13 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->m_t_DR > 0.5) {
+        if (mu.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
         } else {
             continue;
         }
 
-        if (in->mRelPFIsoDBDefault) {
+        if (in->mRelPFIsoDBDefault < 0.5) {
             cutflow->Fill(11., 1.);
         } else {
             continue;

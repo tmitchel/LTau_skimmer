@@ -198,13 +198,13 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (ele.DeltaR(tau) > 0.) {
+        if (ele.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
         } else {
             continue;
         }
 
-        if (in->eRelPFIsoRho) {
+        if (in->eRelPFIsoRho < 0.5) {
             cutflow->Fill(11., 1.);
         } else {
             continue;
