@@ -149,7 +149,7 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
                 cutflow->Fill(2., 1.);
             } else if (Ele32_emb && ele.Pt() > 33) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross_emb && ele.Pt() > 25 && fabs(ele.Eta()) < 2.1 && ele.Pt() < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+            } else if (ele.Pt() > 25 && fabs(ele.Eta()) < 2.1 && ele.Pt() < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
@@ -785,6 +785,9 @@ void etau_tree2017::set_branches() {
     tree->Branch("eMatchesEle32Path", &in->eMatchesEle32Path);
     tree->Branch("eMatchesEle35Filter", &in->eMatchesEle35Filter);
     tree->Branch("eMatchesEle35Path", &in->eMatchesEle35Path);
+    tree->Branch("eMatchEmbeddedFilterEle32", &in->eMatchEmbeddedFilterEle32);
+    tree->Branch("eMatchEmbeddedFilterEle35", &in->eMatchEmbeddedFilterEle35);
+    tree->Branch("eMatchEmbeddedFilterEle24Tau30", &in->eMatchEmbeddedFilterEle24Tau30);
     tree->Branch("eMissingHits", &in->eMissingHits);
     tree->Branch("eNearMuonVeto", &in->eNearMuonVeto);
     tree->Branch("eNearestMuonDR", &in->eNearestMuonDR);
@@ -1135,6 +1138,7 @@ void etau_tree2017::set_branches() {
     tree->Branch("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
     tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
     tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
+    tree->Branch("tMatchEmbeddedFilterEle24Tau30", &in->tMatchEmbeddedFilterEle24Tau30);
     tree->Branch("tMediumDeepTau2017v2p1VSe", &in->tMediumDeepTau2017v2p1VSe);
     tree->Branch("tMediumDeepTau2017v2p1VSjet", &in->tMediumDeepTau2017v2p1VSjet);
     tree->Branch("tMediumDeepTau2017v2p1VSmu", &in->tMediumDeepTau2017v2p1VSmu);

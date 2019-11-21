@@ -145,7 +145,7 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
                 cutflow->Fill(2., 1.);
             } else if (Mu24_emb && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross_emb && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 31 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
+            } else if (mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
@@ -877,6 +877,9 @@ void mutau_tree2017::set_branches() {
     tree->Branch("mMatchesIsoTkMu22Path", &in->mMatchesIsoTkMu22Path);
     tree->Branch("mMatchesIsoTkMu22eta2p1Filter", &in->mMatchesIsoTkMu22eta2p1Filter);
     tree->Branch("mMatchesIsoTkMu22eta2p1Path", &in->mMatchesIsoTkMu22eta2p1Path);
+    tree->Branch("mMatchEmbeddedFilterMu24", &in->mMatchEmbeddedFilterMu24);
+    tree->Branch("mMatchEmbeddedFilterMu27", &in->mMatchEmbeddedFilterMu27);
+    tree->Branch("mMatchEmbeddedFilterMu20Tau27_2017", &in->mMatchEmbeddedFilterMu20Tau27_2017);
     tree->Branch("mMiniIsoLoose", &in->mMiniIsoLoose);
     tree->Branch("mMiniIsoMedium", &in->mMiniIsoMedium);
     tree->Branch("mMiniIsoTight", &in->mMiniIsoTight);
@@ -1078,6 +1081,7 @@ void mutau_tree2017::set_branches() {
     tree->Branch("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
     tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
     tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
+    tree->Branch("tMatchEmbeddedFilterMu20HPSTau27", &in->tMatchEmbeddedFilterMu20HPSTau27);
     tree->Branch("tMediumDeepTau2017v2p1VSe", &in->tMediumDeepTau2017v2p1VSe);
     tree->Branch("tMediumDeepTau2017v2p1VSjet", &in->tMediumDeepTau2017v2p1VSjet);
     tree->Branch("tMediumDeepTau2017v2p1VSmu", &in->tMediumDeepTau2017v2p1VSmu);

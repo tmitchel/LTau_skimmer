@@ -878,6 +878,7 @@ void mutau_tree2016::set_branches() {
     tree->Branch("mMatchesIsoTkMu22Path", &in->mMatchesIsoTkMu22Path);
     tree->Branch("mMatchesIsoTkMu22eta2p1Filter", &in->mMatchesIsoTkMu22eta2p1Filter);
     tree->Branch("mMatchesIsoTkMu22eta2p1Path", &in->mMatchesIsoTkMu22eta2p1Path);
+    tree->Branch("mMatchEmbeddedFilterMu19Tau20_2016", &in->mMatchEmbeddedFilterMu19Tau20_2016);
     tree->Branch("mMiniIsoLoose", &in->mMiniIsoLoose);
     tree->Branch("mMiniIsoMedium", &in->mMiniIsoMedium);
     tree->Branch("mMiniIsoTight", &in->mMiniIsoTight);
@@ -1079,6 +1080,7 @@ void mutau_tree2016::set_branches() {
     tree->Branch("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
     tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
     tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
+    tree->Branch("tMatchEmbeddedFilterMu19Tau20", &in->tMatchEmbeddedFilterMu19Tau20);
     tree->Branch("tMediumDeepTau2017v2p1VSe", &in->tMediumDeepTau2017v2p1VSe);
     tree->Branch("tMediumDeepTau2017v2p1VSjet", &in->tMediumDeepTau2017v2p1VSjet);
     tree->Branch("tMediumDeepTau2017v2p1VSmu", &in->tMediumDeepTau2017v2p1VSmu);
