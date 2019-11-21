@@ -186,10 +186,13 @@ bkg_pref1 = '/hdfs/store/user/caillol/SMHTT_2018_17sep_mc/'
 bkg_pref2 = '/hdfs/store/user/caillol/SMHTT_2018_17sep_mc_TT2L2Nu_etmt/'
 data_pref = '/hdfs/store/user/caillol/SMHTT_2018_17sep_data/'
 embed_pref = '/hdfs/store/user/caillol/SMHTT_2018_17sep_embedded/'
-sig_pref = '/hdfs/store/user/ymaravin/SMHTT_2018/'
+sig_et_pref = '/hdfs/store/user/ymaravin/SMHTT_2018_et/'
+sig_mt_pref = '/hdfs/store/user/ymaravin/SMHTT_2018_mt/'
+
 
 settings = {
-  'sig': [sig_pref, sig_samples],
+  'signal_et': [sig_et_pref, sig_samples],
+  'signal_mt': [sig_mt_pref, sig_samples],
   'bkg1': [bkg_pref1, bkg_samples_batch1],
   'bkg2': [bkg_pref2, bkg_samples_batch2],
   'dataMu': [data_pref, data_mt_samples],
