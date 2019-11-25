@@ -149,6 +149,13 @@ sig_samples = {
     'zh125_JHU_a1-prod_nom-decay': ['ZHiggs0PMToTauTau_M125_13TeV_JHUGenV7011_pythia8_-102X_upgrade2018_realistic_v15-v2', '0'],
 }
 
+tmp_sig_samples = {
+    'ggh125_madgraph_two_a1-prod_nom-decay_v1': ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1', 'Z'],
+    'ggh125_madgraph_two_a1-prod_nom-decay_v2': ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
+    'ggh125_madgraph_two_a2-prod_nom-decay': ['GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
+    'ggh125_madgraph_two_a3-prod_nom-decay': ['GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
+}
+
 data_et_samples = {
     'datasE-A': ['data_EGamma_Run2018A-17Sep2018', '0'],
     'datasE-B': ['data_EGamma_Run2018B-17Sep2018', '0'],
@@ -163,7 +170,6 @@ data_mt_samples = {
     'datasMu-D': ['data_SingleMuon_Run2018D-PromptReco', '0'],
 }
 
-# Need to be updated
 embed_et_samples = {
     'embedEl-A': ['embedded_EmbeddingRun2018A_ElTauFinalState', '0'],
     'embedEl-B': ['embedded_EmbeddingRun2018B_ElTauFinalState', '0'],
@@ -171,12 +177,15 @@ embed_et_samples = {
     'embedEl-D': ['embedded_EmbeddingRun2018D_ElTauFinalState', '0'],
 }
 
-# Need to be updated
 embed_mt_samples = {
     'embedMu-A': ['embedded_EmbeddingRun2018A_MuTauFinalState', '0'],
     'embedMu-B': ['embedded_EmbeddingRun2018B_MuTauFinalState', '0'],
     'embedMu-C': ['embedded_EmbeddingRun2018C_MuTauFinalState', '0'],
     'embedMu-D': ['embedded_EmbeddingRun2018D_MuTauFinalState', '0'],
+}
+
+zh_sample = {
+    'zh125_JHU_l1zgint-prod_nom-decay': ['ZHiggs0L1Zgf05ph0ToTauTau_M125_13TeV_JHUGenV7011_pythia8_-102X_upgrade2018_realistic_v15-v2', '0'],
 }
 
 prefix = args.prefix
@@ -188,7 +197,9 @@ data_pref = '/hdfs/store/user/caillol/SMHTT_2018_17sep_data/'
 embed_pref = '/hdfs/store/user/caillol/SMHTT_2018_17sep_embedded/'
 sig_et_pref = '/hdfs/store/user/ymaravin/SMHTT_2018_et/'
 sig_mt_pref = '/hdfs/store/user/ymaravin/SMHTT_2018_mt/'
-
+zh_pref = '/hdfs/store/user/abdollah/FSA_2018_AC/'
+tmp_sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
+tmp_sig_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_et/"
 
 settings = {
   'signal_et': [sig_et_pref, sig_samples],
@@ -199,6 +210,10 @@ settings = {
   'dataEl': [data_pref, data_et_samples],
   'embedMu': [embed_pref, embed_mt_samples],
   'embedEl': [embed_pref, embed_et_samples],
+  'zh': [zh_pref, zh_sample],
+  'tmp_et': [tmp_sig_et_pref, tmp_sig_samples],
+  'tmp_mt': [tmp_sig_mt_pref, tmp_sig_samples],
+
 }
 
 # bkg_pref = '/hdfs/store/user/caillol/SMHTT_2018_legacy_MC_17jul/'
