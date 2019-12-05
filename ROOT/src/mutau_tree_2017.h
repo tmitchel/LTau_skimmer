@@ -957,6 +957,9 @@ void mutau_tree2017::set_branches() {
     tree->Branch("npNLO", &in->npNLO);
     tree->Branch("numGenJets", &in->numGenJets);
     tree->Branch("nvtx", &in->nvtx);
+    tree->Branch("prefiring_weight", &in->prefiring_weight);
+    tree->Branch("prefiring_weight_up", &in->prefiring_weight_up);
+    tree->Branch("prefiring_weight_down", &in->prefiring_weight_down);
     tree->Branch("processID", &in->processID);
     tree->Branch("puppiMetEt", &in->puppiMetEt);
     tree->Branch("puppiMetPhi", &in->puppiMetPhi);
