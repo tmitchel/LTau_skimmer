@@ -21,9 +21,11 @@ class etau_tree2017 : public virtual base_tree {
     etau_input_branches* in;
     bool isMC, isEmbed;
     std::vector<Int_t> good_events;
-    TLorentzVector ele, tau, MET, MET_reso_Up, MET_reso_Down, MET_resp_Up, MET_resp_Down, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown,
-        MET_Eta0to3Up, MET_Eta0to3Down, MET_Eta0to5Up, MET_Eta0to5Down, MET_Eta3to5Up, MET_Eta3to5Down, MET_EC2Up, MET_EC2Down, MET_RelBalUp,
-        MET_RelBalDown, MET_RelSamUp, MET_RelSamDown;
+    TLorentzVector ele, tau, MET, MET_reso_Up, MET_reso_Down, MET_resp_Up, MET_resp_Down;
+    TLorentzVector MET_JERUp, MET_AbsoluteUp, MET_AbsoluteyearUp, MET_BBEC1Up, MET_BBEC1yearUp, MET_EC2Up, MET_EC2yearUp, MET_EnUp, MET_FlavorQCDUp,
+        MET_HFUp, MET_HFyearUp, MET_RelBalUp, MET_RelSamUp, MET_ResUp, MET_TotalUp, MET_UESUp,
+        MET_JERDown, MET_AbsoluteDown, MET_AbsoluteyearDown, MET_BBEC1Down, MET_BBEC1yearDown, MET_EC2Down, MET_EC2yearDown, MET_EnDown,
+        MET_FlavorQCDDown, MET_HFDown, MET_HFyearDown, MET_RelBalDown, MET_RelSamDown, MET_ResDown, MET_TotalDown, MET_UESDown;
 
    public:
     // Member variables
@@ -37,11 +39,15 @@ class etau_tree2017 : public virtual base_tree {
     Float_t tes_dm0_sf, tes_dm1_sf, tes_dm10_sf, efake_dm0_sf, efake_dm1_sf, mfake_dm0_sf, mfake_dm1_sf;
     Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
     Float_t met_reso_Up, met_reso_Down, met_resp_Up, met_resp_Down, metphi_reso_Up, metphi_reso_Down, metphi_resp_Up, metphi_resp_Down;
-    Float_t met_UESUp, met_UESDown, met_JESUp, met_JESDown, metphi_UESUp, metphi_UESDown, metphi_JESUp, metphi_JESDown;
-    Float_t met_Eta0to3Up, met_Eta0to3Down, met_Eta0to5Up, met_Eta0to5Down, met_Eta3to5Up, met_Eta3to5Down, met_EC2Up, met_EC2Down, met_RelBalUp,
-        met_RelBalDown, met_RelSamUp, met_RelSamDown;
-    Float_t metphi_Eta0to3Up, metphi_Eta0to3Down, metphi_Eta0to5Up, metphi_Eta0to5Down, metphi_Eta3to5Up, metphi_Eta3to5Down, metphi_EC2Up,
-        metphi_EC2Down, metphi_RelBalUp, metphi_RelBalDown, metphi_RelSamUp, metphi_RelSamDown;
+    Float_t met_JERUp, met_AbsoluteUp, met_AbsoluteyearUp, met_BBEC1Up, met_BBEC1yearUp, met_EC2Up, met_EC2yearUp, met_EnUp, met_FlavorQCDUp,
+        met_HFUp, met_HFyearUp, met_RelBalUp, met_RelSamUp, met_ResUp, met_TotalUp, met_UESUp,
+        met_JERDown, met_AbsoluteDown, met_AbsoluteyearDown, met_BBEC1Down, met_BBEC1yearDown, met_EC2Down, met_EC2yearDown, met_EnDown,
+        met_FlavorQCDDown, met_HFDown, met_HFyearDown, met_RelBalDown, met_RelSamDown, met_ResDown, met_TotalDown, met_UESDown;
+    Float_t metphi_JERUp, metphi_AbsoluteUp, metphi_AbsoluteyearUp, metphi_BBEC1Up, metphi_BBEC1yearUp, metphi_EC2Up, metphi_EC2yearUp, metphi_EnUp,
+        metphi_FlavorQCDUp, metphi_HFUp, metphi_HFyearUp, metphi_RelBalUp, metphi_RelSamUp, metphi_ResUp, metphi_TotalUp, metphi_UESUp,
+        metphi_JERDown, metphi_AbsoluteDown, metphi_AbsoluteyearDown, metphi_BBEC1Down, metphi_BBEC1yearDown, metphi_EC2Down, metphi_EC2yearDown,
+        metphi_EnDown, metphi_FlavorQCDDown, metphi_HFDown, metphi_HFyearDown, metphi_RelBalDown, metphi_RelSamDown, metphi_ResDown, metphi_TotalDown,
+        metphi_UESDown;
     Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
     std::vector<TLorentzVector*> mets;
@@ -348,40 +354,57 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         MET_reso_Down.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
         MET_resp_Up.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
         MET_resp_Down.SetPtEtaPhiM(in->type1_pfMetEt, 0, in->type1_pfMetPhi, 0);
-        MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
-        MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
-        MET_JESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
-        MET_JESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
-        MET_Eta0to3Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to3Up, 0, in->type1_pfMet_shiftedPhi_JetEta0to3Up, 0);
-        MET_Eta0to3Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to3Down, 0, in->type1_pfMet_shiftedPhi_JetEta0to3Down, 0);
-        MET_Eta0to5Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to5Up, 0, in->type1_pfMet_shiftedPhi_JetEta0to5Up, 0);
-        MET_Eta0to5Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta0to5Down, 0, in->type1_pfMet_shiftedPhi_JetEta0to5Down, 0);
-        MET_Eta3to5Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta3to5Up, 0, in->type1_pfMet_shiftedPhi_JetEta3to5Up, 0);
-        MET_Eta3to5Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEta3to5Down, 0, in->type1_pfMet_shiftedPhi_JetEta3to5Down, 0);
-        MET_EC2Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Up, 0, in->type1_pfMet_shiftedPhi_JetEC2Up, 0);
-        MET_EC2Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Down, 0, in->type1_pfMet_shiftedPhi_JetEC2Down, 0);
-        MET_RelBalUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalUp, 0);
-        MET_RelBalDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalDown, 0);
-        MET_RelSamUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleUp, 0);
-        MET_RelSamDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleDown, 0);
 
-        mets = {&MET,
-                &MET_UESUp,
-                &MET_UESDown,
-                &MET_JESUp,
-                &MET_JESDown,
-                &MET_Eta0to3Up,
-                &MET_Eta0to3Down,
-                &MET_Eta0to5Up,
-                &MET_Eta0to5Down,
-                &MET_Eta3to5Up,
-                &MET_Eta3to5Down,
-                &MET_EC2Up,
-                &MET_EC2Down,
-                &MET_RelBalUp,
-                &MET_RelBalDown,
-                &MET_RelSamUp,
-                &MET_RelSamDown};
+        MET_JERUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JERUp, 0, in->type1_pfMet_shiftedPhi_JERUp, 0);
+        MET_AbsoluteUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetAbsoluteUp, 0, in->type1_pfMet_shiftedPhi_JetAbsoluteUp, 0);
+        MET_AbsoluteyearUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetAbsoluteyearUp, 0, in->type1_pfMet_shiftedPhi_JetAbsoluteyearUp, 0);
+        MET_BBEC1Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetBBEC1Up, 0, in->type1_pfMet_shiftedPhi_JetBBEC1Up, 0);
+        MET_BBEC1yearUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetBBEC1yearUp, 0, in->type1_pfMet_shiftedPhi_JetBBEC1yearUp, 0);
+        MET_EC2Up.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Up, 0, in->type1_pfMet_shiftedPhi_JetEC2Up, 0);
+        MET_EC2yearUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2yearUp, 0, in->type1_pfMet_shiftedPhi_JetEC2yearUp, 0);
+        MET_EnUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
+        MET_FlavorQCDUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnUp, 0, in->type1_pfMet_shiftedPhi_JetEnUp, 0);
+        MET_HFUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetHFUp, 0, in->type1_pfMet_shiftedPhi_JetHFUp, 0);
+        MET_HFyearUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetHFyearUp, 0, in->type1_pfMet_shiftedPhi_JetHFyearUp, 0);
+        MET_RelBalUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalUp, 0);
+        MET_RelSamUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleUp, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleUp, 0);
+        MET_ResUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetResUp, 0, in->type1_pfMet_shiftedPhi_JetResUp, 0);
+        MET_TotalUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetTotalUp, 0, in->type1_pfMet_shiftedPhi_JetTotalUp, 0);
+        MET_UESUp.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnUp, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
+
+        MET_JERDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JERDown, 0, in->type1_pfMet_shiftedPhi_JERDown, 0);
+        MET_AbsoluteDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetAbsoluteDown, 0, in->type1_pfMet_shiftedPhi_JetAbsoluteDown, 0);
+        MET_AbsoluteyearDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetAbsoluteyearDown, 0, in->type1_pfMet_shiftedPhi_JetAbsoluteyearDown, 0);
+        MET_BBEC1Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetBBEC1Down, 0, in->type1_pfMet_shiftedPhi_JetBBEC1Down, 0);
+        MET_BBEC1yearDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetBBEC1yearDown, 0, in->type1_pfMet_shiftedPhi_JetBBEC1yearDown, 0);
+        MET_EC2Down.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2Down, 0, in->type1_pfMet_shiftedPhi_JetEC2Down, 0);
+        MET_EC2yearDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEC2yearDown, 0, in->type1_pfMet_shiftedPhi_JetEC2yearDown, 0);
+        MET_EnDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
+        MET_FlavorQCDDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetEnDown, 0, in->type1_pfMet_shiftedPhi_JetEnDown, 0);
+        MET_HFDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetHFDown, 0, in->type1_pfMet_shiftedPhi_JetHFDown, 0);
+        MET_HFyearDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetHFyearDown, 0, in->type1_pfMet_shiftedPhi_JetHFyearDown, 0);
+        MET_RelBalDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeBalDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeBalDown, 0);
+        MET_RelSamDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetRelativeSampleDown, 0, in->type1_pfMet_shiftedPhi_JetRelativeSampleDown, 0);
+        MET_ResDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetResDown, 0, in->type1_pfMet_shiftedPhi_JetResDown, 0);
+        MET_TotalDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetTotalDown, 0, in->type1_pfMet_shiftedPhi_JetTotalDown, 0);
+        MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
+
+        mets = {&MET_JERUp, &MET_JERDown,
+            &MET_AbsoluteUp, &MET_AbsoluteDown,
+            &MET_AbsoluteyearUp, &MET_AbsoluteyearDown,
+            &MET_BBEC1Up, &MET_BBEC1Down,
+            &MET_BBEC1yearUp, &MET_BBEC1yearDown,
+            &MET_EC2Up, &MET_EC2Down,
+            &MET_EC2yearUp, &MET_EC2yearDown,
+            &MET_EnUp, &MET_EnDown,
+            &MET_FlavorQCDUp, &MET_FlavorQCDDown,
+            &MET_HFUp, &MET_HFDown,
+            &MET_HFyearUp, &MET_HFyearDown,
+            &MET_RelBalUp, &MET_RelBalDown,
+            &MET_RelSamUp, &MET_RelSamDown,
+            &MET_ResUp, &MET_ResDown,
+            &MET_TotalUp, &MET_TotalDown,
+            &MET_UESUp, &MET_UESDown};
 
         auto jet_for_correction = in->jetVeto30WoNoisyJets;
         if (recoil == 1) {
@@ -438,47 +461,81 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         met_px = MET.Px();
         met_py = MET.Py();
 
+        // systematics
         met_resp_Up = MET_resp_Up.Pt();
         met_resp_Down = MET_resp_Down.Pt();
         met_reso_Up = MET_reso_Up.Pt();
         met_reso_Down = MET_reso_Down.Pt();
-        met_JESUp = MET_JESUp.Pt();
-        met_JESDown = MET_JESDown.Pt();
-        met_UESUp = MET_UESUp.Pt();
-        met_UESDown = MET_UESDown.Pt();
-        met_EC2Up = MET_EC2Up.Pt();
-        met_EC2Down = MET_EC2Down.Pt();
-        met_Eta0to3Up = MET_Eta0to3Up.Pt();
-        met_Eta0to3Down = MET_Eta0to3Down.Pt();
-        met_Eta0to5Up = MET_Eta0to5Up.Pt();
-        met_Eta0to5Down = MET_Eta0to5Down.Pt();
-        met_Eta3to5Up = MET_Eta3to5Up.Pt();
-        met_Eta3to5Down = MET_Eta3to5Down.Pt();
-        met_RelBalUp = MET_RelBalUp.Pt();
-        met_RelBalDown = MET_RelBalDown.Pt();
-        met_RelSamUp = MET_RelSamUp.Pt();
-        met_RelSamDown = MET_RelSamDown.Pt();
-
         metphi_resp_Up = MET_resp_Up.Phi();
         metphi_resp_Down = MET_resp_Down.Phi();
         metphi_reso_Up = MET_reso_Up.Phi();
         metphi_reso_Down = MET_reso_Down.Phi();
-        metphi_JESUp = MET_JESUp.Phi();
-        metphi_JESDown = MET_JESDown.Phi();
-        metphi_UESUp = MET_UESUp.Phi();
-        metphi_UESDown = MET_UESDown.Phi();
+
+        met_JERUp = MET_JERUp.Pt();
+        met_AbsoluteUp = MET_AbsoluteUp.Pt();
+        met_AbsoluteyearUp = MET_AbsoluteyearUp.Pt();
+        met_BBEC1Up = MET_BBEC1Up.Pt();
+        met_BBEC1yearUp = MET_BBEC1yearUp.Pt();
+        met_EC2Up = MET_EC2Up.Pt();
+        met_EC2yearUp = MET_EC2yearUp.Pt();
+        met_EnUp = MET_EnUp.Pt();
+        met_FlavorQCDUp = MET_FlavorQCDUp.Pt();
+        met_HFUp = MET_HFUp.Pt();
+        met_HFyearUp = MET_HFyearUp.Pt();
+        met_RelBalUp = MET_RelBalUp.Pt();
+        met_RelSamUp = MET_RelSamUp.Pt();
+        met_ResUp = MET_ResUp.Pt();
+        met_TotalUp = MET_TotalUp.Pt();
+        met_UESUp = MET_UESUp.Pt();
+        met_JERDown = MET_JERDown.Pt();
+        met_AbsoluteDown = MET_AbsoluteDown.Pt();
+        met_AbsoluteyearDown = MET_AbsoluteyearDown.Pt();
+        met_BBEC1Down = MET_BBEC1Down.Pt();
+        met_BBEC1yearDown = MET_BBEC1yearDown.Pt();
+        met_EC2Down = MET_EC2Down.Pt();
+        met_EC2yearDown = MET_EC2yearDown.Pt();
+        met_EnDown = MET_EnDown.Pt();
+        met_FlavorQCDDown = MET_FlavorQCDDown.Pt();
+        met_HFDown = MET_HFDown.Pt();
+        met_HFyearDown = MET_HFyearDown.Pt();
+        met_RelBalDown = MET_RelBalDown.Pt();
+        met_RelSamDown = MET_RelSamDown.Pt();
+        met_ResDown = MET_ResDown.Pt();
+        met_TotalDown = MET_TotalDown.Pt();
+        met_UESDown = MET_UESDown.Pt();
+
+        metphi_JERUp = MET_JERUp.Phi();
+        metphi_AbsoluteUp = MET_AbsoluteUp.Phi();
+        metphi_AbsoluteyearUp = MET_AbsoluteyearUp.Phi();
+        metphi_BBEC1Up = MET_BBEC1Up.Phi();
+        metphi_BBEC1yearUp = MET_BBEC1yearUp.Phi();
         metphi_EC2Up = MET_EC2Up.Phi();
-        metphi_EC2Down = MET_EC2Down.Phi();
-        metphi_Eta0to3Up = MET_Eta0to3Up.Phi();
-        metphi_Eta0to3Down = MET_Eta0to3Down.Phi();
-        metphi_Eta0to5Up = MET_Eta0to5Up.Phi();
-        metphi_Eta0to5Down = MET_Eta0to5Down.Phi();
-        metphi_Eta3to5Up = MET_Eta3to5Up.Phi();
-        metphi_Eta3to5Down = MET_Eta3to5Down.Phi();
+        metphi_EC2yearUp = MET_EC2yearUp.Phi();
+        metphi_EnUp = MET_EnUp.Phi();
+        metphi_FlavorQCDUp = MET_FlavorQCDUp.Phi();
+        metphi_HFUp = MET_HFUp.Phi();
+        metphi_HFyearUp = MET_HFyearUp.Phi();
         metphi_RelBalUp = MET_RelBalUp.Phi();
-        metphi_RelBalDown = MET_RelBalDown.Phi();
         metphi_RelSamUp = MET_RelSamUp.Phi();
+        metphi_ResUp = MET_ResUp.Phi();
+        metphi_TotalUp = MET_TotalUp.Phi();
+        metphi_UESUp = MET_UESUp.Phi();
+        metphi_JERDown = MET_JERDown.Phi();
+        metphi_AbsoluteDown = MET_AbsoluteDown.Phi();
+        metphi_AbsoluteyearDown = MET_AbsoluteyearDown.Phi();
+        metphi_BBEC1Down = MET_BBEC1Down.Phi();
+        metphi_BBEC1yearDown = MET_BBEC1yearDown.Phi();
+        metphi_EC2Down = MET_EC2Down.Phi();
+        metphi_EC2yearDown = MET_EC2yearDown.Phi();
+        metphi_EnDown = MET_EnDown.Phi();
+        metphi_FlavorQCDDown = MET_FlavorQCDDown.Phi();
+        metphi_HFDown = MET_HFDown.Phi();
+        metphi_HFyearDown = MET_HFyearDown.Phi();
+        metphi_RelBalDown = MET_RelBalDown.Phi();
         metphi_RelSamDown = MET_RelSamDown.Phi();
+        metphi_ResDown = MET_ResDown.Phi();
+        metphi_TotalDown = MET_TotalDown.Phi();
+        metphi_UESDown = MET_UESDown.Phi();
 
         m_1 = ele.M();
         px_1 = ele.Px();
@@ -529,42 +586,75 @@ void etau_tree2017::set_branches() {
     tree->Branch("met_reso_Down", &met_reso_Down);
     tree->Branch("met_resp_Up", &met_resp_Up);
     tree->Branch("met_resp_Down", &met_resp_Down);
-    tree->Branch("met_JESUp", &met_JESUp);
-    tree->Branch("met_JESDown", &met_JESDown);
-    tree->Branch("met_UESUp", &met_UESUp);
-    tree->Branch("met_UESDown", &met_UESDown);
-    tree->Branch("met_JetEC2Up", &met_EC2Up);
-    tree->Branch("met_JetEC2Down", &met_EC2Down);
-    tree->Branch("met_JetEta0to3Up", &met_Eta0to3Up);
-    tree->Branch("met_JetEta0to3Down", &met_Eta0to3Down);
-    tree->Branch("met_JetEta0to5Up", &met_Eta0to5Up);
-    tree->Branch("met_JetEta0to5Down", &met_Eta0to5Down);
-    tree->Branch("met_JetEta3to5Up", &met_Eta3to5Up);
-    tree->Branch("met_JetEta3to5Down", &met_Eta3to5Down);
-    tree->Branch("met_JetRelativeBalUp", &met_RelBalUp);
-    tree->Branch("met_JetRelativeBalDown", &met_RelBalDown);
-    tree->Branch("met_JetRelativeSampleUp", &met_RelSamUp);
-    tree->Branch("met_JetRelativeSampleDown", &met_RelSamDown);
     tree->Branch("metphi_reso_Up", &metphi_reso_Up);
     tree->Branch("metphi_reso_Down", &metphi_reso_Down);
     tree->Branch("metphi_resp_Up", &metphi_resp_Up);
     tree->Branch("metphi_resp_Down", &metphi_resp_Down);
-    tree->Branch("metphi_JESUp", &metphi_JESUp);
-    tree->Branch("metphi_JESDown", &metphi_JESDown);
+    tree->Branch("met_JERUp", &met_JERUp);
+    tree->Branch("met_AbsoluteUp", &met_AbsoluteUp);
+    tree->Branch("met_AbsoluteyearUp", &met_AbsoluteyearUp);
+    tree->Branch("met_BBEC1Up", &met_BBEC1Up);
+    tree->Branch("met_BBEC1yearUp", &met_BBEC1yearUp);
+    tree->Branch("met_EC2Up", &met_EC2Up);
+    tree->Branch("met_EC2yearUp", &met_EC2yearUp);
+    tree->Branch("met_EnUp", &met_EnUp);
+    tree->Branch("met_FlavorQCDUp", &met_FlavorQCDUp);
+    tree->Branch("met_HFUp", &met_HFUp);
+    tree->Branch("met_HFyearUp", &met_HFyearUp);
+    tree->Branch("met_RelBalUp", &met_RelBalUp);
+    tree->Branch("met_RelSamUp", &met_RelSamUp);
+    tree->Branch("met_ResUp", &met_ResUp);
+    tree->Branch("met_TotalUp", &met_TotalUp);
+    tree->Branch("met_UESUp", &met_UESUp);
+    tree->Branch("met_JERDown", &met_JERDown);
+    tree->Branch("met_AbsoluteDown", &met_AbsoluteDown);
+    tree->Branch("met_AbsoluteyearDown", &met_AbsoluteyearDown);
+    tree->Branch("met_BBEC1Down", &met_BBEC1Down);
+    tree->Branch("met_BBEC1yearDown", &met_BBEC1yearDown);
+    tree->Branch("met_EC2Down", &met_EC2Down);
+    tree->Branch("met_EC2yearDown", &met_EC2yearDown);
+    tree->Branch("met_EnDown", &met_EnDown);
+    tree->Branch("met_FlavorQCDDown", &met_FlavorQCDDown);
+    tree->Branch("met_HFDown", &met_HFDown);
+    tree->Branch("met_HFyearDown", &met_HFyearDown);
+    tree->Branch("met_RelBalDown", &met_RelBalDown);
+    tree->Branch("met_RelSamDown", &met_RelSamDown);
+    tree->Branch("met_ResDown", &met_ResDown);
+    tree->Branch("met_TotalDown", &met_TotalDown);
+    tree->Branch("met_UESDown", &met_UESDown);
+    tree->Branch("metphi_JERUp", &metphi_JERUp);
+    tree->Branch("metphi_AbsoluteUp", &metphi_AbsoluteUp);
+    tree->Branch("metphi_AbsoluteyearUp", &metphi_AbsoluteyearUp);
+    tree->Branch("metphi_BBEC1Up", &metphi_BBEC1Up);
+    tree->Branch("metphi_BBEC1yearUp", &metphi_BBEC1yearUp);
+    tree->Branch("metphi_EC2Up", &metphi_EC2Up);
+    tree->Branch("metphi_EC2yearUp", &metphi_EC2yearUp);
+    tree->Branch("metphi_EnUp", &metphi_EnUp);
+    tree->Branch("metphi_FlavorQCDUp", &metphi_FlavorQCDUp);
+    tree->Branch("metphi_HFUp", &metphi_HFUp);
+    tree->Branch("metphi_HFyearUp", &metphi_HFyearUp);
+    tree->Branch("metphi_RelBalUp", &metphi_RelBalUp);
+    tree->Branch("metphi_RelSamUp", &metphi_RelSamUp);
+    tree->Branch("metphi_ResUp", &metphi_ResUp);
+    tree->Branch("metphi_TotalUp", &metphi_TotalUp);
     tree->Branch("metphi_UESUp", &metphi_UESUp);
+    tree->Branch("metphi_JERDown", &metphi_JERDown);
+    tree->Branch("metphi_AbsoluteDown", &metphi_AbsoluteDown);
+    tree->Branch("metphi_AbsoluteyearDown", &metphi_AbsoluteyearDown);
+    tree->Branch("metphi_BBEC1Down", &metphi_BBEC1Down);
+    tree->Branch("metphi_BBEC1yearDown", &metphi_BBEC1yearDown);
+    tree->Branch("metphi_EC2Down", &metphi_EC2Down);
+    tree->Branch("metphi_EC2yearDown", &metphi_EC2yearDown);
+    tree->Branch("metphi_EnDown", &metphi_EnDown);
+    tree->Branch("metphi_FlavorQCDDown", &metphi_FlavorQCDDown);
+    tree->Branch("metphi_HFDown", &metphi_HFDown);
+    tree->Branch("metphi_HFyearDown", &metphi_HFyearDown);
+    tree->Branch("metphi_RelBalDown", &metphi_RelBalDown);
+    tree->Branch("metphi_RelSamDown", &metphi_RelSamDown);
+    tree->Branch("metphi_ResDown", &metphi_ResDown);
+    tree->Branch("metphi_TotalDown", &metphi_TotalDown);
     tree->Branch("metphi_UESDown", &metphi_UESDown);
-    tree->Branch("metphi_JetEC2Up", &metphi_EC2Up);
-    tree->Branch("metphi_JetEC2Down", &metphi_EC2Down);
-    tree->Branch("metphi_JetEta0to3Up", &metphi_Eta0to3Up);
-    tree->Branch("metphi_JetEta0to3Down", &metphi_Eta0to3Down);
-    tree->Branch("metphi_JetEta0to5Up", &metphi_Eta0to5Up);
-    tree->Branch("metphi_JetEta0to5Down", &metphi_Eta0to5Down);
-    tree->Branch("metphi_JetEta3to5Up", &metphi_Eta3to5Up);
-    tree->Branch("metphi_JetEta3to5Down", &metphi_Eta3to5Down);
-    tree->Branch("metphi_JetRelativeBalUp", &metphi_RelBalUp);
-    tree->Branch("metphi_JetRelativeBalDown", &metphi_RelBalDown);
-    tree->Branch("metphi_JetRelativeSampleUp", &metphi_RelSamUp);
-    tree->Branch("metphi_JetRelativeSampleDown", &metphi_RelSamDown);
+
     tree->Branch("m_1", &m_1);
     tree->Branch("px_1", &px_1);
     tree->Branch("py_1", &py_1);
@@ -597,22 +687,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("njetspt20", &njetspt20);
 
     // copy the rest
-    tree->Branch("DoubleMediumHPSTau35Pass", &in->DoubleMediumHPSTau35Pass);
-    tree->Branch("DoubleMediumHPSTau35TightIDPass", &in->DoubleMediumHPSTau35TightIDPass);
-    tree->Branch("DoubleMediumHPSTau40Pass", &in->DoubleMediumHPSTau40Pass);
-    tree->Branch("DoubleMediumHPSTau40TightIDPass", &in->DoubleMediumHPSTau40TightIDPass);
-    tree->Branch("DoubleMediumTau35Pass", &in->DoubleMediumTau35Pass);
-    tree->Branch("DoubleMediumTau35TightIDPass", &in->DoubleMediumTau35TightIDPass);
-    tree->Branch("DoubleMediumTau40Pass", &in->DoubleMediumTau40Pass);
-    tree->Branch("DoubleMediumTau40TightIDPass", &in->DoubleMediumTau40TightIDPass);
-    tree->Branch("DoubleTightHPSTau35Pass", &in->DoubleTightHPSTau35Pass);
-    tree->Branch("DoubleTightHPSTau35TightIDPass", &in->DoubleTightHPSTau35TightIDPass);
-    tree->Branch("DoubleTightHPSTau40Pass", &in->DoubleTightHPSTau40Pass);
-    tree->Branch("DoubleTightHPSTau40TightIDPass", &in->DoubleTightHPSTau40TightIDPass);
-    tree->Branch("DoubleTightTau35Pass", &in->DoubleTightTau35Pass);
-    tree->Branch("DoubleTightTau35TightIDPass", &in->DoubleTightTau35TightIDPass);
-    tree->Branch("DoubleTightTau40Pass", &in->DoubleTightTau40Pass);
-    tree->Branch("DoubleTightTau40TightIDPass", &in->DoubleTightTau40TightIDPass);
     tree->Branch("Ele24LooseHPSTau30Pass", &in->Ele24LooseHPSTau30Pass);
     tree->Branch("Ele24LooseHPSTau30TightIDPass", &in->Ele24LooseHPSTau30TightIDPass);
     tree->Branch("Ele24LooseTau30Pass", &in->Ele24LooseTau30Pass);
@@ -670,12 +744,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("Rivet_stage1_cat_pTjet25GeV", &in->Rivet_stage1_cat_pTjet25GeV);
     tree->Branch("Rivet_stage1_cat_pTjet30GeV", &in->Rivet_stage1_cat_pTjet30GeV);
     tree->Branch("Rivet_stage1p1_cat", &in->Rivet_stage1p1_cat);
-    tree->Branch("VBFDoubleLooseHPSTau20Pass", &in->VBFDoubleLooseHPSTau20Pass);
-    tree->Branch("VBFDoubleLooseTau20Pass", &in->VBFDoubleLooseTau20Pass);
-    tree->Branch("VBFDoubleMediumHPSTau20Pass", &in->VBFDoubleMediumHPSTau20Pass);
-    tree->Branch("VBFDoubleMediumTau20Pass", &in->VBFDoubleMediumTau20Pass);
-    tree->Branch("VBFDoubleTightHPSTau20Pass", &in->VBFDoubleTightHPSTau20Pass);
-    tree->Branch("VBFDoubleTightTau20Pass", &in->VBFDoubleTightTau20Pass);
     tree->Branch("bjetDeepCSVVeto20Loose_2016_DR0p5", &in->bjetDeepCSVVeto20Loose_2016_DR0p5);
     tree->Branch("bjetDeepCSVVeto20Loose_2017_DR0p5", &in->bjetDeepCSVVeto20Loose_2017_DR0p5);
     tree->Branch("bjetDeepCSVVeto20Loose_2018_DR0p5", &in->bjetDeepCSVVeto20Loose_2018_DR0p5);
@@ -695,14 +763,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("dielectronVeto", &in->dielectronVeto);
     tree->Branch("dimu9ele9Pass", &in->dimu9ele9Pass);
     tree->Branch("dimuonVeto", &in->dimuonVeto);
-    tree->Branch("doubleE25Pass", &in->doubleE25Pass);
-    tree->Branch("doubleE33Pass", &in->doubleE33Pass);
-    tree->Branch("doubleE_23_12Pass", &in->doubleE_23_12Pass);
-    tree->Branch("doubleMuDZminMass3p8Pass", &in->doubleMuDZminMass3p8Pass);
-    tree->Branch("doubleMuDZminMass8Pass", &in->doubleMuDZminMass8Pass);
-    tree->Branch("doubleMuSingleEPass", &in->doubleMuSingleEPass);
-    tree->Branch("doubleTau35Pass", &in->doubleTau35Pass);
-    tree->Branch("doubleTauCmbIso35RegPass", &in->doubleTauCmbIso35RegPass);
     tree->Branch("eCBIDLoose", &in->eCBIDLoose);
     tree->Branch("eCBIDMedium", &in->eCBIDMedium);
     tree->Branch("eCBIDTight", &in->eCBIDTight);
@@ -853,30 +913,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("j1phiWoNoisyJets", &in->j1phiWoNoisyJets);
     tree->Branch("j1pt", &in->j1pt);
     tree->Branch("j1ptWoNoisyJets", &in->j1ptWoNoisyJets);
-    tree->Branch("j1ptWoNoisyJets_JetEC2Down", &in->j1ptWoNoisyJets_JetEC2Down);
-    tree->Branch("j1ptWoNoisyJets_JetEC2Up", &in->j1ptWoNoisyJets_JetEC2Up);
-    tree->Branch("j1ptWoNoisyJets_JetEta0to3Down", &in->j1ptWoNoisyJets_JetEta0to3Down);
-    tree->Branch("j1ptWoNoisyJets_JetEta0to3Up", &in->j1ptWoNoisyJets_JetEta0to3Up);
-    tree->Branch("j1ptWoNoisyJets_JetEta0to5Down", &in->j1ptWoNoisyJets_JetEta0to5Down);
-    tree->Branch("j1ptWoNoisyJets_JetEta0to5Up", &in->j1ptWoNoisyJets_JetEta0to5Up);
-    tree->Branch("j1ptWoNoisyJets_JetEta3to5Down", &in->j1ptWoNoisyJets_JetEta3to5Down);
-    tree->Branch("j1ptWoNoisyJets_JetEta3to5Up", &in->j1ptWoNoisyJets_JetEta3to5Up);
-    tree->Branch("j1ptWoNoisyJets_JetRelativeBalDown", &in->j1ptWoNoisyJets_JetRelativeBalDown);
-    tree->Branch("j1ptWoNoisyJets_JetRelativeBalUp", &in->j1ptWoNoisyJets_JetRelativeBalUp);
-    tree->Branch("j1ptWoNoisyJets_JetRelativeSampleDown", &in->j1ptWoNoisyJets_JetRelativeSampleDown);
-    tree->Branch("j1ptWoNoisyJets_JetRelativeSampleUp", &in->j1ptWoNoisyJets_JetRelativeSampleUp);
-    tree->Branch("j1pt_JetEC2Down", &in->j1pt_JetEC2Down);
-    tree->Branch("j1pt_JetEC2Up", &in->j1pt_JetEC2Up);
-    tree->Branch("j1pt_JetEta0to3Down", &in->j1pt_JetEta0to3Down);
-    tree->Branch("j1pt_JetEta0to3Up", &in->j1pt_JetEta0to3Up);
-    tree->Branch("j1pt_JetEta0to5Down", &in->j1pt_JetEta0to5Down);
-    tree->Branch("j1pt_JetEta0to5Up", &in->j1pt_JetEta0to5Up);
-    tree->Branch("j1pt_JetEta3to5Down", &in->j1pt_JetEta3to5Down);
-    tree->Branch("j1pt_JetEta3to5Up", &in->j1pt_JetEta3to5Up);
-    tree->Branch("j1pt_JetRelativeBalDown", &in->j1pt_JetRelativeBalDown);
-    tree->Branch("j1pt_JetRelativeBalUp", &in->j1pt_JetRelativeBalUp);
-    tree->Branch("j1pt_JetRelativeSampleDown", &in->j1pt_JetRelativeSampleDown);
-    tree->Branch("j1pt_JetRelativeSampleUp", &in->j1pt_JetRelativeSampleUp);
     tree->Branch("j2csv", &in->j2csv);
     tree->Branch("j2csvWoNoisyJets", &in->j2csvWoNoisyJets);
     tree->Branch("j2eta", &in->j2eta);
@@ -887,30 +923,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("j2phiWoNoisyJets", &in->j2phiWoNoisyJets);
     tree->Branch("j2pt", &in->j2pt);
     tree->Branch("j2ptWoNoisyJets", &in->j2ptWoNoisyJets);
-    tree->Branch("j2ptWoNoisyJets_JetEC2Down", &in->j2ptWoNoisyJets_JetEC2Down);
-    tree->Branch("j2ptWoNoisyJets_JetEC2Up", &in->j2ptWoNoisyJets_JetEC2Up);
-    tree->Branch("j2ptWoNoisyJets_JetEta0to3Down", &in->j2ptWoNoisyJets_JetEta0to3Down);
-    tree->Branch("j2ptWoNoisyJets_JetEta0to3Up", &in->j2ptWoNoisyJets_JetEta0to3Up);
-    tree->Branch("j2ptWoNoisyJets_JetEta0to5Down", &in->j2ptWoNoisyJets_JetEta0to5Down);
-    tree->Branch("j2ptWoNoisyJets_JetEta0to5Up", &in->j2ptWoNoisyJets_JetEta0to5Up);
-    tree->Branch("j2ptWoNoisyJets_JetEta3to5Down", &in->j2ptWoNoisyJets_JetEta3to5Down);
-    tree->Branch("j2ptWoNoisyJets_JetEta3to5Up", &in->j2ptWoNoisyJets_JetEta3to5Up);
-    tree->Branch("j2ptWoNoisyJets_JetRelativeBalDown", &in->j2ptWoNoisyJets_JetRelativeBalDown);
-    tree->Branch("j2ptWoNoisyJets_JetRelativeBalUp", &in->j2ptWoNoisyJets_JetRelativeBalUp);
-    tree->Branch("j2ptWoNoisyJets_JetRelativeSampleDown", &in->j2ptWoNoisyJets_JetRelativeSampleDown);
-    tree->Branch("j2ptWoNoisyJets_JetRelativeSampleUp", &in->j2ptWoNoisyJets_JetRelativeSampleUp);
-    tree->Branch("j2pt_JetEC2Down", &in->j2pt_JetEC2Down);
-    tree->Branch("j2pt_JetEC2Up", &in->j2pt_JetEC2Up);
-    tree->Branch("j2pt_JetEta0to3Down", &in->j2pt_JetEta0to3Down);
-    tree->Branch("j2pt_JetEta0to3Up", &in->j2pt_JetEta0to3Up);
-    tree->Branch("j2pt_JetEta0to5Down", &in->j2pt_JetEta0to5Down);
-    tree->Branch("j2pt_JetEta0to5Up", &in->j2pt_JetEta0to5Up);
-    tree->Branch("j2pt_JetEta3to5Down", &in->j2pt_JetEta3to5Down);
-    tree->Branch("j2pt_JetEta3to5Up", &in->j2pt_JetEta3to5Up);
-    tree->Branch("j2pt_JetRelativeBalDown", &in->j2pt_JetRelativeBalDown);
-    tree->Branch("j2pt_JetRelativeBalUp", &in->j2pt_JetRelativeBalUp);
-    tree->Branch("j2pt_JetRelativeSampleDown", &in->j2pt_JetRelativeSampleDown);
-    tree->Branch("j2pt_JetRelativeSampleUp", &in->j2pt_JetRelativeSampleUp);
     tree->Branch("jb1eta_2016", &in->jb1eta_2016);
     tree->Branch("jb1eta_2017", &in->jb1eta_2017);
     tree->Branch("jb1eta_2018", &in->jb1eta_2018);
@@ -941,30 +953,56 @@ void etau_tree2017::set_branches() {
     tree->Branch("jetVeto20_JetEnUp", &in->jetVeto20_JetEnUp);
     tree->Branch("jetVeto30", &in->jetVeto30);
     tree->Branch("jetVeto30WoNoisyJets", &in->jetVeto30WoNoisyJets);
+    tree->Branch("jetVeto30WoNoisyJets_JERDown", &in->jetVeto30WoNoisyJets_JERDown);
+    tree->Branch("jetVeto30WoNoisyJets_JERUp", &in->jetVeto30WoNoisyJets_JERUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteDown", &in->jetVeto30WoNoisyJets_JetAbsoluteDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteUp", &in->jetVeto30WoNoisyJets_JetAbsoluteUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteyearDown", &in->jetVeto30WoNoisyJets_JetAbsoluteyearDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteyearUp", &in->jetVeto30WoNoisyJets_JetAbsoluteyearUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1Down", &in->jetVeto30WoNoisyJets_JetBBEC1Down);
+    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1Up", &in->jetVeto30WoNoisyJets_JetBBEC1Up);
+    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1yearDown", &in->jetVeto30WoNoisyJets_JetBBEC1yearDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1yearUp", &in->jetVeto30WoNoisyJets_JetBBEC1yearUp);
     tree->Branch("jetVeto30WoNoisyJets_JetEC2Down", &in->jetVeto30WoNoisyJets_JetEC2Down);
     tree->Branch("jetVeto30WoNoisyJets_JetEC2Up", &in->jetVeto30WoNoisyJets_JetEC2Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Down", &in->jetVeto30WoNoisyJets_JetEta0to3Down);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta0to3Up", &in->jetVeto30WoNoisyJets_JetEta0to3Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Down", &in->jetVeto30WoNoisyJets_JetEta0to5Down);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta0to5Up", &in->jetVeto30WoNoisyJets_JetEta0to5Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Down", &in->jetVeto30WoNoisyJets_JetEta3to5Down);
-    tree->Branch("jetVeto30WoNoisyJets_JetEta3to5Up", &in->jetVeto30WoNoisyJets_JetEta3to5Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalDownWoNoisyJets);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets", &in->jetVeto30WoNoisyJets_JetRelativeBalUpWoNoisyJets);
+    tree->Branch("jetVeto30WoNoisyJets_JetEC2yearDown", &in->jetVeto30WoNoisyJets_JetEC2yearDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetEC2yearUp", &in->jetVeto30WoNoisyJets_JetEC2yearUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetEnDown", &in->jetVeto30WoNoisyJets_JetEnDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetEnUp", &in->jetVeto30WoNoisyJets_JetEnUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetFlavorQCDDown", &in->jetVeto30WoNoisyJets_JetFlavorQCDDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetFlavorQCDUp", &in->jetVeto30WoNoisyJets_JetFlavorQCDUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetHFDown", &in->jetVeto30WoNoisyJets_JetHFDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetHFUp", &in->jetVeto30WoNoisyJets_JetHFUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetHFyearDown", &in->jetVeto30WoNoisyJets_JetHFyearDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetHFyearUp", &in->jetVeto30WoNoisyJets_JetHFyearUp);
+    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalDown", &in->jetVeto30WoNoisyJets_JetRelativeBalDown);
+    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalUp", &in->jetVeto30WoNoisyJets_JetRelativeBalUp);
     tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleDown", &in->jetVeto30WoNoisyJets_JetRelativeSampleDown);
     tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleUp", &in->jetVeto30WoNoisyJets_JetRelativeSampleUp);
     tree->Branch("jetVeto30WoNoisyJets_JetTotalDown", &in->jetVeto30WoNoisyJets_JetTotalDown);
     tree->Branch("jetVeto30WoNoisyJets_JetTotalUp", &in->jetVeto30WoNoisyJets_JetTotalUp);
+    tree->Branch("jetVeto30_JERDown", &in->jetVeto30_JERDown);
+    tree->Branch("jetVeto30_JERUp", &in->jetVeto30_JERUp);
+    tree->Branch("jetVeto30_JetAbsoluteDown", &in->jetVeto30_JetAbsoluteDown);
+    tree->Branch("jetVeto30_JetAbsoluteUp", &in->jetVeto30_JetAbsoluteUp);
+    tree->Branch("jetVeto30_JetAbsoluteyearDown", &in->jetVeto30_JetAbsoluteyearDown);
+    tree->Branch("jetVeto30_JetAbsoluteyearUp", &in->jetVeto30_JetAbsoluteyearUp);
+    tree->Branch("jetVeto30_JetBBEC1Down", &in->jetVeto30_JetBBEC1Down);
+    tree->Branch("jetVeto30_JetBBEC1Up", &in->jetVeto30_JetBBEC1Up);
+    tree->Branch("jetVeto30_JetBBEC1yearDown", &in->jetVeto30_JetBBEC1yearDown);
+    tree->Branch("jetVeto30_JetBBEC1yearUp", &in->jetVeto30_JetBBEC1yearUp);
     tree->Branch("jetVeto30_JetEC2Down", &in->jetVeto30_JetEC2Down);
     tree->Branch("jetVeto30_JetEC2Up", &in->jetVeto30_JetEC2Up);
+    tree->Branch("jetVeto30_JetEC2yearDown", &in->jetVeto30_JetEC2yearDown);
+    tree->Branch("jetVeto30_JetEC2yearUp", &in->jetVeto30_JetEC2yearUp);
     tree->Branch("jetVeto30_JetEnDown", &in->jetVeto30_JetEnDown);
     tree->Branch("jetVeto30_JetEnUp", &in->jetVeto30_JetEnUp);
-    tree->Branch("jetVeto30_JetEta0to3Down", &in->jetVeto30_JetEta0to3Down);
-    tree->Branch("jetVeto30_JetEta0to3Up", &in->jetVeto30_JetEta0to3Up);
-    tree->Branch("jetVeto30_JetEta0to5Down", &in->jetVeto30_JetEta0to5Down);
-    tree->Branch("jetVeto30_JetEta0to5Up", &in->jetVeto30_JetEta0to5Up);
-    tree->Branch("jetVeto30_JetEta3to5Down", &in->jetVeto30_JetEta3to5Down);
-    tree->Branch("jetVeto30_JetEta3to5Up", &in->jetVeto30_JetEta3to5Up);
+    tree->Branch("jetVeto30_JetFlavorQCDDown", &in->jetVeto30_JetFlavorQCDDown);
+    tree->Branch("jetVeto30_JetFlavorQCDUp", &in->jetVeto30_JetFlavorQCDUp);
+    tree->Branch("jetVeto30_JetHFDown", &in->jetVeto30_JetHFDown);
+    tree->Branch("jetVeto30_JetHFUp", &in->jetVeto30_JetHFUp);
+    tree->Branch("jetVeto30_JetHFyearDown", &in->jetVeto30_JetHFyearDown);
+    tree->Branch("jetVeto30_JetHFyearUp", &in->jetVeto30_JetHFyearUp);
     tree->Branch("jetVeto30_JetRelativeBalDown", &in->jetVeto30_JetRelativeBalDown);
     tree->Branch("jetVeto30_JetRelativeBalUp", &in->jetVeto30_JetRelativeBalUp);
     tree->Branch("jetVeto30_JetRelativeSampleDown", &in->jetVeto30_JetRelativeSampleDown);
@@ -1040,32 +1078,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("tAgainstElectronVTightMVA62018", &in->tAgainstElectronVTightMVA62018);
     tree->Branch("tAgainstMuonLoose3", &in->tAgainstMuonLoose3);
     tree->Branch("tAgainstMuonTight3", &in->tAgainstMuonTight3);
-    tree->Branch("tByCombinedIsolationDeltaBetaCorrRaw3Hits", &in->tByCombinedIsolationDeltaBetaCorrRaw3Hits);
-    tree->Branch("tByIsolationMVArun2v1DBdR03oldDMwLTraw", &in->tByIsolationMVArun2v1DBdR03oldDMwLTraw);
-    tree->Branch("tByIsolationMVArun2v1DBnewDMwLTraw", &in->tByIsolationMVArun2v1DBnewDMwLTraw);
-    tree->Branch("tByIsolationMVArun2v1DBoldDMwLTraw", &in->tByIsolationMVArun2v1DBoldDMwLTraw);
-    tree->Branch("tByLooseCombinedIsolationDeltaBetaCorr3Hits", &in->tByLooseCombinedIsolationDeltaBetaCorr3Hits);
-    tree->Branch("tByLooseIsolationMVArun2v1DBdR03oldDMwLT", &in->tByLooseIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByLooseIsolationMVArun2v1DBnewDMwLT", &in->tByLooseIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByLooseIsolationMVArun2v1DBoldDMwLT", &in->tByLooseIsolationMVArun2v1DBoldDMwLT);
-    tree->Branch("tByMediumCombinedIsolationDeltaBetaCorr3Hits", &in->tByMediumCombinedIsolationDeltaBetaCorr3Hits);
-    tree->Branch("tByMediumIsolationMVArun2v1DBdR03oldDMwLT", &in->tByMediumIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByMediumIsolationMVArun2v1DBnewDMwLT", &in->tByMediumIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByMediumIsolationMVArun2v1DBoldDMwLT", &in->tByMediumIsolationMVArun2v1DBoldDMwLT);
-    tree->Branch("tByPhotonPtSumOutsideSignalCone", &in->tByPhotonPtSumOutsideSignalCone);
-    tree->Branch("tByTightCombinedIsolationDeltaBetaCorr3Hits", &in->tByTightCombinedIsolationDeltaBetaCorr3Hits);
-    tree->Branch("tByTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByTightIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByTightIsolationMVArun2v1DBnewDMwLT", &in->tByTightIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByTightIsolationMVArun2v1DBoldDMwLT", &in->tByTightIsolationMVArun2v1DBoldDMwLT);
-    tree->Branch("tByVLooseIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVLooseIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByVLooseIsolationMVArun2v1DBnewDMwLT", &in->tByVLooseIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByVLooseIsolationMVArun2v1DBoldDMwLT", &in->tByVLooseIsolationMVArun2v1DBoldDMwLT);
-    tree->Branch("tByVTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVTightIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByVTightIsolationMVArun2v1DBnewDMwLT", &in->tByVTightIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByVTightIsolationMVArun2v1DBoldDMwLT", &in->tByVTightIsolationMVArun2v1DBoldDMwLT);
-    tree->Branch("tByVVTightIsolationMVArun2v1DBdR03oldDMwLT", &in->tByVVTightIsolationMVArun2v1DBdR03oldDMwLT);
-    tree->Branch("tByVVTightIsolationMVArun2v1DBnewDMwLT", &in->tByVVTightIsolationMVArun2v1DBnewDMwLT);
-    tree->Branch("tByVVTightIsolationMVArun2v1DBoldDMwLT", &in->tByVVTightIsolationMVArun2v1DBoldDMwLT);
     tree->Branch("tCharge", &in->tCharge);
     tree->Branch("tChargedIsoPtSum", &in->tChargedIsoPtSum);
     tree->Branch("tChargedIsoPtSumdR03", &in->tChargedIsoPtSumdR03);
@@ -1113,24 +1125,6 @@ void etau_tree2017::set_branches() {
     tree->Branch("tLooseDeepTau2017v2p1VSmu", &in->tLooseDeepTau2017v2p1VSmu);
     tree->Branch("tLowestMll", &in->tLowestMll);
     tree->Branch("tMass", &in->tMass);
-    tree->Branch("tMatchesDoubleMediumCombinedIsoTau35Path", &in->tMatchesDoubleMediumCombinedIsoTau35Path);
-    tree->Branch("tMatchesDoubleMediumHPSTau35Filter", &in->tMatchesDoubleMediumHPSTau35Filter);
-    tree->Branch("tMatchesDoubleMediumHPSTau35Path", &in->tMatchesDoubleMediumHPSTau35Path);
-    tree->Branch("tMatchesDoubleMediumHPSTau40Filter", &in->tMatchesDoubleMediumHPSTau40Filter);
-    tree->Branch("tMatchesDoubleMediumHPSTau40Path", &in->tMatchesDoubleMediumHPSTau40Path);
-    tree->Branch("tMatchesDoubleMediumIsoTau35Path", &in->tMatchesDoubleMediumIsoTau35Path);
-    tree->Branch("tMatchesDoubleMediumTau35Filter", &in->tMatchesDoubleMediumTau35Filter);
-    tree->Branch("tMatchesDoubleMediumTau35Path", &in->tMatchesDoubleMediumTau35Path);
-    tree->Branch("tMatchesDoubleMediumTau40Filter", &in->tMatchesDoubleMediumTau40Filter);
-    tree->Branch("tMatchesDoubleMediumTau40Path", &in->tMatchesDoubleMediumTau40Path);
-    tree->Branch("tMatchesDoubleTightHPSTau35Filter", &in->tMatchesDoubleTightHPSTau35Filter);
-    tree->Branch("tMatchesDoubleTightHPSTau35Path", &in->tMatchesDoubleTightHPSTau35Path);
-    tree->Branch("tMatchesDoubleTightHPSTau40Filter", &in->tMatchesDoubleTightHPSTau40Filter);
-    tree->Branch("tMatchesDoubleTightHPSTau40Path", &in->tMatchesDoubleTightHPSTau40Path);
-    tree->Branch("tMatchesDoubleTightTau35Filter", &in->tMatchesDoubleTightTau35Filter);
-    tree->Branch("tMatchesDoubleTightTau35Path", &in->tMatchesDoubleTightTau35Path);
-    tree->Branch("tMatchesDoubleTightTau40Filter", &in->tMatchesDoubleTightTau40Filter);
-    tree->Branch("tMatchesDoubleTightTau40Path", &in->tMatchesDoubleTightTau40Path);
     tree->Branch("tMatchesEle24HPSTau30Filter", &in->tMatchesEle24HPSTau30Filter);
     tree->Branch("tMatchesEle24HPSTau30Path", &in->tMatchesEle24HPSTau30Path);
     tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter);
@@ -1208,28 +1202,56 @@ void etau_tree2017::set_branches() {
     tree->Branch("vbfJetVeto30", &in->vbfJetVeto30);
     tree->Branch("vbfMass", &in->vbfMass);
     tree->Branch("vbfMassWoNoisyJets", &in->vbfMassWoNoisyJets);
+    tree->Branch("vbfMassWoNoisyJets_JERDown", &in->vbfMassWoNoisyJets_JERDown);
+    tree->Branch("vbfMassWoNoisyJets_JERUp", &in->vbfMassWoNoisyJets_JERUp);
+    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteDown", &in->vbfMassWoNoisyJets_JetAbsoluteDown);
+    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteUp", &in->vbfMassWoNoisyJets_JetAbsoluteUp);
+    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteyearDown", &in->vbfMassWoNoisyJets_JetAbsoluteyearDown);
+    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteyearUp", &in->vbfMassWoNoisyJets_JetAbsoluteyearUp);
+    tree->Branch("vbfMassWoNoisyJets_JetBBEC1Down", &in->vbfMassWoNoisyJets_JetBBEC1Down);
+    tree->Branch("vbfMassWoNoisyJets_JetBBEC1Up", &in->vbfMassWoNoisyJets_JetBBEC1Up);
+    tree->Branch("vbfMassWoNoisyJets_JetBBEC1yearDown", &in->vbfMassWoNoisyJets_JetBBEC1yearDown);
+    tree->Branch("vbfMassWoNoisyJets_JetBBEC1yearUp", &in->vbfMassWoNoisyJets_JetBBEC1yearUp);
     tree->Branch("vbfMassWoNoisyJets_JetEC2Down", &in->vbfMassWoNoisyJets_JetEC2Down);
     tree->Branch("vbfMassWoNoisyJets_JetEC2Up", &in->vbfMassWoNoisyJets_JetEC2Up);
-    tree->Branch("vbfMassWoNoisyJets_JetEta0to3Down", &in->vbfMassWoNoisyJets_JetEta0to3Down);
-    tree->Branch("vbfMassWoNoisyJets_JetEta0to3Up", &in->vbfMassWoNoisyJets_JetEta0to3Up);
-    tree->Branch("vbfMassWoNoisyJets_JetEta0to5Down", &in->vbfMassWoNoisyJets_JetEta0to5Down);
-    tree->Branch("vbfMassWoNoisyJets_JetEta0to5Up", &in->vbfMassWoNoisyJets_JetEta0to5Up);
-    tree->Branch("vbfMassWoNoisyJets_JetEta3to5Down", &in->vbfMassWoNoisyJets_JetEta3to5Down);
-    tree->Branch("vbfMassWoNoisyJets_JetEta3to5Up", &in->vbfMassWoNoisyJets_JetEta3to5Up);
+    tree->Branch("vbfMassWoNoisyJets_JetEC2yearDown", &in->vbfMassWoNoisyJets_JetEC2yearDown);
+    tree->Branch("vbfMassWoNoisyJets_JetEC2yearUp", &in->vbfMassWoNoisyJets_JetEC2yearUp);
+    tree->Branch("vbfMassWoNoisyJets_JetEnDown", &in->vbfMassWoNoisyJets_JetEnDown);
+    tree->Branch("vbfMassWoNoisyJets_JetEnUp", &in->vbfMassWoNoisyJets_JetEnUp);
+    tree->Branch("vbfMassWoNoisyJets_JetFlavorQCDDown", &in->vbfMassWoNoisyJets_JetFlavorQCDDown);
+    tree->Branch("vbfMassWoNoisyJets_JetFlavorQCDUp", &in->vbfMassWoNoisyJets_JetFlavorQCDUp);
+    tree->Branch("vbfMassWoNoisyJets_JetHFDown", &in->vbfMassWoNoisyJets_JetHFDown);
+    tree->Branch("vbfMassWoNoisyJets_JetHFUp", &in->vbfMassWoNoisyJets_JetHFUp);
+    tree->Branch("vbfMassWoNoisyJets_JetHFyearDown", &in->vbfMassWoNoisyJets_JetHFyearDown);
+    tree->Branch("vbfMassWoNoisyJets_JetHFyearUp", &in->vbfMassWoNoisyJets_JetHFyearUp);
     tree->Branch("vbfMassWoNoisyJets_JetRelativeBalDown", &in->vbfMassWoNoisyJets_JetRelativeBalDown);
     tree->Branch("vbfMassWoNoisyJets_JetRelativeBalUp", &in->vbfMassWoNoisyJets_JetRelativeBalUp);
     tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleDown", &in->vbfMassWoNoisyJets_JetRelativeSampleDown);
     tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleUp", &in->vbfMassWoNoisyJets_JetRelativeSampleUp);
     tree->Branch("vbfMassWoNoisyJets_JetTotalDown", &in->vbfMassWoNoisyJets_JetTotalDown);
     tree->Branch("vbfMassWoNoisyJets_JetTotalUp", &in->vbfMassWoNoisyJets_JetTotalUp);
+    tree->Branch("vbfMass_JERDown", &in->vbfMass_JERDown);
+    tree->Branch("vbfMass_JERUp", &in->vbfMass_JERUp);
+    tree->Branch("vbfMass_JetAbsoluteDown", &in->vbfMass_JetAbsoluteDown);
+    tree->Branch("vbfMass_JetAbsoluteUp", &in->vbfMass_JetAbsoluteUp);
+    tree->Branch("vbfMass_JetAbsoluteyearDown", &in->vbfMass_JetAbsoluteyearDown);
+    tree->Branch("vbfMass_JetAbsoluteyearUp", &in->vbfMass_JetAbsoluteyearUp);
+    tree->Branch("vbfMass_JetBBEC1Down", &in->vbfMass_JetBBEC1Down);
+    tree->Branch("vbfMass_JetBBEC1Up", &in->vbfMass_JetBBEC1Up);
+    tree->Branch("vbfMass_JetBBEC1yearDown", &in->vbfMass_JetBBEC1yearDown);
+    tree->Branch("vbfMass_JetBBEC1yearUp", &in->vbfMass_JetBBEC1yearUp);
     tree->Branch("vbfMass_JetEC2Down", &in->vbfMass_JetEC2Down);
     tree->Branch("vbfMass_JetEC2Up", &in->vbfMass_JetEC2Up);
-    tree->Branch("vbfMass_JetEta0to3Down", &in->vbfMass_JetEta0to3Down);
-    tree->Branch("vbfMass_JetEta0to3Up", &in->vbfMass_JetEta0to3Up);
-    tree->Branch("vbfMass_JetEta0to5Down", &in->vbfMass_JetEta0to5Down);
-    tree->Branch("vbfMass_JetEta0to5Up", &in->vbfMass_JetEta0to5Up);
-    tree->Branch("vbfMass_JetEta3to5Down", &in->vbfMass_JetEta3to5Down);
-    tree->Branch("vbfMass_JetEta3to5Up", &in->vbfMass_JetEta3to5Up);
+    tree->Branch("vbfMass_JetEC2yearDown", &in->vbfMass_JetEC2yearDown);
+    tree->Branch("vbfMass_JetEC2yearUp", &in->vbfMass_JetEC2yearUp);
+    tree->Branch("vbfMass_JetEnDown", &in->vbfMass_JetEnDown);
+    tree->Branch("vbfMass_JetEnUp", &in->vbfMass_JetEnUp);
+    tree->Branch("vbfMass_JetFlavorQCDDown", &in->vbfMass_JetFlavorQCDDown);
+    tree->Branch("vbfMass_JetFlavorQCDUp", &in->vbfMass_JetFlavorQCDUp);
+    tree->Branch("vbfMass_JetHFDown", &in->vbfMass_JetHFDown);
+    tree->Branch("vbfMass_JetHFUp", &in->vbfMass_JetHFUp);
+    tree->Branch("vbfMass_JetHFyearDown", &in->vbfMass_JetHFyearDown);
+    tree->Branch("vbfMass_JetHFyearUp", &in->vbfMass_JetHFyearUp);
     tree->Branch("vbfMass_JetRelativeBalDown", &in->vbfMass_JetRelativeBalDown);
     tree->Branch("vbfMass_JetRelativeBalUp", &in->vbfMass_JetRelativeBalUp);
     tree->Branch("vbfMass_JetRelativeSampleDown", &in->vbfMass_JetRelativeSampleDown);
