@@ -392,6 +392,9 @@ class mutau_input_branches {
   Float_t npNLO;
   Float_t numGenJets;
   Float_t nvtx;
+  Float_t prefiring_weight;
+  Float_t prefiring_weight_up;
+  Float_t prefiring_weight_down;
   Float_t processID;
   Float_t puppiMetEt;
   Float_t puppiMetPhi;
@@ -1052,6 +1055,9 @@ mutau_input_branches::mutau_input_branches(TTree *tree) {
   tree->SetBranchAddress("npNLO", &npNLO);
   tree->SetBranchAddress("numGenJets", &numGenJets);
   tree->SetBranchAddress("nvtx", &nvtx);
+  tree->SetBranchAddress("prefiring_weight", &prefiring_weight);
+  tree->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+  tree->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
   tree->SetBranchAddress("processID", &processID);
   tree->SetBranchAddress("puppiMetEt", &puppiMetEt);
   tree->SetBranchAddress("puppiMetPhi", &puppiMetPhi);
