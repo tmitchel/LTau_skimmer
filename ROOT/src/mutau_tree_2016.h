@@ -178,13 +178,15 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->tRerunMVArun2v2DBoldDMwLTVLoose && in->tDecayMode != 5 && in->tDecayMode != 6 && fabs(in->tCharge) < 2) {
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+            && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
             continue;
         }
 
-        if (in->tAgainstMuonTight3 > 0.5 && in->tAgainstElectronVLooseMVA6 > 0.5) {
+        if ((in->tAgainstMuonTight3 > 0.5 || in->tTightDeepTau2017v2p1VSmu > 0.5)
+            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVLooseDeepTau2017v2p1VSe > 0.5)) {
             cutflow->Fill(8., 1.);  // tau against leptons
         } else {
             continue;
