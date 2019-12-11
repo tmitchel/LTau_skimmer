@@ -19,7 +19,6 @@ bkg_samples_batch1 = {
     'DYJets3_v1': ['DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
     'DYJets3_v2': ['DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v2', 'Z'],
     'DYJets4': ['DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'DYJets_lowM': ['DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v2', 'Z'],
     'DYJets': ['DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
 
     'WJets1': ['W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_-102X_upgrade2018_realistic_v15-v2', 'W'],
@@ -171,28 +170,6 @@ settings = {
 #   'tmp_mt': [tmp_sig_mt_pref, tmp_sig_samples],
 
 }
-
-# bkg_pref = '/hdfs/store/user/caillol/SMHTT_2018_legacy_MC_17jul/'
-# bkg2_pref = '/hdfs/store/user/caillol/SMHTT_2018_legacy_MC_25jul/'
-# data_pref = '/hdfs/store/user/caillol/SMHTT_2018_data/'
-# embed_pref = '/hdfs/store/user/caillol/SMHTT_2018_embedded_triggerFilters/'
-# # Need updated
-# # sig_pref = bkg_pref
-# # ac_pref = '/hdfs/store/user/ymaravin/ac2017_v2/'
-# # madgraph_pref = '/hdfs/store/user/ymaravin/mg2017_v1/'
-
-# settings = {
-#     # 'sig': [sig_pref, sig_samples],
-#     # 'ac': [ac_pref, ac_samples],
-#     # 'madgraph': [madgraph_pref, madgraph_samples],
-#     'dataMu': [data_pref, mu_data_samples],
-#     'dataEl': [data_pref, el_data_samples],
-#     'embedMu': [embed_pref, mu_embedded_samples],
-#     'embedEl': [embed_pref, el_embedded_samples],
-#     'sig': [bkg_pref, sig_samples],
-#     'bkg1': [bkg_pref, bkg_samples_batch1],
-#     'bkg2': [bkg2_pref, bkg_samples_batch2],
-# }
 
 pref = settings[args.job][0]
 samples = settings[args.job][1]
