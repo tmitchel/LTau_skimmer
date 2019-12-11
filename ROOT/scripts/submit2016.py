@@ -72,13 +72,16 @@ bkg_samples_batch1 = {
     "ZZ2l2q": ["ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1", '0'],
     "ZZ4l": ["ZZTo4L_13TeV-amcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2", '0'],
  
-    'ggh125_powheg_v1' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-    'ggh125_powheg_v2' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
-    'ggh125_powheg_v3' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3', 'Z'],
     'vbf125_powheg' : ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
     'wplus125_powheg' : ['WplusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
     'wminus125_powheg' : ['WminusHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
     'zh125_powheg' : ['ZHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+}
+
+ggh_samples = {
+    'ggh125_powheg_v1' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+    'ggh125_powheg_v2' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+    'ggh125_powheg_v3' : ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3', 'Z'],
 }
 
 sig_samples = {
@@ -170,6 +173,7 @@ jobType = args.job
 # bkg_mt_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_mt/'
 # bkg_et_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_et/'
 bkg_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_20nov/'
+ggh_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_20nov_ggH2/'
 data_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/'
 embed_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
 # sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2016_legacy_signal_v3_mt/"
@@ -178,6 +182,7 @@ embed_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
 settings = {
 #   'signal_mt': [sig_mt_pref, sig_samples],
 #   'signal_et': [sig_et_pref, sig_samples],
+  'ggh': [ggh_pref, ggh_samples],
   'bkg_all': [bkg_pref, bkg_samples_batch1],
 #   'bkg_mt': [bkg_mt_pref, bkg_samples_batch2],
 #   'bkg_et': [bkg_et_pref, bkg_samples_batch2],

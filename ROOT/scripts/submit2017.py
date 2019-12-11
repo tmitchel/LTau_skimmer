@@ -62,11 +62,14 @@ bkg_samples = {
     'ZZTo2L2Q': ['ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'ZZTo4L': ['ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
 
-    'ggh125_powheg': ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
     'vbf125_powheg': ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1', 'Z'],
     'wplus125_powheg': ['WplusHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'wminus125_powheg': ['WminusHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'zh125_powheg': ['ZHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+}
+
+ggh_samples = {
+    'ggh125_powheg': ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
 }
 
 sig_samples = {
@@ -160,6 +163,7 @@ embed_mt_samples = {
 prefix = args.prefix
 jobType = args.job
 
+ggh_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_ggh-only/"
 # sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_mt/"
 bkg_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_mt/"
 # sig_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_signal_v3_et/"
@@ -170,6 +174,7 @@ data_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v3/"
 settings = {
 #   'signal_mt': [sig_mt_pref, sig_samples],
 #   'signal_et': [sig_et_pref, sig_samples],
+  'ggh': [ggh_pref, ggh_samples],
   'bkg_mt': [bkg_mt_pref, bkg_samples],
   'bkg_et': [bkg_et_pref, bkg_samples],
   'dataMu': [data_pref, data_mt_samples],
