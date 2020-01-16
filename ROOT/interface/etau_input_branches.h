@@ -786,6 +786,10 @@ class etau_input_branches {
   Float_t vispY;
   Int_t idx;
 
+  Float_t sm_weight_nlo;
+  Float_t ps_weight_nlo;
+  Float_t mm_weight_nlo;
+
   explicit etau_input_branches(TTree *tree = 0);
   virtual ~etau_input_branches() {}
 };
@@ -1567,6 +1571,11 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   tree->SetBranchAddress("vbfj2pt", &vbfj2pt);
   tree->SetBranchAddress("vispX", &vispX);
   tree->SetBranchAddress("vispY", &vispY);
+
+  tree->SetBranchAddress("sm_weight_nlo", &sm_weight_nlo);
+  tree->SetBranchAddress("ps_weight_nlo", &ps_weight_nlo);
+  tree->SetBranchAddress("mm_weight_nlo", &mm_weight_nlo);
+
   tree->SetBranchAddress("idx", &idx);
 }
 

@@ -149,7 +149,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (ele.Pt() > 26. && fabs(ele.Eta()) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
+        if (ele.Pt() > 26. && fabs(ele.Eta()) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
             cutflow->Fill(4., 1.);  // electron kinematic selection
         } else {
             continue;
@@ -167,25 +167,25 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
             && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
             continue;
         }
 
-        if ((in->tAgainstMuonLoose3 > 0.5 || in->tLooseDeepTau2017v2p1VSmu > 0.5)
+        if ((in->tAgainstMuonLoose3 > 0.5 || in->tVLooseDeepTau2017v2p1VSmu > 0.5)
             && (in->tAgainstElectronTightMVA6 > 0.5 || in->tTightDeepTau2017v2p1VSe > 0.5)) {
             cutflow->Fill(8., 1.);  // tau against leptons
         } else {
             continue;
         }
 
-        if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0) {
-            cutflow->Fill(9., 1.);  // vetos
-        } else {
-            continue;
-        }
+        // if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0) {
+        //     cutflow->Fill(9., 1.);  // vetos
+        // } else {
+        //     continue;
+        // }
 
         if (ele.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
@@ -933,35 +933,6 @@ void etau_tree2016::set_branches() {
     tree->Branch("jetVeto20_JetEnDown", &in->jetVeto20_JetEnDown);
     tree->Branch("jetVeto20_JetEnUp", &in->jetVeto20_JetEnUp);
     tree->Branch("jetVeto30", &in->jetVeto30);
-    tree->Branch("jetVeto30WoNoisyJets", &in->jetVeto30WoNoisyJets);
-    tree->Branch("jetVeto30WoNoisyJets_JERDown", &in->jetVeto30WoNoisyJets_JERDown);
-    tree->Branch("jetVeto30WoNoisyJets_JERUp", &in->jetVeto30WoNoisyJets_JERUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteDown", &in->jetVeto30WoNoisyJets_JetAbsoluteDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteUp", &in->jetVeto30WoNoisyJets_JetAbsoluteUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteyearDown", &in->jetVeto30WoNoisyJets_JetAbsoluteyearDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetAbsoluteyearUp", &in->jetVeto30WoNoisyJets_JetAbsoluteyearUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1Down", &in->jetVeto30WoNoisyJets_JetBBEC1Down);
-    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1Up", &in->jetVeto30WoNoisyJets_JetBBEC1Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1yearDown", &in->jetVeto30WoNoisyJets_JetBBEC1yearDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetBBEC1yearUp", &in->jetVeto30WoNoisyJets_JetBBEC1yearUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetEC2Down", &in->jetVeto30WoNoisyJets_JetEC2Down);
-    tree->Branch("jetVeto30WoNoisyJets_JetEC2Up", &in->jetVeto30WoNoisyJets_JetEC2Up);
-    tree->Branch("jetVeto30WoNoisyJets_JetEC2yearDown", &in->jetVeto30WoNoisyJets_JetEC2yearDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetEC2yearUp", &in->jetVeto30WoNoisyJets_JetEC2yearUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetEnDown", &in->jetVeto30WoNoisyJets_JetEnDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetEnUp", &in->jetVeto30WoNoisyJets_JetEnUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetFlavorQCDDown", &in->jetVeto30WoNoisyJets_JetFlavorQCDDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetFlavorQCDUp", &in->jetVeto30WoNoisyJets_JetFlavorQCDUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetHFDown", &in->jetVeto30WoNoisyJets_JetHFDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetHFUp", &in->jetVeto30WoNoisyJets_JetHFUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetHFyearDown", &in->jetVeto30WoNoisyJets_JetHFyearDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetHFyearUp", &in->jetVeto30WoNoisyJets_JetHFyearUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalDown", &in->jetVeto30WoNoisyJets_JetRelativeBalDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeBalUp", &in->jetVeto30WoNoisyJets_JetRelativeBalUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleDown", &in->jetVeto30WoNoisyJets_JetRelativeSampleDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetRelativeSampleUp", &in->jetVeto30WoNoisyJets_JetRelativeSampleUp);
-    tree->Branch("jetVeto30WoNoisyJets_JetTotalDown", &in->jetVeto30WoNoisyJets_JetTotalDown);
-    tree->Branch("jetVeto30WoNoisyJets_JetTotalUp", &in->jetVeto30WoNoisyJets_JetTotalUp);
     tree->Branch("jetVeto30_JERDown", &in->jetVeto30_JERDown);
     tree->Branch("jetVeto30_JERUp", &in->jetVeto30_JERUp);
     tree->Branch("jetVeto30_JetAbsoluteDown", &in->jetVeto30_JetAbsoluteDown);
@@ -1181,35 +1152,6 @@ void etau_tree2016::set_branches() {
     tree->Branch("vbfJetVeto20", &in->vbfJetVeto20);
     tree->Branch("vbfJetVeto30", &in->vbfJetVeto30);
     tree->Branch("vbfMass", &in->vbfMass);
-    tree->Branch("vbfMassWoNoisyJets", &in->vbfMassWoNoisyJets);
-    tree->Branch("vbfMassWoNoisyJets_JERDown", &in->vbfMassWoNoisyJets_JERDown);
-    tree->Branch("vbfMassWoNoisyJets_JERUp", &in->vbfMassWoNoisyJets_JERUp);
-    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteDown", &in->vbfMassWoNoisyJets_JetAbsoluteDown);
-    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteUp", &in->vbfMassWoNoisyJets_JetAbsoluteUp);
-    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteyearDown", &in->vbfMassWoNoisyJets_JetAbsoluteyearDown);
-    tree->Branch("vbfMassWoNoisyJets_JetAbsoluteyearUp", &in->vbfMassWoNoisyJets_JetAbsoluteyearUp);
-    tree->Branch("vbfMassWoNoisyJets_JetBBEC1Down", &in->vbfMassWoNoisyJets_JetBBEC1Down);
-    tree->Branch("vbfMassWoNoisyJets_JetBBEC1Up", &in->vbfMassWoNoisyJets_JetBBEC1Up);
-    tree->Branch("vbfMassWoNoisyJets_JetBBEC1yearDown", &in->vbfMassWoNoisyJets_JetBBEC1yearDown);
-    tree->Branch("vbfMassWoNoisyJets_JetBBEC1yearUp", &in->vbfMassWoNoisyJets_JetBBEC1yearUp);
-    tree->Branch("vbfMassWoNoisyJets_JetEC2Down", &in->vbfMassWoNoisyJets_JetEC2Down);
-    tree->Branch("vbfMassWoNoisyJets_JetEC2Up", &in->vbfMassWoNoisyJets_JetEC2Up);
-    tree->Branch("vbfMassWoNoisyJets_JetEC2yearDown", &in->vbfMassWoNoisyJets_JetEC2yearDown);
-    tree->Branch("vbfMassWoNoisyJets_JetEC2yearUp", &in->vbfMassWoNoisyJets_JetEC2yearUp);
-    tree->Branch("vbfMassWoNoisyJets_JetEnDown", &in->vbfMassWoNoisyJets_JetEnDown);
-    tree->Branch("vbfMassWoNoisyJets_JetEnUp", &in->vbfMassWoNoisyJets_JetEnUp);
-    tree->Branch("vbfMassWoNoisyJets_JetFlavorQCDDown", &in->vbfMassWoNoisyJets_JetFlavorQCDDown);
-    tree->Branch("vbfMassWoNoisyJets_JetFlavorQCDUp", &in->vbfMassWoNoisyJets_JetFlavorQCDUp);
-    tree->Branch("vbfMassWoNoisyJets_JetHFDown", &in->vbfMassWoNoisyJets_JetHFDown);
-    tree->Branch("vbfMassWoNoisyJets_JetHFUp", &in->vbfMassWoNoisyJets_JetHFUp);
-    tree->Branch("vbfMassWoNoisyJets_JetHFyearDown", &in->vbfMassWoNoisyJets_JetHFyearDown);
-    tree->Branch("vbfMassWoNoisyJets_JetHFyearUp", &in->vbfMassWoNoisyJets_JetHFyearUp);
-    tree->Branch("vbfMassWoNoisyJets_JetRelativeBalDown", &in->vbfMassWoNoisyJets_JetRelativeBalDown);
-    tree->Branch("vbfMassWoNoisyJets_JetRelativeBalUp", &in->vbfMassWoNoisyJets_JetRelativeBalUp);
-    tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleDown", &in->vbfMassWoNoisyJets_JetRelativeSampleDown);
-    tree->Branch("vbfMassWoNoisyJets_JetRelativeSampleUp", &in->vbfMassWoNoisyJets_JetRelativeSampleUp);
-    tree->Branch("vbfMassWoNoisyJets_JetTotalDown", &in->vbfMassWoNoisyJets_JetTotalDown);
-    tree->Branch("vbfMassWoNoisyJets_JetTotalUp", &in->vbfMassWoNoisyJets_JetTotalUp);
     tree->Branch("vbfMass_JERDown", &in->vbfMass_JERDown);
     tree->Branch("vbfMass_JERUp", &in->vbfMass_JERUp);
     tree->Branch("vbfMass_JetAbsoluteDown", &in->vbfMass_JetAbsoluteDown);

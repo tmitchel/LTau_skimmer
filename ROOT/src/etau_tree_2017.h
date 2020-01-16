@@ -141,13 +141,15 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         cutflow->Fill(1., 1.);
         // apply event selection
 
+        auto Ele27 = in->eMatchesEle27Filter && in->eMatchesEle27Path && in->Ele27WPTightPass;
         auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
         auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
         auto Cross = in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->Ele24LooseTau30Pass && in->tMatchesEle24Tau30Path &&
                      in->tMatchesEle24Tau30Filter;
+        auto Ele27_emb = in->eMatchEmbeddedFilterEle27 || fabs(ele.Eta()) > 1.479;
         auto Ele32_emb = in->eMatchEmbeddedFilterEle32 || fabs(ele.Eta()) > 1.479;
         auto Ele35_emb = in->eMatchEmbeddedFilterEle35 || fabs(ele.Eta()) > 1.479;
-        auto Cross_emb = (in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30) || fabs(ele.Eta()) > 1.479;
+        // auto Cross_emb = (in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30) || fabs(ele.Eta()) > 1.479;
 
         // embedded has it's own trigger paths
         if (isEmbed) {
@@ -155,7 +157,9 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
                 cutflow->Fill(2., 1.);
             } else if (Ele32_emb && ele.Pt() > 33) {
                 cutflow->Fill(2., 1.);
-            } else if (ele.Pt() > 25 && fabs(ele.Eta()) < 2.1 && ele.Pt() < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+            } else if (Ele27_emb && ele.Pt() > 27) {
+                cutflow->Fill(2., 1.);
+            } else if (ele.Pt() > 25 && ele.Pt() < 28 && tau.Pt() > 35 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
@@ -165,14 +169,16 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
                 cutflow->Fill(2., 1.);
             } else if (Ele32 && ele.Pt() > 33) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross && ele.Pt() > 25 && fabs(ele.Eta()) < 2.1 && ele.Pt() < 33 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+            } else if (Ele27 && ele.Pt() > 27) {
+                cutflow->Fill(2., 1.);
+            } else if (Cross && ele.Pt() > 25 && ele.Pt() < 28 && tau.Pt() > 35 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
             }
         }
 
-        if (ele.Pt() > 25. && fabs(ele.Eta()) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
+        if (ele.Pt() > 25. && fabs(ele.Eta()) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045)
             cutflow->Fill(4., 1.);  // electron kinematic selection
         else
             continue;
@@ -187,22 +193,22 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
             && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
             continue;
 
-        if ((in->tAgainstMuonLoose3 > 0.5 || in->tLooseDeepTau2017v2p1VSmu > 0.5)
+        if ((in->tAgainstMuonLoose3 > 0.5 || in->tVLooseDeepTau2017v2p1VSmu > 0.5)
             && (in->tAgainstElectronTightMVA6 > 0.5 || in->tTightDeepTau2017v2p1VSe > 0.5))
             cutflow->Fill(8., 1.);  // tau against leptons
         else
             continue;
 
-        if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0)
-            cutflow->Fill(9., 1.);  // vetos
-        else
-            continue;
+        // if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0)
+        //     cutflow->Fill(9., 1.);  // vetos
+        // else
+        //     continue;
 
         if (ele.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
