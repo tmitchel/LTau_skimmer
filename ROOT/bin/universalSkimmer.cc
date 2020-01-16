@@ -24,6 +24,7 @@
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2018.h"
+#include "ltau_skimmer/ROOT/src/sync_mutau_tree_2018.h"
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
@@ -127,6 +128,8 @@ int main(int argc, char *argv[]) {
       skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
     } else if (lepton == "mt") {
       skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+    } else if (lepton == "sync") {
+      skimmer = new sync_mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
     } else {
       std::cerr << "bad options, my dude." << std::endl;
       return -1;

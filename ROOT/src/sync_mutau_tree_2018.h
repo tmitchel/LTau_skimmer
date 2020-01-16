@@ -1,7 +1,7 @@
 // Copyright 2019 Tyler Mitchell
 
-#ifndef ROOT_SRC_MUTAU_TREE_2018_H_
-#define ROOT_SRC_MUTAU_TREE_2018_H_
+#ifndef ROOT_SRC_SYNC_MUTAU_TREE_2018_H_
+#define ROOT_SRC_SYNC_MUTAU_TREE_2018_H_
 
 #include <cmath>
 #include <iostream>
@@ -14,7 +14,7 @@
 #include "TTree.h"
 #include "ltau_skimmer/ROOT/interface/mutau_input_branches.h"
 
-class mutau_tree2018 : public virtual base_tree {
+class sync_mutau_tree2018 : public virtual base_tree {
    private:
     TTree *tree, *original;
     mutau_input_branches* in;
@@ -42,8 +42,8 @@ class mutau_tree2018 : public virtual base_tree {
     std::vector<TLorentzVector*> mets;
 
     // Member functions
-    mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
-    virtual ~mutau_tree2018() {}
+    sync_mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
+    virtual ~sync_mutau_tree2018() {}
     void do_skimming(TH1F*);
     void set_branches();
     Float_t get_tes_sf(Float_t);
@@ -65,7 +65,7 @@ class mutau_tree2018 : public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-mutau_tree2018::mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec)
+sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec)
     : tree(itree),
       original(Original),
       in(new mutau_input_branches(Original)),
@@ -97,7 +97,7 @@ mutau_tree2018::mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool Is
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree2018::do_skimming(TH1F* cutflow) {
+void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
     // declare variables for sorting
     ULong64_t evt_now(0);
     ULong64_t evt_before(1);
@@ -192,7 +192,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     if (best_evt > -1) good_events.push_back(best_evt);
 }
 
-Float_t mutau_tree2018::get_tes_sf(Float_t decayMode) {
+Float_t sync_mutau_tree2018::get_tes_sf(Float_t decayMode) {
     if (decayMode == 0) {
         return tes_dm0_sf;
     } else if (decayMode == 1) {
@@ -203,7 +203,7 @@ Float_t mutau_tree2018::get_tes_sf(Float_t decayMode) {
     return 1.;
 }
 
-Float_t mutau_tree2018::get_efake_sf(Float_t decayMode) {
+Float_t sync_mutau_tree2018::get_efake_sf(Float_t decayMode) {
     if (decayMode == 0) {
         return efake_dm0_sf;
     } else if (decayMode == 1) {
@@ -212,7 +212,7 @@ Float_t mutau_tree2018::get_efake_sf(Float_t decayMode) {
     return 1.;
 }
 
-Float_t mutau_tree2018::get_mfake_sf(Float_t decayMode) {
+Float_t sync_mutau_tree2018::get_mfake_sf(Float_t decayMode) {
     if (decayMode == 0) {
         return mfake_dm0_sf;
     } else if (decayMode == 1) {
@@ -221,7 +221,7 @@ Float_t mutau_tree2018::get_mfake_sf(Float_t decayMode) {
     return 1.;
 }
 
-void mutau_tree2018::do_met_corr_nom(Float_t decayMode, energy_scale escale, TLorentzVector tau, TLorentzVector* met) {
+void sync_mutau_tree2018::do_met_corr_nom(Float_t decayMode, energy_scale escale, TLorentzVector tau, TLorentzVector* met) {
     double sf(1.);
     if (escale == tes) {
         sf = get_tes_sf(decayMode);
@@ -235,7 +235,7 @@ void mutau_tree2018::do_met_corr_nom(Float_t decayMode, energy_scale escale, TLo
     *met = (*met) + tau - sf * tau;  // update input met}
 }
 
-void mutau_tree2018::do_recoil_corr(RecoilCorrector* recoilPFMetCorrector, TLorentzVector* met, int njets) {
+void sync_mutau_tree2018::do_recoil_corr(RecoilCorrector* recoilPFMetCorrector, TLorentzVector* met, int njets) {
     float pfmetcorr_ex, pfmetcorr_ey;
     recoilPFMetCorrector->CorrectByMeanResolution(met->Px(),      // uncorrected type I pf met px (float)
                                                   met->Py(),      // uncorrected type I pf met py (float)
@@ -258,7 +258,7 @@ void mutau_tree2018::do_recoil_corr(RecoilCorrector* recoilPFMetCorrector, TLore
 // Return: The same TTree passed to the constructor and stored  //
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
-TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys metSys) {
+TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys metSys) {
     std::cout << "setting branches..." << std::endl;
     set_branches();  // get all the branches set up
     std::cout << "branches set." << std::endl;
@@ -392,7 +392,7 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
 //          new name, or used to construct new variables.       //
 //   - Create branches in tree to store any variable we want    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree2018::set_branches() {
+void sync_mutau_tree2018::set_branches() {
     // new branches
     tree->Branch("run", &Run);
     tree->Branch("era", &era);
@@ -453,4 +453,4 @@ void mutau_tree2018::set_branches() {
     tree->Branch("idx", &in->idx);
 }
 
-#endif  // ROOT_SRC_MUTAU_TREE_2018_H_
+#endif  // ROOT_SRC_SYNC_MUTAU_TREE_2018_H_
