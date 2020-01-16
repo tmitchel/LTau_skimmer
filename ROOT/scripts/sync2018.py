@@ -38,5 +38,5 @@ for sample in sorted(samples.keys()):
     pref = settings[args.job][0]
 
     command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i input_file.root -o \'$OUTPUT\'' % (
-        pref+path, jobType, recoil, '2018', lep)
+        pref+path, jobType, recoil, '2018', 'sync')
     ch.submit_command(command, prefix, pref+path, sample, use_input='-n ', dryrun=False)

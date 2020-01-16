@@ -12,7 +12,7 @@
 #include "RooMsgService.h"
 #include "RooRealVar.h"
 #include "RooWorkspace.h"
-#include "data/LumiReweightingStandAlone.h"
+#include "ltau_skimmer/ROOT/src/LumiReweightingStandAlone.h"
 #include "HTT-utilities/RecoilCorrections/interface/MEtSys.h"
 #include "HTT-utilities/RecoilCorrections/interface/RecoilCorrector.h"
 #include "TLorentzVector.h"
@@ -269,17 +269,17 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
     std::cout << "branches set." << std::endl;
 
     // legacy sf's
-    TFile htt_sf_file("data/htt_scalefactors_legacy_2018.root");
+    TFile htt_sf_file("$CMSSW_BASE/bin/$SCRAM_ARCH/htt_scalefactors_legacy_2018.root");
     RooWorkspace *htt_sf = reinterpret_cast<RooWorkspace*>(htt_sf_file.Get("w"));
     htt_sf_file.Close();
 
     auto lumi_weights =
-        new reweight::LumiReWeighting("data/pu_distributions_mc_2018.root", "data/pu_distributions_data_2018.root", "pileup", "pileup");
-
+        new reweight::LumiReWeighting("$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_mc_2018.root", "$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_data_2018.root", "pileup", "pileup");
+    
     // loop through all events pasing skimming/sorting
     for (auto& ievt : good_events) {
         original->GetEntry(ievt);
-
+        
         // TLorentzVector mu, tau;
         mu.SetPtEtaPhiM(in->mPt, in->mEta, in->mPhi, in->mMass);
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
@@ -364,7 +364,7 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
         if (trg_singlemuon) {
             trigweight_1 = htt_sf->function("m_trg_ic_ratio")->getVal();
         } else if (trg_mutaucross) {
-            trigweight_1 = htt_sf->function("m_trg_20_ic_ratio")->getVal() * htt_sf->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal();
+            trigweight_1 = htt_sf->function("m_trg_20_ic_ratio")->getVal()* htt_sf->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal();
         }
         idisoweight_1 = htt_sf->function("m_idiso_ic_ratio")->getVal();
         idisoweight_2 = htt_sf->function("t_deeptauid_pt_medium")->getVal();
@@ -425,8 +425,13 @@ void sync_mutau_tree2018::set_branches() {
     tree->Branch("dilepton_veto", &dilepton_veto);
     tree->Branch("extraelec_veto", &extraelec_veto);
     tree->Branch("extramuon_veto", &extramuon_veto);
-    tree->Branch("trg_singlemuon", trg_singlemuon);
-    tree->Branch("trg_mutaucross", trg_mutaucross);
+    tree->Branch("puweight", &puweight);
+    tree->Branch("trigweight_1", &trigweight_1);
+    tree->Branch("idisoweight_1", &idisoweight_1);
+    tree->Branch("idisoweight_2", &idisoweight_2);
+    tree->Branch("trackingweight_1", &trackingweight_1);
+    tree->Branch("trg_singlemuon", &trg_singlemuon);
+    tree->Branch("trg_mutaucross", &trg_mutaucross);
     tree->Branch("pt_1", &pt_1);
     tree->Branch("phi_1", &phi_1);
     tree->Branch("eta_1", &eta_1);
