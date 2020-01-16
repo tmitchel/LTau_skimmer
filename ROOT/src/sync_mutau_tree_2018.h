@@ -8,6 +8,11 @@
 #include <utility>
 #include <vector>
 #include "./base_tree.h"
+#include "RooFunctor.h"
+#include "RooMsgService.h"
+#include "RooRealVar.h"
+#include "RooWorkspace.h"
+#include "data/LumiReweightingStandAlone.h"
 #include "HTT-utilities/RecoilCorrections/interface/MEtSys.h"
 #include "HTT-utilities/RecoilCorrections/interface/RecoilCorrector.h"
 #include "TLorentzVector.h"
@@ -263,6 +268,14 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
     set_branches();  // get all the branches set up
     std::cout << "branches set." << std::endl;
 
+    // legacy sf's
+    TFile htt_sf_file("data/htt_scalefactors_legacy_2018.root");
+    RooWorkspace *htt_sf = reinterpret_cast<RooWorkspace*>(htt_sf_file.Get("w"));
+    htt_sf_file.Close();
+
+    auto lumi_weights =
+        new reweight::LumiReWeighting("data/pu_distributions_mc_2018.root", "data/pu_distributions_data_2018.root", "pileup", "pileup");
+
     // loop through all events pasing skimming/sorting
     for (auto& ievt : good_events) {
         original->GetEntry(ievt);
@@ -346,6 +359,17 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
         dilepton_veto = in->dimuonVeto > 0;
         extraelec_veto = in->eVetoZTTp001dxyzR0 > 0;
         extramuon_veto = in->muVetoZTTp001dxyzR0 > 1;
+
+        puweight = lumi_weights->weight(in->nvtx);
+        if (trg_singlemuon) {
+            trigweight_1 = htt_sf->function("m_trg_ic_ratio")->getVal();
+        } else if (trg_mutaucross) {
+            trigweight_1 = htt_sf->function("m_trg_20_ic_ratio")->getVal() * htt_sf->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal();
+        }
+        idisoweight_1 = htt_sf->function("m_idiso_ic_ratio")->getVal();
+        idisoweight_2 = htt_sf->function("t_deeptauid_pt_medium")->getVal();
+        trackingweight_1 = htt_sf->function("m_trk_ratio")->getVal();
+
         flagFilter = !(in->Flag_goodVertices || in->Flag_globalSuperTightHalo2016Filter || in->Flag_HBHENoiseFilter
                 || in->Flag_HBHENoiseIsoFilter || in->Flag_EcalDeadCellTriggerPrimitiveFilter || in->Flag_BadPFMuonFilter
                 || in->Flag_eeBadScFilter || in->Flag_ecalBadCalibFilter);
