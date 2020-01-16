@@ -148,14 +148,14 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         auto Cross_v2 = Cross_base && in->Mu20LooseHPSTau27TightIDPass && (isMC || (in->run > 317509 && isData));
         auto Mu24_emb = in->mMatchEmbeddedFilterMu24;
         auto Mu27_emb = in->mMatchEmbeddedFilterMu27;
-        auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2018 && in->tMatchEmbeddedFilterMu20HPSTau27;
+        // auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2018 && in->tMatchEmbeddedFilterMu20HPSTau27;
 
         if (isEmbed) {
             if (Mu27_emb && mu.Pt() > 28) {
                 cutflow->Fill(2., 1.);
             } else if (Mu24_emb && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
-            } else if (mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 31 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
+            } else if (mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
@@ -165,14 +165,14 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
                 cutflow->Fill(2., 1.);
             } else if (Mu24 && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
-            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 31 && fabs(mu.Eta()) < 2.1 && fabs(tau.Eta()) < 2.1) {
+            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
             }
         }
 
-        if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
+        if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.1 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045)
             cutflow->Fill(3., 1.);  // electron kinematic selection
         else
             continue;
@@ -187,22 +187,22 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
             && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
             continue;
 
         if ((in->tAgainstMuonTight3 > 0.5 || in->tTightDeepTau2017v2p1VSmu > 0.5)
-            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVLooseDeepTau2017v2p1VSe > 0.5))
+            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVVVLooseDeepTau2017v2p1VSe > 0.5))
             cutflow->Fill(8., 1.);  // tau against leptons
         else
             continue;
 
-        if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0)
-            cutflow->Fill(9., 1.);  // vetos
-        else
-            continue;
+        // if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0)
+        //     cutflow->Fill(9., 1.);  // vetos
+        // else
+        //     continue;
 
         if (mu.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
@@ -1199,6 +1199,11 @@ void mutau_tree2018::set_branches() {
     tree->Branch("vbfj2pt", &in->vbfj2pt);
     tree->Branch("vispX", &in->vispX);
     tree->Branch("vispY", &in->vispY);
+
+    tree->Branch("sm_weight_nlo", &in->sm_weight_nlo);
+    tree->Branch("ps_weight_nlo", &in->ps_weight_nlo);
+    tree->Branch("mm_weight_nlo", &in->mm_weight_nlo);
+
     tree->Branch("idx", &in->idx);
 }
 

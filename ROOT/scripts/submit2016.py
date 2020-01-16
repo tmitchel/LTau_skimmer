@@ -86,9 +86,9 @@ ggh_samples = {
 
 sig_samples = {
    'ggh125_minlo_nnlops': ['GluGluHToTauTau_M-125_13TeV_powheg_MINLO_NNLOPS_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
-   'ggh125_JHU_a1-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_sm_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
-   'ggh125_JHU_a3-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_pseudoscalar_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext3-v2', 'Z'],
-   'ggh125_JHU_a3int-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
+   # 'ggh125_JHU_a1-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_sm_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
+   # 'ggh125_JHU_a3-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_pseudoscalar_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext3-v2', 'Z'],
+   # 'ggh125_JHU_a3int-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
    'ggh125_minlo' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
    'ggh125_minlo_CUEDown' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_CUETP8M1Down_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
    'ggh125_minlo_CUEUp' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_CUETP8M1Up_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
@@ -119,6 +119,7 @@ sig_samples = {
    
    'zh125_JHU_a1-prod_nom-decay' : ['ZHiggs0PM_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'zh125_JHU_a2-prod_nom-decay' : ['ZHiggs0PH_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+   'zh125_JHU_a2int-prod_nom-decay': ['ZHiggs0PHfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'zh125_JHU_a3-prod_nom-decay' : ['ZHiggs0M_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'zh125_JHU_a3int-prod_nom-decay' : ['ZHiggs0MfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
    'zh125_JHU_l1-prod_nom-decay' : ['ZHiggs0L1_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
@@ -170,22 +171,16 @@ embed_mt_samples = {
 prefix = args.prefix
 jobType = args.job
 
-# bkg_mt_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_mt/'
-# bkg_et_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_18Sep_HighMem_et/'
 bkg_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_20nov/'
 ggh_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_20nov_ggH2/'
 data_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/'
 embed_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
-# sig_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2016_legacy_signal_v3_mt/"
-# sig_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2016_legacy_signal_v3_et/"
+sig_pref = '/hdfs/store/user/abdollah/FSA_2016_AC_XMass/'
 
 settings = {
-#   'signal_mt': [sig_mt_pref, sig_samples],
-#   'signal_et': [sig_et_pref, sig_samples],
+  'sig': [sig_pref, sig_samples],
   'ggh': [ggh_pref, ggh_samples],
   'bkg_all': [bkg_pref, bkg_samples_batch1],
-#   'bkg_mt': [bkg_mt_pref, bkg_samples_batch2],
-#   'bkg_et': [bkg_et_pref, bkg_samples_batch2],
   'dataMu': [data_pref, data_mt_samples],
   'dataEl': [data_pref, data_et_samples],
   'embedMu': [embed_pref, embed_mt_samples],

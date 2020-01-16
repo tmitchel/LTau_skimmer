@@ -149,7 +149,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (ele.Pt() > 26. && fabs(ele.Eta()) < 2.4 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
+        if (ele.Pt() > 26. && fabs(ele.Eta()) < 2.1 && fabs(in->ePVDZ) < 0.2 && fabs(in->ePVDXY) < 0.045) {
             cutflow->Fill(4., 1.);  // electron kinematic selection
         } else {
             continue;
@@ -167,25 +167,25 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
             && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
             continue;
         }
 
-        if ((in->tAgainstMuonLoose3 > 0.5 || in->tLooseDeepTau2017v2p1VSmu > 0.5)
+        if ((in->tAgainstMuonLoose3 > 0.5 || in->tVLooseDeepTau2017v2p1VSmu > 0.5)
             && (in->tAgainstElectronTightMVA6 > 0.5 || in->tTightDeepTau2017v2p1VSe > 0.5)) {
             cutflow->Fill(8., 1.);  // tau against leptons
         } else {
             continue;
         }
 
-        if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0) {
-            cutflow->Fill(9., 1.);  // vetos
-        } else {
-            continue;
-        }
+        // if (in->muVetoZTTp001dxyzR0 == 0 && in->eVetoZTTp001dxyzR0 < 2 && in->dielectronVeto == 0) {
+        //     cutflow->Fill(9., 1.);  // vetos
+        // } else {
+        //     continue;
+        // }
 
         if (ele.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);

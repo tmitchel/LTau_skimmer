@@ -148,17 +148,17 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         auto Cross_emb = in->mMatchEmbeddedFilterMu19Tau20_2016 && in->tMatchEmbeddedFilterMu19Tau20;
 
         if (isEmbed) {
-            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
+            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23) {
                 cutflow->Fill(2., 1.);
-            } else if (Cross_emb && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
+            } else if (Cross_emb && mu.Pt() > 20 && mu.Pt() < 23 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
             }
         } else {
-            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23 && fabs(mu.Eta()) < 2.1) {
+            if ((IsoMu22 || IsoTkMu22 || IsoMu22eta2p1 || IsoTkMu22eta2p1) && mu.Pt() > 23) {
                 cutflow->Fill(2., 1.);
-            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 23 && fabs(mu.Eta()) < 2.1) {
+            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 20 && mu.Pt() < 23 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
             } else {
                 continue;
@@ -166,7 +166,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         }
 
 
-        if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.4 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
+        if (mu.Pt() > 21. && fabs(mu.Eta()) < 2.1 && fabs(in->mPVDZ) < 0.2 && fabs(in->mPVDXY) < 0.045) {
             cutflow->Fill(3., 1.);  // muon kinematic selection
         } else {
             continue;
@@ -184,7 +184,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVLooseDeepTau2017v2p1VSjet)
+        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
             && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2) {
             cutflow->Fill(7., 1.);  // tau quality selection
         } else {
@@ -192,17 +192,17 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         }
 
         if ((in->tAgainstMuonTight3 > 0.5 || in->tTightDeepTau2017v2p1VSmu > 0.5)
-            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVLooseDeepTau2017v2p1VSe > 0.5)) {
+            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVVVLooseDeepTau2017v2p1VSe > 0.5)) {
             cutflow->Fill(8., 1.);  // tau against leptons
         } else {
             continue;
         }
 
-        if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0) {
-            cutflow->Fill(9., 1.);  // vetos
-        } else {
-            continue;
-        }
+        // if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0) {
+        //     cutflow->Fill(9., 1.);  // vetos
+        // } else {
+        //     continue;
+        // }
 
         if (mu.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
