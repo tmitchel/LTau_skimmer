@@ -360,6 +360,13 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
         extraelec_veto = in->eVetoZTTp001dxyzR0 > 0;
         extramuon_veto = in->muVetoZTTp001dxyzR0 > 1;
 
+        htt_sf->var("m_pt")->setVal(mu.Pt());
+        htt_sf->var("m_eta")->setVal(mu.Eta());
+        htt_sf->var("t_pt")->setVal(tau.Pt());
+        htt_sf->var("t_eta")->setVal(tau.Eta());
+        htt_sf->var("t_phi")->setVal(tau.Phi());
+        htt_sf->var("t_dm")->setVal(in->tDecayMode);
+
         puweight = lumi_weights->weight(in->nvtx);
         if (trg_singlemuon) {
             trigweight_1 = htt_sf->function("m_trg_ic_ratio")->getVal();
