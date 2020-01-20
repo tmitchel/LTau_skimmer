@@ -40,7 +40,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
 
     Int_t era;
     Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
-    Float_t tes_dm0_sf, tes_dm1_sf, tes_dm10_sf, efake_dm0_sf, efake_dm1_sf, mfake_dm0_sf, mfake_dm1_sf;
+    Float_t tes_dm0_sf, tes_dm1_sf, tes_dm10_sf, tes_dm11_sf, efake_dm0_sf, efake_dm1_sf, mfake_dm0_sf, mfake_dm1_sf;
     Float_t jetVeto20, jetVeto30, met, metphi, met_px, met_py, extraelec_veto, extramuon_veto, dilepton_veto, pfmetcorr_ex, pfmetcorr_ey;
     Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
@@ -81,6 +81,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       tes_dm0_sf(0.987),
       tes_dm1_sf(0.995),
       tes_dm10_sf(0.988),
+      tes_dm11_sf(0.999),
       efake_dm0_sf(0.968),
       efake_dm1_sf(1.026),
       mfake_dm0_sf(0.998),
@@ -204,6 +205,8 @@ Float_t sync_mutau_tree2018::get_tes_sf(Float_t decayMode) {
         return tes_dm1_sf;
     } else if (decayMode == 10) {
         return tes_dm10_sf;
+    } else if (decayMode == 11) {
+        return tes_dm11_sf;
     }
     return 1.;
 }
