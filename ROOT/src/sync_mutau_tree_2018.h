@@ -151,7 +151,9 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->tRerunMVArun2v2DBoldDMwLTVVLoose && in->tDecayModeFinding > 0.5 && fabs(in->tCharge) < 2)
+        if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 && in->tVLooseDeepTau2017v2p1VSmu > 0.5 &&
+            in->tDecayMode != 5 && in->tDecayMode != 6 &&
+            in->tDecayModeFindingNewDMs > 0.5 && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
             continue;
@@ -460,15 +462,34 @@ void sync_mutau_tree2018::set_branches() {
     tree->Branch("dZ_2", &in->tPVDZ);
     tree->Branch("iso_2", &in->tDeepTau2017v2p1VSjetraw);
     tree->Branch("gen_match_2", &gen_match_2);
-    tree->Branch("tDeepTau2017v2p1VSmuraw", &in->tDeepTau2017v2p1VSmuraw);
-    tree->Branch("tLooseDeepTau2017v2p1VSmu", &in->tLooseDeepTau2017v2p1VSmu);
-    tree->Branch("tMediumDeepTau2017v2p1VSmu", &in->tMediumDeepTau2017v2p1VSmu);
-    tree->Branch("tTightDeepTau2017v2p1VSmu", &in->tTightDeepTau2017v2p1VSmu);
-    tree->Branch("tVLooseDeepTau2017v2p1VSmu", &in->tVLooseDeepTau2017v2p1VSmu);
-    tree->Branch("tVTightDeepTau2017v2p1VSmu", &in->tVTightDeepTau2017v2p1VSmu);
-    tree->Branch("tVVLooseDeepTau2017v2p1VSmu", &in->tVVLooseDeepTau2017v2p1VSmu);
-    tree->Branch("tVVTightDeepTau2017v2p1VSmu", &in->tVVTightDeepTau2017v2p1VSmu);
-    tree->Branch("tVVVLooseDeepTau2017v2p1VSmu", &in->tVVVLooseDeepTau2017v2p1VSmu);
+    tree->Branch("tau_decay_mode_2", &in->tDecayMode);
+    tree->Branch("tDeepTau2017v2p1VSmuraw_2", &in->tDeepTau2017v2p1VSmuraw);
+    tree->Branch("tLooseDeepTau2017v2p1VSmu_2", &in->tLooseDeepTau2017v2p1VSmu);
+    tree->Branch("tMediumDeepTau2017v2p1VSmu_2", &in->tMediumDeepTau2017v2p1VSmu);
+    tree->Branch("tTightDeepTau2017v2p1VSmu_2", &in->tTightDeepTau2017v2p1VSmu);
+    tree->Branch("tVLooseDeepTau2017v2p1VSmu_2", &in->tVLooseDeepTau2017v2p1VSmu);
+    tree->Branch("tVTightDeepTau2017v2p1VSmu_2", &in->tVTightDeepTau2017v2p1VSmu);
+    tree->Branch("tVVLooseDeepTau2017v2p1VSmu_2", &in->tVVLooseDeepTau2017v2p1VSmu);
+    tree->Branch("tVVTightDeepTau2017v2p1VSmu_2", &in->tVVTightDeepTau2017v2p1VSmu);
+    tree->Branch("tVVVLooseDeepTau2017v2p1VSmu_2", &in->tVVVLooseDeepTau2017v2p1VSmu);
+    tree->Branch("tDeepTau2017v2p1VSjetraw_2", &in->tDeepTau2017v2p1VSjetraw);
+    tree->Branch("tLooseDeepTau2017v2p1VSjet_2", &in->tLooseDeepTau2017v2p1VSjet);
+    tree->Branch("tMediumDeepTau2017v2p1VSjet_2", &in->tMediumDeepTau2017v2p1VSjet);
+    tree->Branch("tTightDeepTau2017v2p1VSjet_2", &in->tTightDeepTau2017v2p1VSjet);
+    tree->Branch("tVLooseDeepTau2017v2p1VSjet_2", &in->tVLooseDeepTau2017v2p1VSjet);
+    tree->Branch("tVTightDeepTau2017v2p1VSjet_2", &in->tVTightDeepTau2017v2p1VSjet);
+    tree->Branch("tVVLooseDeepTau2017v2p1VSjet_2", &in->tVVLooseDeepTau2017v2p1VSjet);
+    tree->Branch("tVVTightDeepTau2017v2p1VSjet_2", &in->tVVTightDeepTau2017v2p1VSjet);
+    tree->Branch("tVVVLooseDeepTau2017v2p1VSjet_2", &in->tVVVLooseDeepTau2017v2p1VSjet);
+    tree->Branch("tDeepTau2017v2p1VSeraw_2", &in->tDeepTau2017v2p1VSeraw);
+    tree->Branch("tLooseDeepTau2017v2p1VSe_2", &in->tLooseDeepTau2017v2p1VSe);
+    tree->Branch("tMediumDeepTau2017v2p1VSe_2", &in->tMediumDeepTau2017v2p1VSe);
+    tree->Branch("tTightDeepTau2017v2p1VSe_2", &in->tTightDeepTau2017v2p1VSe);
+    tree->Branch("tVLooseDeepTau2017v2p1VSe_2", &in->tVLooseDeepTau2017v2p1VSe);
+    tree->Branch("tVTightDeepTau2017v2p1VSe_2", &in->tVTightDeepTau2017v2p1VSe);
+    tree->Branch("tVVLooseDeepTau2017v2p1VSe_2", &in->tVVLooseDeepTau2017v2p1VSe);
+    tree->Branch("tVVTightDeepTau2017v2p1VSe_2", &in->tVVTightDeepTau2017v2p1VSe);
+    tree->Branch("tVVVLooseDeepTau2017v2p1VSe_2", &in->tVVVLooseDeepTau2017v2p1VSe);
     tree->Branch("met", &met);
     tree->Branch("metphi", &metphi);
     tree->Branch("metcov00", &in->metcov00);
