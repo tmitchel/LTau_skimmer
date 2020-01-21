@@ -151,7 +151,8 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 && in->tVLooseDeepTau2017v2p1VSmu > 0.5 &&
+        if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 &&
+            in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVLooseDeepTau2017v2p1VSe > 0.5 &&
             in->tDecayMode != 5 && in->tDecayMode != 6 &&
             in->tDecayModeFindingNewDMs > 0.5 && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
