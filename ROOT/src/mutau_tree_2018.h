@@ -13,6 +13,7 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 #include "ltau_skimmer/ROOT/interface/mutau_input_branches.h"
+#include "ltau_skimmer/ROOT/interface/TauFESTool.h"
 
 class mutau_tree2018 : public virtual base_tree {
    private:
@@ -25,6 +26,7 @@ class mutau_tree2018 : public virtual base_tree {
         MET_HFUp, MET_HFyearUp, MET_RelBalUp, MET_RelSamUp, MET_ResUp, MET_TotalUp, MET_UESUp,
         MET_JERDown, MET_AbsoluteDown, MET_AbsoluteyearDown, MET_BBEC1Down, MET_BBEC1yearDown, MET_EC2Down, MET_EC2yearDown, MET_EnDown,
         MET_FlavorQCDDown, MET_HFDown, MET_HFyearDown, MET_RelBalDown, MET_RelSamDown, MET_ResDown, MET_TotalDown, MET_UESDown;
+    TauFESTool tfes;
 
    public:
     // Member variables
@@ -56,10 +58,7 @@ class mutau_tree2018 : public virtual base_tree {
     virtual ~mutau_tree2018() {}
     void do_skimming(TH1F*);
     void set_branches();
-    Float_t get_tes_sf(Float_t);
-    Float_t get_efake_sf(Float_t);
-    Float_t get_mfake_sf(Float_t);
-    void do_met_corr_nom(Float_t, energy_scale, TLorentzVector, TLorentzVector*);
+    void do_met_corr_nom(Float_t, TLorentzVector, TLorentzVector*);
     void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);
     TTree* fill_tree(RecoilCorrector, MEtSys);
 };
@@ -81,26 +80,9 @@ mutau_tree2018::mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool Is
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
       recoil(rec),
-      era(2018),
-      tes_dm0_sf(0.987),
-      tes_dm1_sf(0.995),
-      tes_dm10_sf(0.988),
-      efake_dm0_sf(0.968),
-      efake_dm1_sf(1.026),
-      mfake_dm0_sf(0.998),
-      mfake_dm1_sf(0.990) {
-    // set embedded TES
-    if (isEmbed) {
-        tes_dm0_sf = 0.975;
-        tes_dm1_sf = 0.975 * 1.051;
-        tes_dm10_sf = 0.975 * 0.975 * 0.975;
-        efake_dm0_sf = 1.;
-        efake_dm1_sf = 1.;
-        mfake_dm0_sf = 1.;
-        mfake_dm1_sf = 1.;
-    }
-}
+      era(2018) {}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -128,13 +110,8 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
 
         // apply TES
         if (isMC || isEmbed) {
-            if (in->tZTTGenMatching == 5) {
-                tau *= get_tes_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-                tau *= get_efake_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-                tau *= get_mfake_sf(in->tDecayMode);
-            }
+            tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+            tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
         }
 
         cutflow->Fill(1., 1.);
@@ -187,22 +164,21 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if ((in->tRerunMVArun2v2DBoldDMwLTVLoose || in->tVVVLooseDeepTau2017v2p1VSjet)
-            && in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
+        if (in->tVVVLooseDeepTau2017v2p1VSjet && in->tDecayModeFindingNewDMs &&
+            in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
             continue;
 
-        if ((in->tAgainstMuonTight3 > 0.5 || in->tTightDeepTau2017v2p1VSmu > 0.5)
-            && (in->tAgainstElectronVLooseMVA6 > 0.5 || in->tVVVLooseDeepTau2017v2p1VSe > 0.5))
+        if (in->tTightDeepTau2017v2p1VSmu > 0.5 && in->tVVVLooseDeepTau2017v2p1VSe > 0.5)
             cutflow->Fill(8., 1.);  // tau against leptons
         else
             continue;
 
-        // if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0)
-        //     cutflow->Fill(9., 1.);  // vetos
-        // else
-        //     continue;
+        if (in->muVetoZTTp001dxyzR0 < 2 && in->eVetoZTTp001dxyzR0 == 0 && in->dimuonVeto == 0)
+            cutflow->Fill(9., 1.);  // vetos
+        else
+            continue;
 
         if (mu.DeltaR(tau) > 0.5) {
             cutflow->Fill(10., 1.);
@@ -252,46 +228,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
     if (best_evt > -1) good_events.push_back(best_evt);
 }
 
-Float_t mutau_tree2018::get_tes_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return tes_dm0_sf;
-    } else if (decayMode == 1) {
-        return tes_dm1_sf;
-    } else if (decayMode == 10) {
-        return tes_dm10_sf;
-    }
-    return 1.;
-}
-
-Float_t mutau_tree2018::get_efake_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return efake_dm0_sf;
-    } else if (decayMode == 1) {
-        return efake_dm1_sf;
-    }
-    return 1.;
-}
-
-Float_t mutau_tree2018::get_mfake_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return mfake_dm0_sf;
-    } else if (decayMode == 1) {
-        return mfake_dm1_sf;
-    }
-    return 1.;
-}
-
-void mutau_tree2018::do_met_corr_nom(Float_t decayMode, energy_scale escale, TLorentzVector tau, TLorentzVector* met) {
-    double sf(1.);
-    if (escale == tes) {
-        sf = get_tes_sf(decayMode);
-    } else if (escale == efake) {
-        sf = get_efake_sf(decayMode);
-    } else if (escale == mfake) {
-        sf = get_mfake_sf(decayMode);
-    } else {
-        std::cerr << "Not a valid energy correction" << std::endl;
-    }
+void mutau_tree2018::do_met_corr_nom(Float_t sf, TLorentzVector tau, TLorentzVector* met) {
     *met = (*met) + tau - sf * tau;  // update input met}
 }
 
@@ -434,24 +371,11 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
                                  sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
 
         if (isMC || isEmbed) {
-            // met correction due to tau energy scale
-            if (in->tZTTGenMatching == 5) {
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, tes, tau, mets.at(i));
-                }
-                tau *= get_tes_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-                // electron -> tau fake energy scale
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, efake, tau, mets.at(i));
-                }
-                tau *= get_efake_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-                // muon -> tau fake energy scale
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, mfake, tau, mets.at(i));
-                }
-                tau *= get_mfake_sf(in->tDecayMode);
+            auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+            auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+            tau *= fes_sf * tes_sf;
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
             }
         }
 
