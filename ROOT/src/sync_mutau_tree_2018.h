@@ -78,7 +78,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
-      tfes("2018", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed),
       recoil(rec),
       era(2018) {}
 
@@ -213,12 +213,12 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
     std::cout << "branches set." << std::endl;
 
     // legacy sf's
-    TFile htt_sf_file("$CMSSW_BASE/bin/$SCRAM_ARCH/htt_scalefactors_legacy_2018.root");
+    TFile htt_sf_file("$CMSSW_BASE/src/ltau_skimmer/ROOT/data/htt_scalefactors_legacy_2018.root");
     RooWorkspace *htt_sf = reinterpret_cast<RooWorkspace*>(htt_sf_file.Get("w"));
     htt_sf_file.Close();
 
     auto lumi_weights =
-        new reweight::LumiReWeighting("$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_mc_2018.root", "$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_data_2018.root", "pileup", "pileup");
+        new reweight::LumiReWeighting("$CMSSW_BASE/src/ltau_skimmer/ROOT/data/pu_distributions_mc_2018.root", "$CMSSW_BASE/src/ltau_skimmer/ROOT/data/pu_distributions_data_2018.root", "pileup", "pileup");
     
     // loop through all events pasing skimming/sorting
     for (auto& ievt : good_events) {

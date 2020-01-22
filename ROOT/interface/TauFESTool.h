@@ -31,7 +31,7 @@ TauFESTool::TauFESTool(std::string year, std::string id, std::string path, bool 
     : fes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       tes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       dm_map{{0, 0}, {1, 1}, {10, 2}, {11, 3}} {
-    std::string filepath = path + "TauFES_eta-dm_" + id + "_" + year + ".root";
+    std::string filepath = "$CMSSW_BASE/src/" + path + "TauFES_eta-dm_" + id + "_" + year + ".root";
     auto tes_file = new TFile(filepath.c_str(), "READ");
     TGraph* tes_graph = reinterpret_cast<TGraph*>(tes_file->Get("fes"));
 
@@ -57,13 +57,13 @@ TauFESTool::TauFESTool(std::string year, std::string id, std::string path, bool 
         shifts = {dm0_embed_syst, dm1_embed_syst, dm10_embed_syst, 0.};
     } else {
         std::vector<Float_t> nominal;
-        if (year == "2016") {
+        if (year == "2016Legacy") {
             tes_sfs["nominal"] = convert_to_weight({-0.6, -0.5, 0., -0.1});
             shifts = convert_to_decimal({1., 0.9, 1.1, 1.});
-        } else if (year == "2017") {
+        } else if (year == "2017ReReco") {
             tes_sfs["nominal"] = convert_to_weight({0.7, -0.2, 0.1, -0.1});
             shifts = convert_to_decimal({0.8, 0.8, 0.9, 1.});
-        } else if (year == "2018") {
+        } else if (year == "2018ReReco") {
             tes_sfs["nominal"] = convert_to_weight({-1.3, -0.5, -1.2, -0.1});
             shifts = convert_to_decimal({1.1, 0.9, 0.8, 1.});
         }
@@ -79,8 +79,10 @@ TauFESTool::TauFESTool(std::string year, std::string id, std::string path, bool 
 Float_t TauFESTool::getTES(Float_t dm, Float_t gen_match, std::string syst = "") {
     if (gen_match != 5) {
         return 1.;
+    } else if (dm == 5 || dm == 6) {
+      return 1.;  // these will be removed anyways
     }
-
+    
     auto index = dm_map.at(dm);
     if (syst == "") {
         syst = "nominal";
@@ -93,6 +95,8 @@ Float_t TauFESTool::getFES(Float_t dm, Float_t eta, Float_t gen_match, std::stri
     // SF is 1 if not an electron
     if (gen_match != 1 && gen_match != 3) {
         return 1.;
+    } else if (dm != 0 && dm != 1) {
+      return 1.;  // these will be removed anyways
     }
 
     // handle default case
