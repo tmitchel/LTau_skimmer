@@ -78,7 +78,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
-      tfes("2018ReReco", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
       recoil(rec),
       era(2018) {}
 
