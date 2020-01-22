@@ -78,8 +78,8 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
-      recoil(rec),
       tfes("2018", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed),
+      recoil(rec),
       era(2018) {}
 
 //////////////////////////////////////////////////////////////////
