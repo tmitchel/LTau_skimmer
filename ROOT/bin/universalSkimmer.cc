@@ -24,6 +24,7 @@
 #include "ltau_skimmer/ROOT/src/mutau_tree_2016.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2017.h"
 #include "ltau_skimmer/ROOT/src/mutau_tree_2018.h"
+#include "ltau_skimmer/ROOT/src/sync_mutau_tree_2018.h"
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {
@@ -37,6 +38,11 @@ int main(int argc, char *argv[]) {
   std::string job_type = parser.Option("-j");
   std::string inrecoil = parser.Option("-r");
   std::string real_fname = parser.Option("-n");
+  bool isSync(false);
+  if (lepton == "sync") {
+    lepton = "mt";
+    isSync = true;
+  }
 
   // recoil corrections
   int recoil(0);
@@ -60,7 +66,7 @@ int main(int argc, char *argv[]) {
   std::string treename;
   if (lepton == "et") {
     treename = "etau_tree";
-  } else if (lepton == "mt") {
+  } else if (lepton == "mt" || lepton == "sync") {
     treename = "mutau_tree";
   }
 
@@ -123,13 +129,17 @@ int main(int argc, char *argv[]) {
     }
 
   } else if (year == "2018") {
-    if (lepton == "et") {
-      skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
-    } else if (lepton == "mt") {
-      skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+    if (isSync) {
+      skimmer = new sync_mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
     } else {
-      std::cerr << "bad options, my dude." << std::endl;
-      return -1;
+      if (lepton == "et") {
+        skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+      } else if (lepton == "mt") {
+        skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+      } else {
+        std::cerr << "bad options, my dude." << std::endl;
+        return -1;
+      }
     }
   } else {
     std::cerr << "bad options, my dude." << std::endl;

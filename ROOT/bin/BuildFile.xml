@@ -2,4 +2,5 @@
 <bin name="uniSkim" file="universalSkimmer.cc">
   <use name="rootcore"/>
   <use name="root"/>
+  <use name="roofitcore"/>
 </bin>
