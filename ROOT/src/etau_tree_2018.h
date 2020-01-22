@@ -14,6 +14,7 @@
 #include "TTree.h"
 #include "ltau_skimmer/ROOT/interface/etau_input_branches.h"
 #include "ltau_skimmer/ROOT/interface/TauFESTool.h"
+
 class etau_tree2018 : public virtual base_tree {
    private:
     TTree *tree, *original;
@@ -108,6 +109,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
         // electron energy scale
         ele *= in->eCorrectedEt / ele.Energy();
 
+        // apply TES
         if (isMC || isEmbed) {
             tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
