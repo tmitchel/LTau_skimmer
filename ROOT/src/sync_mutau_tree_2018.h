@@ -79,8 +79,8 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       isMC(IsMC),
       isEmbed(IsEmbed),
       recoil(rec),
-      era(2018),
-      tfes("2018", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed) {}
+      tfes("2018", "DeepTau2017v2p1VSe", "TauPOG/TauIDSFs/data/", isEmbed),
+      era(2018) {}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //

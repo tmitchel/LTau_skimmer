@@ -12,7 +12,8 @@
 #include "TGraph.h"
 
 typedef std::vector<Float_t> fvector;
-using std::make_pair;
+std::vector<Float_t> convert_to_weight(std::vector<Float_t>);
+std::vector<Float_t> convert_to_decimal(std::vector<Float_t>);
 
 class TauFESTool {
    public:
