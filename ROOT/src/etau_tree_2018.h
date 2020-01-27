@@ -49,6 +49,7 @@ class etau_tree2018 : public virtual base_tree {
         metphi_JERDown, metphi_AbsoluteDown, metphi_AbsoluteyearDown, metphi_BBEC1Down, metphi_BBEC1yearDown, metphi_EC2Down, metphi_EC2yearDown,
         metphi_EnDown, metphi_FlavorQCDDown, metphi_HFDown, metphi_HFyearDown, metphi_RelBalDown, metphi_RelSamDown, metphi_ResDown, metphi_TotalDown,
         metphi_UESDown;
+    Float_t tes_syst, ftes_syst_up, ftes_syst_down;
     Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
     std::vector<TLorentzVector*> mets;
@@ -328,7 +329,8 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         MET_TotalDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_JetTotalDown, 0, in->type1_pfMet_shiftedPhi_JetTotalDown, 0);
         MET_UESDown.SetPtEtaPhiM(in->type1_pfMet_shiftedPt_UnclusteredEnDown, 0, in->type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
 
-        mets = {&MET_JERUp, &MET_JERDown,
+        mets = {&MET,
+            &MET_JERUp, &MET_JERDown,
             &MET_AbsoluteUp, &MET_AbsoluteDown,
             &MET_AbsoluteyearUp, &MET_AbsoluteyearDown,
             &MET_BBEC1Up, &MET_BBEC1Down,
@@ -373,6 +375,9 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                  sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
 
+        tes_syst = 0;
+        ftes_syst_up = 0;
+        ftes_syst_down = 0;
         if (isMC || isEmbed) {
             auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
@@ -380,6 +385,9 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             for (unsigned i = 0; i < mets.size(); i++) {
                 do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
             }
+            ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
+            ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
+            tes_syst = tfes.getTES(in->tDecayMode, in->tZTTGenMatching, true);
         }
 
         met = MET.Pt();
@@ -580,6 +588,9 @@ void etau_tree2018::set_branches() {
     tree->Branch("metphi_ResDown", &metphi_ResDown);
     tree->Branch("metphi_TotalDown", &metphi_TotalDown);
     tree->Branch("metphi_UESDown", &metphi_UESDown);
+    tree->Branch("ftes_syst_up", &ftes_syst_up);
+    tree->Branch("ftes_syst_down", &ftes_syst_down);
+    tree->Branch("tes_syst", &tes_syst);
 
     tree->Branch("m_1", &m_1);
     tree->Branch("px_1", &px_1);
