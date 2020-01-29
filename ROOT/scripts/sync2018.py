@@ -18,7 +18,7 @@ sync = {
 prefix = args.prefix
 jobType = args.job
 
-sync_pref = '/hdfs/store/user/caillol/SMHTT_2018_20nov_mc/'
+sync_pref = '/hdfs/store/user/tmitchel/sync_vbf/'
 
 settings = {
   'sync': [sync_pref, sync],
