@@ -131,7 +131,7 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
             continue;
 
         if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 &&
-            in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVLooseDeepTau2017v2p1VSe > 0.5 &&
+            in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVVVLooseDeepTau2017v2p1VSe > 0.5 &&
             in->tDecayMode != 5 && in->tDecayMode != 6 &&
             in->tDecayModeFindingNewDMs > 0.5 && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
@@ -153,10 +153,10 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
             muCandidate = std::make_pair(mu.Pt(), in->mRelPFIsoDBDefault);
-            tauCandidate = std::make_pair(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            tauCandidate = std::make_pair(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
         } else {  // not a new event
             std::pair<float, float> currEleCandidate(mu.Pt(), in->mRelPFIsoDBDefault);
-            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;
