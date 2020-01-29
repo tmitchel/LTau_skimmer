@@ -18,6 +18,7 @@
 #include "TLorentzVector.h"
 #include "TTree.h"
 #include "ltau_skimmer/ROOT/interface/mutau_input_branches.h"
+#include "ltau_skimmer/ROOT/interface/TauFESTool.h"
 
 class sync_mutau_tree2018 : public virtual base_tree {
    private:
@@ -26,7 +27,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
     bool isMC, isEmbed, isData;
     std::vector<Int_t> good_events;
     TLorentzVector mu, tau, MET;
-
+    TauFESTool tfes;
 
    public:
     // Member variables
@@ -46,6 +47,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
 
     std::vector<TLorentzVector*> mets;
 
+
     // Member functions
     sync_mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
     virtual ~sync_mutau_tree2018() {}
@@ -54,7 +56,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
     Float_t get_tes_sf(Float_t);
     Float_t get_efake_sf(Float_t);
     Float_t get_mfake_sf(Float_t);
-    void do_met_corr_nom(Float_t, energy_scale, TLorentzVector, TLorentzVector*);
+    void do_met_corr_nom(Float_t, TLorentzVector, TLorentzVector*);
     void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);
     TTree* fill_tree(RecoilCorrector, MEtSys);
 };
@@ -76,27 +78,9 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
       recoil(rec),
-      era(2018),
-      tes_dm0_sf(0.987),
-      tes_dm1_sf(0.995),
-      tes_dm10_sf(0.988),
-      tes_dm11_sf(0.999),
-      efake_dm0_sf(0.968),
-      efake_dm1_sf(1.026),
-      mfake_dm0_sf(0.998),
-      mfake_dm1_sf(0.990) {
-    // set embedded TES
-    if (isEmbed) {
-        tes_dm0_sf = 0.975;
-        tes_dm1_sf = 0.975 * 1.051;
-        tes_dm10_sf = 0.975 * 0.975 * 0.975;
-        efake_dm0_sf = 1.;
-        efake_dm1_sf = 1.;
-        mfake_dm0_sf = 1.;
-        mfake_dm1_sf = 1.;
-    }
-}
+      era(2018) {}
 
 //////////////////////////////////////////////////////////////////
 // Purpose: Skim original then apply Isolation-based sorting.   //
@@ -124,13 +108,8 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
 
         // apply TES
         if (isMC || isEmbed) {
-            if (in->tZTTGenMatching == 5) {
-                tau *= get_tes_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-                tau *= get_efake_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-                tau *= get_mfake_sf(in->tDecayMode);
-            }
+            tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+            tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
         }
 
         cutflow->Fill(1., 1.);
@@ -152,7 +131,7 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
             continue;
 
         if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 &&
-            in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVLooseDeepTau2017v2p1VSe > 0.5 &&
+            in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVVVLooseDeepTau2017v2p1VSe > 0.5 &&
             in->tDecayMode != 5 && in->tDecayMode != 6 &&
             in->tDecayModeFindingNewDMs > 0.5 && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
@@ -174,10 +153,10 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
             muCandidate = std::make_pair(mu.Pt(), in->mRelPFIsoDBDefault);
-            tauCandidate = std::make_pair(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            tauCandidate = std::make_pair(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
         } else {  // not a new event
             std::pair<float, float> currEleCandidate(mu.Pt(), in->mRelPFIsoDBDefault);
-            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - muCandidate.second > 0.0001) best_evt = ievt;
@@ -201,49 +180,8 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
     if (best_evt > -1) good_events.push_back(best_evt);
 }
 
-Float_t sync_mutau_tree2018::get_tes_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return tes_dm0_sf;
-    } else if (decayMode == 1) {
-        return tes_dm1_sf;
-    } else if (decayMode == 10) {
-        return tes_dm10_sf;
-    } else if (decayMode == 11) {
-        return tes_dm11_sf;
-    }
-    return 1.;
-}
-
-Float_t sync_mutau_tree2018::get_efake_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return efake_dm0_sf;
-    } else if (decayMode == 1) {
-        return efake_dm1_sf;
-    }
-    return 1.;
-}
-
-Float_t sync_mutau_tree2018::get_mfake_sf(Float_t decayMode) {
-    if (decayMode == 0) {
-        return mfake_dm0_sf;
-    } else if (decayMode == 1) {
-        return mfake_dm1_sf;
-    }
-    return 1.;
-}
-
-void sync_mutau_tree2018::do_met_corr_nom(Float_t decayMode, energy_scale escale, TLorentzVector tau, TLorentzVector* met) {
-    double sf(1.);
-    if (escale == tes) {
-        sf = get_tes_sf(decayMode);
-    } else if (escale == efake) {
-        sf = get_efake_sf(decayMode);
-    } else if (escale == mfake) {
-        sf = get_mfake_sf(decayMode);
-    } else {
-        std::cerr << "Not a valid energy correction" << std::endl;
-    }
-    *met = (*met) + tau - sf * tau;  // update input met}
+void sync_mutau_tree2018::do_met_corr_nom(Float_t sf, TLorentzVector tau, TLorentzVector* met) {
+    *met = (*met) + tau - sf * tau;  // update input met
 }
 
 void sync_mutau_tree2018::do_recoil_corr(RecoilCorrector* recoilPFMetCorrector, TLorentzVector* met, int njets) {
@@ -275,17 +213,17 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
     std::cout << "branches set." << std::endl;
 
     // legacy sf's
-    TFile htt_sf_file("$CMSSW_BASE/bin/$SCRAM_ARCH/htt_scalefactors_legacy_2018.root");
+    TFile htt_sf_file("$CMSSW_BASE/src/ltau_skimmer/ROOT/data/htt_scalefactors_legacy_2018.root");
     RooWorkspace *htt_sf = reinterpret_cast<RooWorkspace*>(htt_sf_file.Get("w"));
     htt_sf_file.Close();
 
     auto lumi_weights =
-        new reweight::LumiReWeighting("$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_mc_2018.root", "$CMSSW_BASE/bin/$SCRAM_ARCH/pu_distributions_data_2018.root", "pileup", "pileup");
+        new reweight::LumiReWeighting("$CMSSW_BASE/src/ltau_skimmer/ROOT/data/pu_distributions_mc_2018.root", "$CMSSW_BASE/src/ltau_skimmer/ROOT/data/pu_distributions_data_2018.root", "pileup", "pileup");
     
     // loop through all events pasing skimming/sorting
     for (auto& ievt : good_events) {
         original->GetEntry(ievt);
-        
+
         // TLorentzVector mu, tau;
         mu.SetPtEtaPhiM(in->mPt, in->mEta, in->mPhi, in->mMass);
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
@@ -305,24 +243,11 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
         }
 
         if (isMC || isEmbed) {
-            // met correction due to tau energy scale
-            if (in->tZTTGenMatching == 5) {
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, tes, tau, mets.at(i));
-                }
-                tau *= get_tes_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 1 || in->tZTTGenMatching == 3) {
-                // electron -> tau fake energy scale
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, efake, tau, mets.at(i));
-                }
-                tau *= get_efake_sf(in->tDecayMode);
-            } else if (in->tZTTGenMatching == 2 || in->tZTTGenMatching == 4) {
-                // muon -> tau fake energy scale
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(in->tDecayMode, mfake, tau, mets.at(i));
-                }
-                tau *= get_mfake_sf(in->tDecayMode);
+            auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+            auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+            tau *= fes_sf * tes_sf;
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
             }
         }
 
