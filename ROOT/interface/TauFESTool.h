@@ -77,6 +77,11 @@ Float_t TauFESTool::getTES(Float_t dm, Float_t gen_match, Bool_t syst = false) {
       return syst ? 0. : 1.;  // these will be removed anyways
     }
 
+    // handle small fraction of 1prong + 2pizero
+    if (dm == 2) {
+      dm = 1;
+    }
+
     auto index = dm_map.at(dm);
     std::string key = "nominal";
     if (syst) {
