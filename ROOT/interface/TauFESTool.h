@@ -47,26 +47,20 @@ TauFESTool::TauFESTool(std::string year, std::string id, std::string path, bool 
 
     // make_pair(energy scale, systematic shift)
     // order: dm0, dm1, dm10, dm11
-    std::vector<Float_t> shifts;
+    if (year == "2016Legacy") {
+        tes_sfs["nominal"] = percentage_to_weight({-0.6, -0.5, 0., -0.1});
+        tes_sfs["syst"] = percentage_to_decimal({1., 0.9, 1.1, 1.});
+    } else if (year == "2017ReReco") {
+        tes_sfs["nominal"] = percentage_to_weight({0.7, -0.2, 0.1, -0.1});
+        tes_sfs["syst"] = percentage_to_decimal({0.8, 0.8, 0.9, 1.});
+    } else if (year == "2018ReReco") {
+        tes_sfs["nominal"] = percentage_to_weight({-1.3, -0.5, -1.2, -0.1});
+        tes_sfs["syst"] = percentage_to_decimal({1.1, 0.9, 0.8, 1.});
+    }
+
+    // no TES shift for embedded, but same systematics as MC
     if (isEmbed) {
-        // embedded only
-        Float_t dm0_embed(0.975), dm0_embed_syst(0.008);
-        Float_t dm1_embed(0.975 * 1.051), dm1_embed_syst(.016);
-        Float_t dm10_embed(0.975 * 0.975 * 0.975), dm10_embed_syst(.024);
-        tes_sfs["nominal"] = {dm0_embed, dm1_embed, dm10_embed, 1.};
-        tes_sfs["syst"] = {dm0_embed_syst, dm1_embed_syst, dm10_embed_syst, 0.};
-    } else {
-        std::vector<Float_t> nominal;
-        if (year == "2016Legacy") {
-            tes_sfs["nominal"] = percentage_to_weight({-0.6, -0.5, 0., -0.1});
-            tes_sfs["syst"] = percentage_to_decimal({1., 0.9, 1.1, 1.});
-        } else if (year == "2017ReReco") {
-            tes_sfs["nominal"] = percentage_to_weight({0.7, -0.2, 0.1, -0.1});
-            tes_sfs["syst"] = percentage_to_decimal({0.8, 0.8, 0.9, 1.});
-        } else if (year == "2018ReReco") {
-            tes_sfs["nominal"] = percentage_to_weight({-1.3, -0.5, -1.2, -0.1});
-            tes_sfs["syst"] = percentage_to_decimal({1.1, 0.9, 0.8, 1.});
-        }
+        tes_sfs["nominal"] = percentage_to_weight({0., 0., 0., 0.});
     }
 }
 
