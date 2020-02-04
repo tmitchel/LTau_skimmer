@@ -361,10 +361,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         if (isMC || isEmbed) {
             auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
-            tau *= fes_sf * tes_sf;
             for (unsigned i = 0; i < mets.size(); i++) {
                 do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
             }
+            tau *= fes_sf * tes_sf;
             ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
             ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
             tes_syst = tfes.getTES(in->tDecayMode, in->tZTTGenMatching, true);
