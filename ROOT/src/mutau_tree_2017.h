@@ -350,38 +350,38 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
             for (unsigned i = 0; i < mets.size(); i++) {
                 do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
             }
-        }
 
-        float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
-        metSys.ApplyMEtSys(MET_resp_Up.Px(), MET_resp_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_resp_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                               sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_resp_Down.Px(), MET_resp_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_resp_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                                 sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_reso_Up.Px(), MET_reso_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                               sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                                 sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
+            metSys.ApplyMEtSys(MET_resp_Up.Px(), MET_resp_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_resp_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_resp_Down.Px(), MET_resp_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_resp_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                    sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_reso_Up.Px(), MET_reso_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                    sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+        }
 
         tes_syst = 0;
         ftes_syst_up = 0;
         ftes_syst_down = 0;
         if (isMC || isEmbed) {
-            auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
             if (!isEmbed) {
+                auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+                auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
                 for (unsigned i = 0; i < mets.size(); i++) {
                     do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
                 }
+                tau = tau * fes_sf * tes_sf;
             }
-            tau *= fes_sf * tes_sf;
             ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
             ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
             tes_syst = tfes.getTES(in->tDecayMode, in->tZTTGenMatching, true);
