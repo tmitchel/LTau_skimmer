@@ -358,8 +358,10 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         }
 
         // do recoil corrections on all met
-        for (unsigned i = 0; i < mets.size(); i++) {
-            do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
+        if (recoil > 0) {
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
+            }
         }
 
         float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
@@ -386,8 +388,10 @@ TTree* etau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         if (isMC || isEmbed) {
             auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
-            for (unsigned i = 0; i < mets.size(); i++) {
-                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
+            if (!isEmbed) {
+                for (unsigned i = 0; i < mets.size(); i++) {
+                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
+                }
             }
             tau *= fes_sf * tes_sf;
             ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
