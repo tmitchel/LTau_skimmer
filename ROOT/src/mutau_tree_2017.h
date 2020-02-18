@@ -109,7 +109,7 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
         // apply TES
-        if (isMC || isEmbed) {
+        if (isMC) {
             tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
         }

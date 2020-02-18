@@ -111,7 +111,7 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         ele *= in->eCorrectedEt / ele.Energy();
 
         // apply TES
-        if (isMC || isEmbed) {
+        if (isMC) {
             tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
         }
