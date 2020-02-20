@@ -111,7 +111,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
         ele *= in->eCorrectedEt / ele.Energy();
 
         // apply TES
-        if (isMC || isEmbed) {
+        if (isMC) {
             tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
         }
@@ -204,10 +204,10 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
             eleCandidate = std::make_pair(ele.Pt(), in->eRelPFIsoRho);
-            tauCandidate = std::make_pair(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            tauCandidate = std::make_pair(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
         } else {  // not a new event
             std::pair<float, float> currEleCandidate(ele.Pt(), in->eRelPFIsoRho);
-            std::pair<float, float> currTauCandidate(tau.Pt(), in->tRerunMVArun2v2DBoldDMwLTraw);
+            std::pair<float, float> currTauCandidate(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
 
             // clause 1, select the pair that has most isolated tau lepton 1
             if (currEleCandidate.second - eleCandidate.second > 0.0001) best_evt = ievt;
@@ -353,37 +353,41 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         }
 
         // do recoil corrections on all met
-        for (unsigned i = 0; i < mets.size(); i++) {
-            do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
-        }
+        if (recoil > 0) {
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
+            }
 
-        float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
-        metSys.ApplyMEtSys(MET_resp_Up.Px(), MET_resp_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_resp_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                               sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_resp_Down.Px(), MET_resp_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_resp_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                                 sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_reso_Up.Px(), MET_reso_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                               sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
-        metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                           MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
-        MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
-                                 sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            float pfmetcorr_recoil_ex, pfmetcorr_recoil_ey;
+            metSys.ApplyMEtSys(MET_resp_Up.Px(), MET_resp_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_resp_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                   sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_resp_Down.Px(), MET_resp_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Response, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_resp_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                     sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_reso_Up.Px(), MET_reso_Up.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                   sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+            metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
+                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+            MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
+                                     sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
+        }
 
         tes_syst = 0;
         ftes_syst_up = 0;
         ftes_syst_down = 0;
         if (isMC || isEmbed) {
-            auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
-            tau *= fes_sf * tes_sf;
-            for (unsigned i = 0; i < mets.size(); i++) {
-                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
+            if (!isEmbed) {
+                auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
+                auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+                for (unsigned i = 0; i < mets.size(); i++) {
+                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
+                }
+                tau = tau * fes_sf * tes_sf;
             }
             ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
             ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
