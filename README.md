@@ -4,7 +4,6 @@ This repository contains all of the code needed to skim either lepton+tau channe
 
 ##### Table of Contents
 [Input File Locations](#files) <br/>
-[Output File Locations](#ofiles) <br/>
 [Quick Start](#quickstart) <br/>
 [Using Condor](#condor) <br/>
 
@@ -14,45 +13,33 @@ This repository contains all of the code needed to skim either lepton+tau channe
 
 Here are the locations of all currently used FSA ntuples
 - 2016 ntuples
-    - Background Monte Carlo: /hdfs/store/user/abdollah/FSA_MC_2016/
+    - Background Monte Carlo: `/hdfs/store/user/aloeliger/SMHTT_2016_20nov/`
     - Signal Monte Carlo: 
-        - /hdfs/store/user/abdollah/FSA_Signal_2016/
-        - /hdfs/store/user/ymaravin/SMHTT_2016/
-    - Electron Data: /hdfs/store/user/abdollah/FSA_Data_et_2016/
-    - Muon Data: /hdfs/store/user/abdollah/FSA_Data_mt_2016/
-    - Embedded Electron: In Progress
-    - Embedded Muon: In Progress
+        - `/hdfs/store/user/abdollah/FSA_2016_AC_XMass/`
+        - `/hdfs/store/user/aloeliger/SMHTT_2016_20nov_ggH2/`
+    - Data: `/hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/`
+    - Embedded: `/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/`
 
 - 2017 ntuples
-    - Background Monte Carlo: /hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v1/
+    - Background Monte Carlo: 
+        - `/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_mt/`
+        - `/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_et/`
     - Signal Monte Carlo: 
-        - /hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part1/
-        - /hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part2/
-        - /hdfs/store/user/senka/SMHTT_2017_Ntuples_valid_part3/
-    - Data: /hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v1/
-    - Embedded: /hdfs/store/user/tmitchel/SMHTT_2017_embedded_v1/
+        - `/hdfs/store/user/abdollah/FSA_2017_AC_XMass/`
+        - `/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_ggh-only/`
+    - Data: `/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v3/`
+    - Embedded: `/hdfs/store/user/tmitchel/SMHTT_2017_legacy_embedded_v3/`
 
-- 2018 ntuples
-    - Monte Carlo: /hdfs/store/user/caillol/SMHTT_legacy_2018_240419/
-    - Data: /hdfs/store/user/caillol/SMHTT_legacy_2018_data_24042019/
-    - Embedded: In Progress
+- 2018 ntuples (old global tag)
+    - Background Monte Carlo: 
+        - `/hdfs/store/user/caillol/SMHTT_2018_20nov_mc/`
+        - `/hdfs/store/user/caillol/SMHTT_2018_20nov_highMem_etmt_mc/`
+    - Signal Monte Carlo: `/hdfs/store/user/abdollah/FSA_2018_AC_XMass`/
+    - Data: `/hdfs/store/user/caillol/SMHTT_2018_31oct_data/`
+    - Embedded: `/hdfs/store/user/caillol/SMHTT_2018_20nov_embedded/`
 
-<a name="ofiles"/>
-
-## Output File Locations
-
-Here are the locations of the skims currently being used for studies
-- 2016 skims:
-    - /hdfs/store/user/tmitchel/etau2016_legacy-v1_skim
-    - /hdfs/store/user/tmitchel/mutau2016_legacy-v1_skim
-
-- 2017 ntuples
-    - /hdfs/store/user/tmitchel/etau2017_legacy-v1_skim
-    - /hdfs/store/user/tmitchel/mutau2017_legacy-v1_skim
-
-- 2018 ntuples
-    - /hdfs/store/user/tmitchel/etau2018_legacy-v1_skim
-    - /hdfs/store/user/tmitchel/mutau2018_legacy-v1_skim
+- 2018 ntuples (new global tag)
+    - all in progress
 
 <a name="quickstart"/>
 
@@ -67,7 +54,7 @@ This section is designed so that you can start producing skims by simply copy/pa
 2. Clone all necessary repositories and get them setup
     - clone this repo
         ```
-        git clone -b development ssh://git@gitlab.cern.ch:7999/KState-HEP-HTT/ltau_skimmer.git
+        git clone -b development git@github.com:tmitchel/LTau_skimmer.git
         ```
     - get the files needed for recoil corrections
         ```
@@ -75,8 +62,13 @@ This section is designed so that you can start producing skims by simply copy/pa
         ```
     - now compile CMSSW things that need compiling
         ```
-        cd $CMSSW_BASE/src
+        cd ${CMSSW_BASE}/src
         scram b -j 8
+        ```
+    - finally, download Tau ES files
+        ```
+        cd ${CMSSW_BASE}/src/LTau_skimmer
+        source setup.sh
         ```
 3. Submit skims to condor for a chosen year/lepton/job type
 Submitting 2016 samples to be skimmed is done using a single python script to submit multiple jobs.
