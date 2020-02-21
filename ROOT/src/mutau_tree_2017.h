@@ -189,6 +189,12 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
             continue;
         }
 
+        if (in->bjetDeepCSVVeto20Tight_2017_DR0p5 < 1) {
+            cutflow->Fill(12., 1.);
+        } else {
+            continue;
+        }
+
         // implement new sorting per
         // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
         if (evt_now != evt_before) {  // new event, save the tau candidates
