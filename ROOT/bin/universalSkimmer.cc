@@ -30,6 +30,7 @@ static unsigned events(0);
 int main(int argc, char *argv[]) {
   CLParser parser(argc, argv);
   bool local = parser.Flag("--local");
+  bool isSignal = parser.Flag("-s");
   std::string year = parser.Option("-y");
   std::string ifile = parser.Option("-i");
   std::string ofile = parser.Option("-o");
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  skimmer->do_skimming(cutflow);
+  skimmer->do_skimming(cutflow, isSignal);
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector, metSys);
   events += skimmed_tree->GetEntries();
 

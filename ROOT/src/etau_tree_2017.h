@@ -58,7 +58,7 @@ class etau_tree2017 : public virtual base_tree {
     // Member functions
     etau_tree2017(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
     virtual ~etau_tree2017() {}
-    void do_skimming(TH1F*);
+    void do_skimming(TH1F*, bool);
     void set_branches();
     void do_met_corr_nom(Float_t, TLorentzVector, TLorentzVector*);
     void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);
@@ -91,7 +91,7 @@ etau_tree2017::etau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEm
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void etau_tree2017::do_skimming(TH1F* cutflow) {
+void etau_tree2017::do_skimming(TH1F* cutflow, bool isSignal) {
     // declare variables for sorting
     ULong64_t evt_now(0);
     ULong64_t evt_before(1);
@@ -171,7 +171,9 @@ void etau_tree2017::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->tVVVLooseDeepTau2017v2p1VSjet && in->tDecayModeFindingNewDMs &&
+        // signal samples are huge and have many systematics. I'll need to remove as much as possible before SVFit.
+        bool pass_id = ((isSignal && in->tMediumDeepTau2017v2p1VSjet) || (!isSignal && in->tVVVLooseDeepTau2017v2p1VSjet));
+        if (pass_id && in->tDecayModeFindingNewDMs &&
             in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else

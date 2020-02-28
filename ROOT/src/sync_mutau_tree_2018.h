@@ -51,7 +51,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
     // Member functions
     sync_mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
     virtual ~sync_mutau_tree2018() {}
-    void do_skimming(TH1F*);
+    void do_skimming(TH1F*, bool);
     void set_branches();
     Float_t get_tes_sf(Float_t);
     Float_t get_efake_sf(Float_t);
@@ -87,7 +87,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
+void sync_mutau_tree2018::do_skimming(TH1F* cutflow, bool isSignal) {
     // declare variables for sorting
     ULong64_t evt_now(0);
     ULong64_t evt_before(1);
