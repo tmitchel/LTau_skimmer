@@ -190,7 +190,7 @@ for sample in sorted(samples.keys()):
         pref+path, jobType, recoil, '2018', lep)
     
     # is this signal
-    if job == 'sig_mt' or job == 'sig_et' or job == 'mg':
+    if args.job == 'sig_mt' or args.job == 'sig_et' or args.job == 'mg':
         command += ' -s '
 
     # boilerplate
