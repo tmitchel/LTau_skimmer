@@ -180,6 +180,15 @@ for sample in sorted(samples.keys()):
     path = samples[sample][0]
     pref = settings[args.job][0]
 
-    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d %s -j %s -r %s -y %s -l %s -i input_file.root -o \'$OUTPUT\'' % (
+    # base command
+    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d {} -j {} -r {} -y {} -l {}'.format(
         pref+path, jobType, recoil, '2018', lep)
+    
+    # is this signal
+    if job == 'sig' or job == 'ggh':
+        command += ' -s '
+
+    # boilerplate
+    command +=  '-i input_file.root -o \'$OUTPUT\''
+
     ch.submit_command(command, prefix, pref+path, sample, use_input='-n ', dryrun=False)
