@@ -201,7 +201,7 @@ for sample in sorted(samples.keys()):
     pref = settings[args.job][0]
 
     # base command
-    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d {} -j {} -r {} -y {} -l {}'.format(
+    command = '$CMSSW_BASE/bin/$SCRAM_ARCH/uniSkim -d {} -j {} -r {} -y {} -l {} '.format(
         pref+path, jobType, recoil, '2016', lep)
     
     # is this signal
@@ -209,6 +209,6 @@ for sample in sorted(samples.keys()):
         command += ' -s '
 
     # boilerplate
-    command +=  '-i input_file.root -o \'$OUTPUT\''
+    command +=  ' -i input_file.root -o \'$OUTPUT\''
 
     ch.submit_command(command, prefix, pref+path, sample)

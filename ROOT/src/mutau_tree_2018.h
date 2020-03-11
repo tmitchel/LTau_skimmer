@@ -120,18 +120,18 @@ void mutau_tree2018::do_skimming(TH1F* cutflow, bool isSignal) {
 
         auto Mu24 = in->IsoMu24Pass && in->mMatchesIsoMu24Path && in->mMatchesIsoMu24Filter;
         auto Mu27 = in->IsoMu27Pass && in->mMatchesIsoMu27Path && in->mMatchesIsoMu27Filter;
-        auto Cross_base = in->mMatchesIsoMu20HPSTau27Filter && in->mMatchesIsoMu20HPSTau27Path && in->tMatchesIsoMu20HPSTau27Filter &&
-                          in->tMatchesIsoMu20HPSTau27Path;
-        auto Cross_v1 = Cross_base && in->Mu20LooseHPSTau27Pass && in->run < 317509 && isData;
-        auto Cross_v2 = Cross_base && in->Mu20LooseHPSTau27TightIDPass && (isMC || (in->run > 317509 && isData));
+        auto Cross_v1 = in->run < 317509 && isData && in->Mu20LooseTau27Pass && in->mMatchesIsoMu20Tau27Filter && in->mMatchesIsoMu20Tau27Path && 
+                        in->tMatchesIsoMu20Tau27Filter && in->tMatchesIsoMu20Tau27Path;
+        auto Cross_v2 = (isMC || (in->run >= 317509 && isData)) && in->Mu20LooseHPSTau27Pass && in->mMatchesIsoMu20HPSTau27Filter && in->mMatchesIsoMu20HPSTau27Path &&
+                        in->tMatchesIsoMu20HPSTau27Filter && in->tMatchesIsoMu20HPSTau27Path;
         auto Mu24_emb = in->mMatchEmbeddedFilterMu24;
         auto Mu27_emb = in->mMatchEmbeddedFilterMu27;
         // auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2018 && in->tMatchEmbeddedFilterMu20HPSTau27;
 
         if (isEmbed) {
-            if (Mu27_emb && mu.Pt() > 28) {
+            if (Mu27 && mu.Pt() > 28) {
                 cutflow->Fill(2., 1.);
-            } else if (Mu24_emb && mu.Pt() > 25) {
+            } else if (Mu24 && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
             } else if (mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);

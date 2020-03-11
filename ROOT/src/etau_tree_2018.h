@@ -121,19 +121,19 @@ void etau_tree2018::do_skimming(TH1F* cutflow, bool isSignal) {
 
         auto Ele32 = in->eMatchesEle32Filter && in->eMatchesEle32Path && in->Ele32WPTightPass;
         auto Ele35 = in->eMatchesEle35Filter && in->eMatchesEle35Path && in->Ele35WPTightPass;
-        auto Cross_base =
-            in->eMatchesEle24HPSTau30Filter && in->eMatchesEle24HPSTau30Path && in->tMatchesEle24HPSTau30Filter && in->tMatchesEle24HPSTau30Path;
-        auto Cross_v1 = Cross_base && in->Ele24LooseHPSTau30Pass && in->run < 317509 && isData;
-        auto Cross_v2 = Cross_base && in->Ele24LooseHPSTau30TightIDPass && (isMC || (in->run > 317509 && isData));
+        auto Cross_v1 = in->run < 317509 && isData && in->Ele24LooseTau30Pass &&
+                        in->eMatchesEle24Tau30Filter && in->eMatchesEle24Tau30Path && in->tMatchesEle24Tau30Filter && in->tMatchesEle24Tau30Path;
+        auto Cross_v2 = (isMC || (in->run >= 317509 && isData))&& in->Ele24LooseHPSTau30TightIDPass && 
+                        in->eMatchesEle24HPSTau30Filter && in->eMatchesEle24HPSTau30Path && in->tMatchesEle24HPSTau30Filter && in->tMatchesEle24HPSTau30Path;
         auto Ele32_emb = in->eMatchEmbeddedFilterEle32 || fabs(ele.Eta()) > 1.479;
         auto Ele35_emb = in->eMatchEmbeddedFilterEle35 || fabs(ele.Eta()) > 1.479;
         // auto Cross_emb = (in->eMatchEmbeddedFilterEle24Tau30 && in->tMatchEmbeddedFilterEle24Tau30) || fabs(ele.Eta()) > 1.479;
 
         // embedded has it's own trigger paths
         if (isEmbed) {
-            if (Ele35_emb && ele.Pt() > 36) {
+            if (Ele35 && ele.Pt() > 36) {
                 cutflow->Fill(2., 1.);
-            } else if (Ele32_emb && ele.Pt() > 33) {
+            } else if (Ele32 && ele.Pt() > 33) {
                 cutflow->Fill(2., 1.);
             } else if (ele.Pt() > 25 && ele.Pt() < 33 && tau.Pt() > 35 && fabs(tau.Eta()) < 2.1) {
                 cutflow->Fill(2., 1.);
