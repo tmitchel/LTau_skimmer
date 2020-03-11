@@ -103,18 +103,18 @@ int main(int argc, char *argv[]) {
 
   if (year == "2016") {
     if (lepton == "et") {
-      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new etau_tree2016(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
     } else if (lepton == "mt") {
-      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new mutau_tree2016(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
     } else {
       std::cerr << "bad options, my dude." << std::endl;
       return -1;
     }
   } else if (year == "2017") {
     if (lepton == "et") {
-      skimmer = new etau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new etau_tree2017(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
     } else if (lepton == "mt") {
-      skimmer = new mutau_tree2017(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new mutau_tree2017(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
     } else {
       std::cerr << "bad options, my dude." << std::endl;
       return -1;
@@ -131,12 +131,12 @@ int main(int argc, char *argv[]) {
 
   } else if (year == "2018") {
     if (isSync) {
-      skimmer = new sync_mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+      skimmer = new sync_mutau_tree2018(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
     } else {
       if (lepton == "et") {
-        skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+        skimmer = new etau_tree2018(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
       } else if (lepton == "mt") {
-        skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, recoil);
+        skimmer = new mutau_tree2018(ntuple, newtree, isMC, isEmbed, isSignal, recoil);
       } else {
         std::cerr << "bad options, my dude." << std::endl;
         return -1;
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  skimmer->do_skimming(cutflow, isSignal);
+  skimmer->do_skimming(cutflow);
   auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector, metSys);
   events += skimmed_tree->GetEntries();
 

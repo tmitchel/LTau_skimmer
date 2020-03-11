@@ -21,9 +21,9 @@ class base_tree {
  public:
   // Member functions
   base_tree() {}
-  base_tree(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
+  base_tree(TTree* orig, TTree* itree, bool isMC, bool isEmbed, bool isSignal, Int_t rec);
   virtual ~base_tree() {}
-  virtual void do_skimming(TH1F*, bool) = 0;
+  virtual void do_skimming(TH1F*) = 0;
   virtual void set_branches() = 0;
   virtual TTree* fill_tree(RecoilCorrector, MEtSys) = 0;
 };

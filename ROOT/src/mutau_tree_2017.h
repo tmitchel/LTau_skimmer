@@ -19,7 +19,7 @@ class mutau_tree2017 : public virtual base_tree {
    private:
     TTree *tree, *original;
     mutau_input_branches* in;
-    bool isMC, isEmbed;
+    bool isMC, isEmbed, isSignal;
     std::vector<Int_t> good_events;
     TLorentzVector mu, tau, MET, MET_reso_Up, MET_reso_Down, MET_resp_Up, MET_resp_Down;
     TLorentzVector MET_JERUp, MET_AbsoluteUp, MET_AbsoluteyearUp, MET_BBEC1Up, MET_BBEC1yearUp, MET_EC2Up, MET_EC2yearUp, MET_EnUp, MET_FlavorQCDUp,
@@ -55,9 +55,9 @@ class mutau_tree2017 : public virtual base_tree {
     std::vector<TLorentzVector*> mets;
 
     // Member functions
-    mutau_tree2017(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
+    mutau_tree2017(TTree* orig, TTree* itree, bool isMC, bool isEmbed, bool IsSignal, Int_t rec);
     virtual ~mutau_tree2017() {}
-    void do_skimming(TH1F*, bool);
+    void do_skimming(TH1F*);
     void set_branches();
     void do_met_corr_nom(Float_t, TLorentzVector, TLorentzVector*);
     void do_recoil_corr(RecoilCorrector*, TLorentzVector*, int);
@@ -75,12 +75,13 @@ class mutau_tree2017 : public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-mutau_tree2017::mutau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec)
+mutau_tree2017::mutau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, bool IsSignal, Int_t rec)
     : tree(itree),
       original(Original),
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
+      isSignal(IsSignal),
       tfes("2017ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
       recoil(rec),
       era(2017) {}
@@ -90,7 +91,7 @@ mutau_tree2017::mutau_tree2017(TTree* Original, TTree* itree, bool IsMC, bool Is
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void mutau_tree2017::do_skimming(TH1F* cutflow, bool isSignal) {
+void mutau_tree2017::do_skimming(TH1F* cutflow) {
     // declare variables for sorting
     ULong64_t evt_now(0);
     ULong64_t evt_before(1);
@@ -161,9 +162,7 @@ void mutau_tree2017::do_skimming(TH1F* cutflow, bool isSignal) {
         else
             continue;
 
-        // signal samples are huge and have many systematics. I'll need to remove as much as possible before SVFit.
-        bool pass_id = ((isSignal && in->tMediumDeepTau2017v2p1VSjet) || (!isSignal && in->tVVVLooseDeepTau2017v2p1VSjet));
-        if (pass_id && in->tDecayModeFindingNewDMs &&
+        if (in->tVVVLooseDeepTau2017v2p1VSjet > 0.5 && in->tDecayModeFindingNewDMs &&
             in->tDecayMode != 5 && in->tDecayMode != 6  && fabs(in->tCharge) < 2)
             cutflow->Fill(7., 1.);  // tau quality selection
         else
@@ -268,6 +267,11 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
     // loop through all events pasing skimming/sorting
     for (auto& ievt : good_events) {
         original->GetEntry(ievt);
+
+        // remove anti-iso region from signal
+        if (isSignal && in->tMediumDeepTau2017v2p1VSjet < 0.5) {
+            continue;
+        }
 
         Run = in->run;
         Lumi = in->lumi;

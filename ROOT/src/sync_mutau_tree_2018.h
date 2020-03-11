@@ -24,7 +24,7 @@ class sync_mutau_tree2018 : public virtual base_tree {
    private:
     TTree *tree, *original;
     mutau_input_branches* in;
-    bool isMC, isEmbed, isData;
+    bool isMC, isEmbed, isData, isSignal;
     std::vector<Int_t> good_events;
     TLorentzVector mu, tau, MET;
     TauFESTool tfes;
@@ -49,9 +49,9 @@ class sync_mutau_tree2018 : public virtual base_tree {
 
 
     // Member functions
-    sync_mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, Int_t rec);
+    sync_mutau_tree2018(TTree* orig, TTree* itree, bool isMC, bool isEmbed, bool IsSignal, Int_t rec);
     virtual ~sync_mutau_tree2018() {}
-    void do_skimming(TH1F*, bool);
+    void do_skimming(TH1F*);
     void set_branches();
     Float_t get_tes_sf(Float_t);
     Float_t get_efake_sf(Float_t);
@@ -72,12 +72,13 @@ class sync_mutau_tree2018 : public virtual base_tree {
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec)
+sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, bool IsSignal, Int_t rec)
     : tree(itree),
       original(Original),
       in(new mutau_input_branches(Original)),
       isMC(IsMC),
       isEmbed(IsEmbed),
+      isSignal(IsSignal),
       tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
       recoil(rec),
       era(2018) {}
@@ -87,7 +88,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void sync_mutau_tree2018::do_skimming(TH1F* cutflow, bool isSignal) {
+void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
     // declare variables for sorting
     ULong64_t evt_now(0);
     ULong64_t evt_before(1);
