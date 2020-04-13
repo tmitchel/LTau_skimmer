@@ -239,11 +239,11 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
         }
 
         // do recoil corrections on all met
-        for (unsigned i = 0; i < mets.size(); i++) {
-            do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
-        }
-
         if (isMC || isEmbed) {
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
+            }
+
             auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
             tau *= fes_sf * tes_sf;
@@ -278,7 +278,7 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
                 trg_singlemuon = true;
             } else if (Mu24 && mu.Pt() > 25) {
                 trg_singlemuon = true;
-            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32 && fabs(tau.Eta()) < 2.1) {
+            } else if ((Cross_v1 || Cross_v2) && mu.Pt() > 21 && mu.Pt() < 25 && tau.Pt() > 32) {
                 trg_mutaucross = true;
             } else {
                 // nothing

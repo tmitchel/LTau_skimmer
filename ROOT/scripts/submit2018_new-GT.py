@@ -158,7 +158,7 @@ data_pref = '/hdfs/store/user/tmitchel/SMHTT_2018_legacy_data_GTv20/'
 embed_pref = '/hdfs/store/user/senka/SMHTT_2018_embedded/'
 sig_mt_pref = '/hdfs/store/user/senka/SMHTT_2018/'
 sig_et_pref = '/hdfs/store/user/senka/SMHTT_2018_em_et_tt/'
-mg_pref = '/hdfs/store/user/abdollah/FSA_2018_MadGraph_etmt/'
+mg_pref = '/hdfs/store/user/tmitchel/SMHTT_2018_legacy_madgraph_GTv20_etmt/'
 
 settings = {
   'sig_mt': [sig_mt_pref, sig_samples],

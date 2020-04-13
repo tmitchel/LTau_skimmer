@@ -94,12 +94,12 @@ sig_samples = {
    'ggh125_minlo_CUEUp' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_CUETP8M1Up_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
    'ggh125_minlo_DownPS' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_DownPS_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
    'ggh125_minlo_UpPS' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_powheg-minlo_pythia8_UpPS_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_inc_a1-prod_nom-decay' : ['GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_inc_a3-prod_nom-decay' : ['GluGluToPseudoscalarHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_inc_a3int-prod_nom-decay' : ['GluGluToMaxmixHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_two_a1-prod_nom-decay' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_two_a3-prod_nom-decay' : ['GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
-   'ggh125_madgraph_two_a3int-prod_nom-decay' : ['GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_inc_a1-prod_nom-decay' : ['GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_inc_a3-prod_nom-decay' : ['GluGluToPseudoscalarHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_inc_a3int-prod_nom-decay' : ['GluGluToMaxmixHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_two_a1-prod_nom-decay' : ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_two_a3-prod_nom-decay' : ['GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   # 'ggh125_madgraph_two_a3int-prod_nom-decay' : ['GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_tauola_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
 
    'vbf125_JHU_a1-prod_nom-decay' : ['VBFHiggs0PM_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
    'vbf125_JHU_a2-prod_nom-decay' : ['VBFHiggs0PH_HToTauTau_M-125_13TeV-JHUGenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
@@ -124,6 +124,20 @@ sig_samples = {
    'zh125_JHU_a3int-prod_nom-decay' : ['ZHiggs0MfZH05ph0_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', '0'],
    'zh125_JHU_l1-prod_nom-decay' : ['ZHiggs0L1_Undecayed_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
    'zh125_JHU_l1int-prod_nom-decay' : ['ZHiggs0L1fZH05ph0_HToTauTau_M-125_13TeV-JHUgenV6_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', '0'],
+}
+
+mg_samples = {
+   'ggh125_madgraph_one_a3int_filtered': ['JJH0Mf05ph0ToTauTauPlusOneJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_two_a3int_filtered': ['JJH0Mf05ph0ToTauTauPlusTwoJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_two_a3int_filtered': ['JJH0Mf05ph0ToTauTauPlusTwoJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+   'ggh125_madgraph_zero_a3int_filtered': ['JJH0Mf05ph0ToTauTauPlusZeroJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_one_a3_filtered': ['JJH0MToTauTauPlusOneJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_two_a3_filtered': ['JJH0MToTauTauPlusTwoJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_zero_a3_filtered': ['JJH0MToTauTauPlusZeroJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_one_a1_filtered': ['JJH0PMToTauTauPlusOneJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_two_a1_filtered': ['JJH0PMToTauTauPlusTwoJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+   'ggh125_madgraph_zero_a1_filtered': ['JJH0PMToTauTauPlusZeroJets_Filtered_M125_TuneCUETP8M1_13TeV-mcatnloFXFX-pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1', 'Z'],
+
 }
 
 data_et_samples = {
@@ -176,10 +190,12 @@ ggh_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_20nov_ggH2/'
 data_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_data_18Sep/'
 embed_pref = '/hdfs/store/user/aloeliger/SMHTT_2016_embedded_18sep/'
 sig_pref = '/hdfs/store/user/abdollah/FSA_2016_AC_XMass/'
+mg_pref = '/hdfs/store/user/tmitchel/SMHTT_2016_legacy_madgraph_GTv20_etmt/'
 
 settings = {
   'sig': [sig_pref, sig_samples],
   'ggh': [ggh_pref, ggh_samples],
+  'mg': [mg_pref, mg_samples],
   'bkg_all': [bkg_pref, bkg_samples_batch1],
   'dataMu': [data_pref, data_mt_samples],
   'dataEl': [data_pref, data_et_samples],
@@ -205,7 +221,7 @@ for sample in sorted(samples.keys()):
         pref+path, jobType, recoil, '2016', lep)
     
     # is this signal
-    if args.job == 'sig' or args.job == 'ggh':
+    if args.job == 'sig' or args.job == 'ggh' or args.job == 'mg':
         command += ' -s '
 
     # boilerplate
