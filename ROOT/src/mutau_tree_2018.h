@@ -130,7 +130,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
         // auto Cross_emb = in->mMatchEmbeddedFilterMu20Tau27_2018 && in->tMatchEmbeddedFilterMu20HPSTau27;
 
         if (isEmbed) {
-            if (Mu27 && mu.Pt() > 28) {
+            if (Mu27) {
                 cutflow->Fill(2., 1.);
             } else if (Mu24 && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
@@ -140,7 +140,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
                 continue;
             }
         } else {
-            if (Mu27 && mu.Pt() > 28) {
+            if (Mu27) {
                 cutflow->Fill(2., 1.);
             } else if (Mu24 && mu.Pt() > 25) {
                 cutflow->Fill(2., 1.);
@@ -381,7 +381,7 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
             MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                    sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
             metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+                               MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
             MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                      sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
         }

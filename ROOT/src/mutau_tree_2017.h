@@ -377,7 +377,7 @@ TTree* mutau_tree2017::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
             MET_reso_Up.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                 sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
             metSys.ApplyMEtSys(MET_reso_Down.Px(), MET_reso_Down.Py(), in->genpX, in->genpY, in->vispX, in->vispY, jet_for_correction,
-                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Up, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
+                            MEtSys::ProcessType::BOSON, MEtSys::SysType::Resolution, MEtSys::SysShift::Down, pfmetcorr_recoil_ex, pfmetcorr_recoil_ey);
             MET_reso_Down.SetPxPyPzE(pfmetcorr_recoil_ex, pfmetcorr_recoil_ey, 0,
                                     sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
         }
