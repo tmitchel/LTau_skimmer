@@ -89,9 +89,9 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
         embed_fes_sfs["down"]       = percentage_to_decimal({-0.50, -1.25});
     } else if (channel == "mt") {
         // mutau has no correction and no uncertainty
-        embed_fes_sfs["nominal"]  = {1.0};
-        embed_fes_sfs["up"]       = {0.0};
-        embed_fes_sfs["down"]     = {0.0};
+        embed_fes_sfs["nominal"]  = {1.0, 1.0};
+        embed_fes_sfs["up"]       = {0.0, 0.0};
+        embed_fes_sfs["down"]     = {0.0, 0.0};
     } else {
         std::cerr << "Don't know the provided channel " << channel << std::endl;
         return;
@@ -186,18 +186,22 @@ Float_t TauFESTool::getFES(Float_t dm, Float_t eta, Float_t gen_match, std::stri
         syst = "nominal";
     }
 
+    if (isEmbed) {
+        if (fabs(eta) < 1.479) {
+            return embed_fes_sfs[syst].at(0);
+        } else {
+            return embed_fes_sfs[syst].at(1);
+        }
+    }
+
     // handle barrel vs endcap
     int index = 0;
-    if (eta > 1.5) {
+    if (fabs(eta) > 1.479) {
         index = 2;
     }
 
     // decay mode 0 or 1
     index += dm;
-
-    if (isEmbed) {
-        return embed_fes_sfs[syst].at(index);
-    }
 
     return mc_fes_sfs[syst].at(index);
 }
