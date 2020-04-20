@@ -26,11 +26,11 @@ class TauFESTool {
     std::string year, id, path, channel;
     Float_t low_pt, high_pt;
     bool isEmbed;
-    std::unordered_map<int, int> dm_map;
     std::unordered_map<std::string, fvector> mc_fes_sfs;
     std::unordered_map<std::string, fvector> mc_tes_sfs, mc_tes_highpt_sfs, mc_tes_int_sfs;
     std::unordered_map<std::string, fvector> embed_fes_sfs;
     std::unordered_map<std::string, fvector> embed_tes_sfs;
+    std::unordered_map<int, int> dm_map;
 };
 
 TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, std::string _channel, bool _isEmbed)
