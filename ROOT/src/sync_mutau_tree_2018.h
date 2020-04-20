@@ -79,7 +79,7 @@ sync_mutau_tree2018::sync_mutau_tree2018(TTree* Original, TTree* itree, bool IsM
       isMC(IsMC),
       isEmbed(IsEmbed),
       isSignal(IsSignal),
-      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", "mt", isEmbed),
       recoil(rec),
       era(2018) {}
 
@@ -109,8 +109,8 @@ void sync_mutau_tree2018::do_skimming(TH1F* cutflow) {
 
         // apply TES
         if (isMC || isEmbed) {
-            tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+            tau *= tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            tau *= tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
         }
 
         cutflow->Fill(1., 1.);
@@ -244,8 +244,8 @@ TTree* sync_mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtS
                 do_recoil_corr(&recoilPFMetCorrector, mets.at(i), jet_for_correction);
             }
 
-            auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+            auto fes_sf = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
             tau *= fes_sf * tes_sf;
             for (unsigned i = 0; i < mets.size(); i++) {
                 do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
