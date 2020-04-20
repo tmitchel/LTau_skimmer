@@ -49,7 +49,7 @@ class mutau_tree2018 : public virtual base_tree {
         metphi_JERDown, metphi_AbsoluteDown, metphi_AbsoluteyearDown, metphi_BBEC1Down, metphi_BBEC1yearDown, metphi_EC2Down, metphi_EC2yearDown,
         metphi_EnDown, metphi_FlavorQCDDown, metphi_HFDown, metphi_HFyearDown, metphi_RelBalDown, metphi_RelSamDown, metphi_ResDown, metphi_TotalDown,
         metphi_UESDown;
-    Float_t tes_syst, ftes_syst_up, ftes_syst_down;
+    Float_t tes_syst_up, tes_syst_down, ftes_syst_up, ftes_syst_down;
     Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
     std::vector<TLorentzVector*> mets;
@@ -82,7 +82,7 @@ mutau_tree2018::mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool Is
       isMC(IsMC),
       isEmbed(IsEmbed),
       isSignal(IsSignal),
-      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", "mt", isEmbed),
       recoil(rec),
       era(2018) {}
 
@@ -112,8 +112,8 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
 
         // apply TES
         if (isMC) {
-            tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+            tau *= tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            tau *= tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
         }
 
         cutflow->Fill(1., 1.);
@@ -386,21 +386,23 @@ TTree* mutau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
                                      sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
         }
 
-        tes_syst = 0;
+        tes_syst_up = 0;
+        tes_syst_down = 0;
         ftes_syst_up = 0;
         ftes_syst_down = 0;
         if (isMC || isEmbed) {
+            auto fes_sf = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
             if (!isEmbed) {
-                auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-                auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
                 for (unsigned i = 0; i < mets.size(); i++) {
                     do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
                 }
-                tau = tau * fes_sf * tes_sf;
             }
-            ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
-            ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
-            tes_syst = tfes.getTES(in->tDecayMode, in->tZTTGenMatching, true);
+            tau = tau * fes_sf * tes_sf;
+            ftes_syst_up = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "up");
+            ftes_syst_down = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "down");
+            tes_syst_up = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "up");
+            tes_syst_down = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "down");
         }
 
         met = MET.Pt();
@@ -603,7 +605,8 @@ void mutau_tree2018::set_branches() {
     tree->Branch("metphi_UESDown", &metphi_UESDown);
     tree->Branch("ftes_syst_up", &ftes_syst_up);
     tree->Branch("ftes_syst_down", &ftes_syst_down);
-    tree->Branch("tes_syst", &tes_syst);
+    tree->Branch("tes_syst_up", &tes_syst_up);
+    tree->Branch("tes_syst_down", &tes_syst_down);
 
     tree->Branch("m_1", &m_1);
     tree->Branch("px_1", &px_1);
