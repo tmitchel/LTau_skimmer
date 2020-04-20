@@ -23,18 +23,18 @@ class TauFESTool {
     Float_t getTES(Float_t, Float_t, Float_t, std::string);
 
    private:
+    std::string year, id, path, channel;
+    Float_t low_pt, high_pt;
+    bool isEmbed;
+    std::unordered_map<int, int> dm_map;
     std::unordered_map<std::string, fvector> mc_fes_sfs;
     std::unordered_map<std::string, fvector> mc_tes_sfs, mc_tes_highpt_sfs, mc_tes_int_sfs;
     std::unordered_map<std::string, fvector> embed_fes_sfs;
     std::unordered_map<std::string, fvector> embed_tes_sfs;
-    std::unordered_map<int, int> dm_map;
-    std::string year, id, path, channel;
-    Float_t low_pt, high_pt;
-    bool isEmbed;
 };
 
 TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, std::string _channel, bool _isEmbed)
-    : year(_year), id(_id), path(_path), channel(_channel), isEmbed(_isEmbed), low_pt(34.), high_pt(170.),
+    : year(_year), id(_id), path(_path), channel(_channel), low_pt(34.), high_pt(170.), isEmbed(_isEmbed),
       mc_fes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       mc_tes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       mc_tes_highpt_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
