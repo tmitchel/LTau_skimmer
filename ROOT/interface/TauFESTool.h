@@ -42,15 +42,15 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
       embed_fes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       embed_tes_sfs{{"nominal", fvector{}}, {"up", fvector{}}, {"down", fvector{}}},
       dm_map{{0, 0}, {1, 1}, {10, 2}, {11, 3}} {
-    std::string fes_filepath = "$CMSSW_BASE/src/" + path + "TauFES_eta-dm_" + id + "_" + year + ".root";
+    std::string fes_filepath = "$CMSSW_BASE/src/" + path + "TauFES_eta-dm_" + id + "VSe_" + year + ".root";
     auto fes_file = new TFile(fes_filepath.c_str(), "READ");
     TGraph* fes_graph = reinterpret_cast<TGraph*>(fes_file->Get("fes"));
 
-    std::string tes_filepath = "$CMSSW_BASE/src/" + path + "TauES_dm_" + id + "_" + year + ".root";
+    std::string tes_filepath = "$CMSSW_BASE/src/" + path + "TauES_dm_" + id + "VSjet_" + year + ".root";
     auto tes_file = new TFile(tes_filepath.c_str(), "READ");
     TH1F* tes_hist = reinterpret_cast<TH1F*>(tes_file->Get("tes"));
 
-    std::string tes_highpt_filepath = "$CMSSW_BASE/src/" + path + "TauES_dm_" + id + "_" + year + "_ptgt100.root";
+    std::string tes_highpt_filepath = "$CMSSW_BASE/src/" + path + "TauES_dm_" + id + "VSjet_" + year + "_ptgt100.root";
     auto tes_highpt_file = new TFile(tes_highpt_filepath.c_str(), "READ");
     TH1F* tes_highpt_hist = reinterpret_cast<TH1F*>(tes_highpt_file->Get("tes"));
 

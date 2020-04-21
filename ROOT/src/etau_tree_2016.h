@@ -82,7 +82,7 @@ etau_tree2016::etau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEm
       isMC(IsMC),
       isEmbed(IsEmbed),
       isSignal(IsSignal),
-      tfes("2016Legacy", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", "et", isEmbed),
+      tfes("2016Legacy", "DeepTau2017v2p1", "ltau_skimmer/ROOT/data/", "et", isEmbed),
       recoil(rec),
       era(2016) {}
 

@@ -82,7 +82,7 @@ mutau_tree2018::mutau_tree2018(TTree* Original, TTree* itree, bool IsMC, bool Is
       isMC(IsMC),
       isEmbed(IsEmbed),
       isSignal(IsSignal),
-      tfes("2018ReReco", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", "mt", isEmbed),
+      tfes("2018ReReco", "DeepTau2017v2p1", "ltau_skimmer/ROOT/data/", "mt", isEmbed),
       recoil(rec),
       era(2018) {}
 
