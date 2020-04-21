@@ -145,7 +145,7 @@ Float_t TauFESTool::getTES(Float_t pt, Float_t dm, Float_t gen_match, std::strin
     if (dm == 2) {
       dm = 1;
     }
-
+    
     auto index = dm_map.at(dm);
     // handle default case
     if (syst == "") {
@@ -156,7 +156,7 @@ Float_t TauFESTool::getTES(Float_t pt, Float_t dm, Float_t gen_match, std::strin
         return embed_tes_sfs.at(syst).at(index);
     }
 
-    if (syst != "") {
+    if (syst != "nominal") {
         // handle pT dependence of systematic
         if (pt <= 34) {
             return mc_tes_sfs.at(syst).at(index);
