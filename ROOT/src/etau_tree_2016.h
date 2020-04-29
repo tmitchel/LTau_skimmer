@@ -1139,6 +1139,11 @@ void etau_tree2016::set_branches() {
     tree->Branch("vbfj2pt", &in->vbfj2pt);
     tree->Branch("vispX", &in->vispX);
     tree->Branch("vispY", &in->vispY);
+
+    tree->Branch("sm_weight_nlo", &in->sm_weight_nlo);
+    tree->Branch("ps_weight_nlo", &in->ps_weight_nlo);
+    tree->Branch("mm_weight_nlo", &in->mm_weight_nlo);
+
     tree->Branch("idx", &in->idx);
 }
 
