@@ -190,7 +190,7 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->eRelPFIsoRho < 0.5) {
+        if (in->eRelPFIsoRho < 0.15) {
             cutflow->Fill(11., 1.);
         } else {
             continue;

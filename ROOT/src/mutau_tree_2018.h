@@ -188,7 +188,7 @@ void mutau_tree2018::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->mRelPFIsoDBDefault < 0.5) {
+        if (in->mRelPFIsoDBDefault < 0.15) {
             cutflow->Fill(11., 1.);
         } else {
             continue;
