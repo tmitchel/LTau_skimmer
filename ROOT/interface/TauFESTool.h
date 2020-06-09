@@ -110,12 +110,12 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
         mc_tes_sfs["up"].push_back(tes_hist->GetBinError(bin) / nom);
         mc_tes_highpt_sfs["up"].push_back(tes_highpt_hist->GetBinError(bin) / nom);
         // just slope for interpolation later
-        mc_tes_int_sfs["up"].push_back(((tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt)) / nom);
+        mc_tes_int_sfs["up"].push_back((tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt));
 
         mc_tes_sfs["down"].push_back(-1. * tes_hist->GetBinError(bin) / nom);
         mc_tes_highpt_sfs["down"].push_back(-1. * tes_highpt_hist->GetBinError(bin) / nom);
         // just slope for interpolation later
-        mc_tes_int_sfs["down"].push_back(((tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt)) / nom);
+        mc_tes_int_sfs["down"].push_back((tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt));
     }
 
     // genuine tau energy scale corrections (embedded)
@@ -145,7 +145,7 @@ Float_t TauFESTool::getTES(Float_t pt, Float_t dm, Float_t gen_match, std::strin
     if (dm == 2) {
       dm = 1;
     }
-    
+
     auto index = dm_map.at(dm);
     // handle default case
     if (syst == "") {
@@ -163,7 +163,8 @@ Float_t TauFESTool::getTES(Float_t pt, Float_t dm, Float_t gen_match, std::strin
         } else if (pt >= 170) {
             return mc_tes_highpt_sfs.at(syst).at(index);
         } else {
-            auto shift = mc_tes_sfs.at("nominal").at(index) + (pt - low_pt) * mc_tes_int_sfs.at(syst).at(index);
+            auto shift = mc_tes_sfs.at(syst).at(index) + (mc_tes_int_sfs.at(syst).at(index) / (pt - low_pt));
+            shift /= mc_tes_sfs.at("nominal").at(index);
             if (syst == "down") {
                 shift *= -1;
             }
