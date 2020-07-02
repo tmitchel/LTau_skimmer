@@ -672,7 +672,7 @@ void mutau_tree2018::set_branches() {
     tree->Branch("Mu20LooseTau27TightIDPass", &in->Mu20LooseTau27TightIDPass);
     tree->Branch("Mu50Pass", &in->Mu50Pass);
     tree->Branch("NUP", &in->NUP);
-    tree->Branch("Phi", &in->Phi);
+//    tree->Branch("Phi", &in->Phi);
     tree->Branch("Pt", &in->Pt);
     tree->Branch("Rivet_VEta", &in->Rivet_VEta);
     tree->Branch("Rivet_VPt", &in->Rivet_VPt);
