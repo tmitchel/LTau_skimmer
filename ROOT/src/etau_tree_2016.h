@@ -271,9 +271,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
-        // electron energy scale
-        ele *= in->eCorrectedEt / ele.Energy();
-
         met_px = in->type1_pfMetEt * cos(in->type1_pfMetPhi);
         met_py = in->type1_pfMetEt * sin(in->type1_pfMetPhi);
 
@@ -378,7 +375,8 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
             if (!isEmbed) {
                 for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
+                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));  // correct for change in tau energy scale
+                    do_met_corr_nom(in->eCorrectedEt / ele.Energy(), ele, mets.at(i));  // correct for change in electron energy scale
                 }
             }
             tau = tau * fes_sf * tes_sf;
@@ -387,6 +385,9 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             tes_syst_up = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "up");
             tes_syst_down = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "down");
         }
+
+        // electron energy scale
+        ele *= in->eCorrectedEt / ele.Energy();
 
         met = MET.Pt();
         metphi = MET.Phi();
