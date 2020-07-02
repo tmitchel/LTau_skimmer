@@ -153,8 +153,8 @@ int main(int argc, char *argv[]) {
 
   open_file->Close();
   fout->cd();
-  if (!local) {
-    TNamed dbName("MiniAOD_name", originalName.c_str());
+  if (!local && year == "2017") {
+    TH1F dbName = TH1F("MiniAOD_name", originalName.c_str(), 1, 0, 1); 
     dbName.Write();
   }
   nevents->Write();
