@@ -1229,6 +1229,10 @@ void etau_tree2017::set_branches() {
     tree->Branch("vispX", &in->vispX);
     tree->Branch("vispY", &in->vispY);
     tree->Branch("idx", &in->idx);
+
+    tree->Branch("sm_weight_nlo", &in->sm_weight_nlo);
+    tree->Branch("ps_weight_nlo", &in->ps_weight_nlo);
+    tree->Branch("mm_weight_nlo", &in->mm_weight_nlo);
 }
 
 #endif  // ROOT_SRC_ETAU_TREE_2017_H_
