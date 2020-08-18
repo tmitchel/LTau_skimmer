@@ -62,8 +62,8 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
         // i = 3 : endcap dm 1
         for (auto i = 0; i < 4; i++) {
             mc_fes_sfs["nominal"].push_back(fes_graph->GetY()[i]);
-            mc_fes_sfs["up"].push_back(fes_graph->GetErrorYhigh(i));
-            mc_fes_sfs["down"].push_back(-1 * fes_graph->GetErrorYlow(i));
+            mc_fes_sfs["up"].push_back(fes_graph->GetErrorYhigh(i) / fes_graph->GetY()[i]);
+            mc_fes_sfs["down"].push_back(-1 * fes_graph->GetErrorYlow(i) / fes_graph->GetY()[i]);
         }
     } else if (channel == "mt") {
         // mutau has no correction, but 1% uncorrelated in DM uncertainty
