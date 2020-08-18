@@ -62,8 +62,8 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
         // i = 3 : endcap dm 1
         for (auto i = 0; i < 4; i++) {
             mc_fes_sfs["nominal"].push_back(fes_graph->GetY()[i]);
-            mc_fes_sfs["up"].push_back(fes_graph->GetErrorYhigh(i) - fes_graph->GetY()[i]);
-            mc_fes_sfs["down"].push_back(fes_graph->GetErrorYlow(i) - fes_graph->GetY()[i]);
+            mc_fes_sfs["up"].push_back(fes_graph->GetErrorYhigh(i));
+            mc_fes_sfs["down"].push_back(-1 * fes_graph->GetErrorYlow(i));
         }
     } else if (channel == "mt") {
         // mutau has no correction, but 1% uncorrelated in DM uncertainty
@@ -115,7 +115,7 @@ TauFESTool::TauFESTool(std::string _year, std::string _id, std::string _path, st
         mc_tes_sfs["down"].push_back(-1. * tes_hist->GetBinError(bin) / nom);
         mc_tes_highpt_sfs["down"].push_back(-1. * tes_highpt_hist->GetBinError(bin) / nom);
         // just slope for interpolation later
-        mc_tes_int_sfs["down"].push_back((tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt));
+        mc_tes_int_sfs["down"].push_back(-1 * (tes_highpt_hist->GetBinError(bin) - tes_hist->GetBinError(bin)) / (high_pt - low_pt));
     }
 
     // genuine tau energy scale corrections (embedded)
@@ -165,9 +165,6 @@ Float_t TauFESTool::getTES(Float_t pt, Float_t dm, Float_t gen_match, std::strin
         } else {
             auto shift = mc_tes_sfs.at(syst).at(index) + (mc_tes_int_sfs.at(syst).at(index) / (pt - low_pt));
             shift /= mc_tes_sfs.at("nominal").at(index);
-            if (syst == "down") {
-                shift *= -1;
-            }
             return shift;
         }
     }
