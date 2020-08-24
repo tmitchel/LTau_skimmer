@@ -108,7 +108,7 @@ void mutau_tree2016::do_skimming(TH1F* cutflow) {
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
         // apply TES
-        if (isMC) {
+        if (isMC || isEmbed) {
             tau *= tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
             tau *= tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
         }
@@ -388,10 +388,8 @@ TTree* mutau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys me
         if (isMC || isEmbed) {
             auto fes_sf = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
-            if (!isEmbed) {
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
-                }
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
             }
             tau = tau * fes_sf * tes_sf;
             ftes_syst_up = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "up");

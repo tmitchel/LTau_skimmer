@@ -111,7 +111,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         ele *= in->eCorrectedEt / ele.Energy();
 
         // apply TES
-        if (isMC) {
+        if (isMC || isEmbed) {
             tau *= tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
             tau *= tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
         }
@@ -341,6 +341,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             jet_for_correction += 1;
         }
 
+
         // do recoil corrections on all met
         if (recoil > 0) {
             for (unsigned i = 0; i < mets.size(); i++) {
@@ -373,11 +374,9 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         if (isMC || isEmbed) {
             auto fes_sf = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
             auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
-            if (!isEmbed) {
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));  // correct for change in tau energy scale
-                    do_met_corr_nom(in->eCorrectedEt / ele.Energy(), ele, mets.at(i));  // correct for change in electron energy scale
-                }
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));  // correct for change in tau energy scale
+                do_met_corr_nom(in->eCorrectedEt / ele.Energy(), ele, mets.at(i));  // correct for change in electron energy scale
             }
             tau = tau * fes_sf * tes_sf;
             ftes_syst_up = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "up");
@@ -385,7 +384,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             tes_syst_up = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "up");
             tes_syst_down = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "down");
         }
-
+        
         // electron energy scale
         ele *= in->eCorrectedEt / ele.Energy();
 
