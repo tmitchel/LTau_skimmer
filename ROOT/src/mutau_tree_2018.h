@@ -520,8 +520,6 @@ void mutau_tree2018::set_branches() {
     tree->Branch("lumi", &Lumi);
     tree->Branch("gen_match_1", &gen_match_1);
     tree->Branch("gen_match_2", &gen_match_2);
-    tree->Branch("met_px", &met_px);
-    tree->Branch("met_py", &met_py);
     tree->Branch("extraelec_veto", &extraelec_veto);
     tree->Branch("extramuon_veto", &extramuon_veto);
     tree->Branch("dilepton_veto", &dilepton_veto);
