@@ -49,7 +49,7 @@ class etau_tree2016 : public virtual base_tree {
         metphi_JERDown, metphi_AbsoluteDown, metphi_AbsoluteyearDown, metphi_BBEC1Down, metphi_BBEC1yearDown, metphi_EC2Down, metphi_EC2yearDown,
         metphi_EnDown, metphi_FlavorQCDDown, metphi_HFDown, metphi_HFyearDown, metphi_RelBalDown, metphi_RelSamDown, metphi_ResDown, metphi_TotalDown,
         metphi_UESDown;
-    Float_t tes_syst, ftes_syst_up, ftes_syst_down;
+    Float_t tes_syst_up, tes_syst_down, ftes_syst_up, ftes_syst_down;
     Float_t pt_1, eta_1, phi_1, m_1, e_1, px_1, py_1, pz_1, pt_2, eta_2, phi_2, m_2, e_2, px_2, py_2, pz_2;
 
     std::vector<TLorentzVector*> mets;
@@ -82,7 +82,7 @@ etau_tree2016::etau_tree2016(TTree* Original, TTree* itree, bool IsMC, bool IsEm
       isMC(IsMC),
       isEmbed(IsEmbed),
       isSignal(IsSignal),
-      tfes("2016Legacy", "DeepTau2017v2p1VSe", "ltau_skimmer/ROOT/data/", isEmbed),
+      tfes("2016Legacy", "DeepTau2017v2p1", "ltau_skimmer/ROOT/data/", "et", isEmbed),
       recoil(rec),
       era(2016) {}
 
@@ -111,9 +111,9 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         ele *= in->eCorrectedEt / ele.Energy();
 
         // apply TES
-        if (isMC) {
-            tau *= tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-            tau *= tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
+        if (isMC || isEmbed) {
+            tau *= tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            tau *= tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
         }
 
         cutflow->Fill(1., 1.);
@@ -168,7 +168,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->eRelPFIsoRho < 0.5) {
+        if (in->eRelPFIsoRho < 0.15) {
             cutflow->Fill(11., 1.);
         } else {
             continue;
@@ -189,7 +189,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             //  this is a new event, so the first tau pair is the best! :)
             best_evt = ievt;
             eleCandidate = std::make_pair(ele.Pt(), in->eRelPFIsoRho);
-            tauCandidate = std::make_pair(in->Pt, in->tDeepTau2017v2p1VSjetraw);
+            tauCandidate = std::make_pair(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
         } else {  // not a new event
             std::pair<float, float> currEleCandidate(ele.Pt(), in->eRelPFIsoRho);
             std::pair<float, float> currTauCandidate(tau.Pt(), in->tDeepTau2017v2p1VSjetraw);
@@ -271,9 +271,6 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         ele.SetPtEtaPhiM(in->ePt, in->eEta, in->ePhi, in->eMass);
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
-        // electron energy scale
-        ele *= in->eCorrectedEt / ele.Energy();
-
         met_px = in->type1_pfMetEt * cos(in->type1_pfMetPhi);
         met_py = in->type1_pfMetEt * sin(in->type1_pfMetPhi);
 
@@ -344,6 +341,7 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
             jet_for_correction += 1;
         }
 
+
         // do recoil corrections on all met
         if (recoil > 0) {
             for (unsigned i = 0; i < mets.size(); i++) {
@@ -369,22 +367,26 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
                                     sqrt(pfmetcorr_recoil_ex * pfmetcorr_recoil_ex + pfmetcorr_recoil_ey * pfmetcorr_recoil_ey));
         }
 
-        tes_syst = 0;
+        tes_syst_up = 0;
+        tes_syst_down = 0;
         ftes_syst_up = 0;
         ftes_syst_down = 0;
         if (isMC || isEmbed) {
-            if (!isEmbed) {
-                auto fes_sf = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching);
-                auto tes_sf = tfes.getTES(in->tDecayMode, in->tZTTGenMatching);
-                for (unsigned i = 0; i < mets.size(); i++) {
-                    do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));
-                }
-                tau = tau * fes_sf * tes_sf;
+            auto fes_sf = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching);
+            auto tes_sf = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching);
+            for (unsigned i = 0; i < mets.size(); i++) {
+                do_met_corr_nom(fes_sf * tes_sf, tau, mets.at(i));  // correct for change in tau energy scale
+                do_met_corr_nom(in->eCorrectedEt / ele.Energy(), ele, mets.at(i));  // correct for change in electron energy scale
             }
-            ftes_syst_up = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "up");
-            ftes_syst_down = tfes.getFES(in->tDecayMode, tau.Eta(), in->tZTTGenMatching, "down");
-            tes_syst = tfes.getTES(in->tDecayMode, in->tZTTGenMatching, true);
+            tau = tau * fes_sf * tes_sf;
+            ftes_syst_up = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "up");
+            ftes_syst_down = tfes.getFES(in->tDecayMode, in->tEta, in->tZTTGenMatching, "down");
+            tes_syst_up = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "up");
+            tes_syst_down = tfes.getTES(in->tPt, in->tDecayMode, in->tZTTGenMatching, "down");
         }
+        
+        // electron energy scale
+        ele *= in->eCorrectedEt / ele.Energy();
 
         met = MET.Pt();
         metphi = MET.Phi();
@@ -586,7 +588,8 @@ void etau_tree2016::set_branches() {
     tree->Branch("metphi_UESDown", &metphi_UESDown);
     tree->Branch("ftes_syst_up", &ftes_syst_up);
     tree->Branch("ftes_syst_down", &ftes_syst_down);
-    tree->Branch("tes_syst", &tes_syst);
+    tree->Branch("tes_syst_up", &tes_syst_up);
+    tree->Branch("tes_syst_down", &tes_syst_down);
 
     tree->Branch("m_1", &m_1);
     tree->Branch("px_1", &px_1);
@@ -661,7 +664,7 @@ void etau_tree2016::set_branches() {
     tree->Branch("Mu20LooseTau27TightIDPass", &in->Mu20LooseTau27TightIDPass);
     tree->Branch("Mu50Pass", &in->Mu50Pass);
     tree->Branch("NUP", &in->NUP);
-    tree->Branch("Phi", &in->Phi);
+//    tree->Branch("Phi", &in->Phi);
     tree->Branch("Pt", &in->Pt);
     tree->Branch("Rivet_VEta", &in->Rivet_VEta);
     tree->Branch("Rivet_VPt", &in->Rivet_VPt);

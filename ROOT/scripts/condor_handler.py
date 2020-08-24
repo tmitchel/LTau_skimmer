@@ -7,6 +7,7 @@ def write_bash_script(command, output_sample_name, dag_dir, use_input=''):
     bash_name = '{}/{}.sh'.format(dag_dir+'inputs', output_sample_name)
     bashScript = '#!/bin/bash\n invalue=$(<$INPUT)\n echo "$invalue"\n'
     bashScript += 'echo $invalue\n'
+    bashScript += 'set -e\n'
     bashScript += 'value=${invalue:5}\n echo $value\n'
     copy_command = 'cp $value input_file.root'.replace(
         '/hdfs', '')
