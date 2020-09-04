@@ -88,7 +88,7 @@ bkg_samples_batch1 = {
 }
 
 sig_samples = {
-   'ggh125_minlo_nnlops': ['GluGluHToTauTau_M-125_13TeV_powheg_MINLO_NNLOPS_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
+    # 'ggh125_minlo_nnlops': ['GluGluHToTauTau_M-125_13TeV_powheg_MINLO_NNLOPS_pythia8_v3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2', 'Z'],
    'ggh125_JHU_a1-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_sm_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
    'ggh125_JHU_a3-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_pseudoscalar_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext3-v2', 'Z'],
    'ggh125_JHU_a3int-prod_nom-decay' : ['GluGluH2JetsToTauTau_M125_13TeV_CPmixing_maxmix_JHU_v3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2', 'Z'],
