@@ -163,7 +163,7 @@ embed_pref = "/hdfs/store/user/caillol/SMHTT_2017_27jul_embedded/"
 
 settings = {
   'sig': [sig_pref, sig_samples],
-  'mg': [mg_pref, mg_samples]
+  'mg': [mg_pref, mg_samples],
   'bkg': [bkg_pref, bkg_samples],
   'dataMu': [data_pref, data_mt_samples],
   'dataEl': [data_pref, data_et_samples],
