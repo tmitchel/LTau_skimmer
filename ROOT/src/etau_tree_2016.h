@@ -174,7 +174,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->bjetDeepCSVVeto20Tight_2016_DR0p5 < 1) {
+        if (in->bjetDeepCSVVeto20Medium_2016_DR0p5 < 1) {
             cutflow->Fill(12., 1.);
         } else {
             continue;
@@ -844,30 +844,14 @@ void etau_tree2016::set_branches() {
     tree->Branch("j2hadronflavor", &in->j2hadronflavor);
     tree->Branch("j2phi", &in->j2phi);
     tree->Branch("j2pt", &in->j2pt);
-    tree->Branch("jb1eta_2016", &in->jb1eta_2016);
-    tree->Branch("jb1eta_2017", &in->jb1eta_2017);
-    tree->Branch("jb1eta_2018", &in->jb1eta_2018);
-    tree->Branch("jb1hadronflavor_2016", &in->jb1hadronflavor_2016);
-    tree->Branch("jb1hadronflavor_2017", &in->jb1hadronflavor_2017);
-    tree->Branch("jb1hadronflavor_2018", &in->jb1hadronflavor_2018);
-    tree->Branch("jb1phi_2016", &in->jb1phi_2016);
-    tree->Branch("jb1phi_2017", &in->jb1phi_2017);
-    tree->Branch("jb1phi_2018", &in->jb1phi_2018);
-    tree->Branch("jb1pt_2016", &in->jb1pt_2016);
-    tree->Branch("jb1pt_2017", &in->jb1pt_2017);
-    tree->Branch("jb1pt_2018", &in->jb1pt_2018);
-    tree->Branch("jb2eta_2016", &in->jb2eta_2016);
-    tree->Branch("jb2eta_2017", &in->jb2eta_2017);
-    tree->Branch("jb2eta_2018", &in->jb2eta_2018);
-    tree->Branch("jb2hadronflavor_2016", &in->jb2hadronflavor_2016);
-    tree->Branch("jb2hadronflavor_2017", &in->jb2hadronflavor_2017);
-    tree->Branch("jb2hadronflavor_2018", &in->jb2hadronflavor_2018);
-    tree->Branch("jb2phi_2016", &in->jb2phi_2016);
-    tree->Branch("jb2phi_2017", &in->jb2phi_2017);
-    tree->Branch("jb2phi_2018", &in->jb2phi_2018);
-    tree->Branch("jb2pt_2016", &in->jb2pt_2016);
-    tree->Branch("jb2pt_2017", &in->jb2pt_2017);
-    tree->Branch("jb2pt_2018", &in->jb2pt_2018);
+    tree->Branch("jb1eta", &in->jb1eta);
+    tree->Branch("jb1hadronflavor", &in->jb1hadronflavor);
+    tree->Branch("jb1phi", &in->jb1phi);
+    tree->Branch("jb1pt", &in->jb1pt);
+    tree->Branch("jb2eta", &in->jb2eta);
+    tree->Branch("jb2hadronflavor", &in->jb2hadronflavor);
+    tree->Branch("jb2phi", &in->jb2phi);
+    tree->Branch("jb2pt", &in->jb2pt);
     tree->Branch("jetVeto20", &in->jetVeto20);
     tree->Branch("jetVeto20_JetEnDown", &in->jetVeto20_JetEnDown);
     tree->Branch("jetVeto20_JetEnUp", &in->jetVeto20_JetEnUp);
