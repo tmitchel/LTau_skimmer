@@ -724,10 +724,12 @@ void mutau_tree2017::set_branches() {
     tree->Branch("j2phi", &in->j2phi);
     tree->Branch("j2pt", &in->j2pt);
     tree->Branch("jb1eta", &in->jb1eta);
+    tree->Branch("deepcsvb1_btagscore", &in->deepcsvb1_btagscore);
     tree->Branch("jb1hadronflavor", &in->jb1hadronflavor);
     tree->Branch("jb1phi", &in->jb1phi);
     tree->Branch("jb1pt", &in->jb1pt);
     tree->Branch("jb2eta", &in->jb2eta);
+    tree->Branch("deepcsvb2_btagscore", &in->deepcsvb2_btagscore);
     tree->Branch("jb2hadronflavor", &in->jb2hadronflavor);
     tree->Branch("jb2phi", &in->jb2phi);
     tree->Branch("jb2pt", &in->jb2pt);

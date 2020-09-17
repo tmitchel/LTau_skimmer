@@ -335,10 +335,12 @@ class etau_input_branches {
   Float_t jb1hadronflavor;
   Float_t jb1phi;
   Float_t jb1pt;
+  Float_t deepcsvb1_btagscore;
   Float_t jb2eta;
   Float_t jb2hadronflavor;
   Float_t jb2phi;
   Float_t jb2pt;
+  Float_t deepcsvb2_btagscore;
   Float_t jetVeto20;
   Float_t jetVeto20WoNoisyJets;
   Float_t jetVeto20_JetEnDown;
@@ -1103,10 +1105,12 @@ etau_input_branches::etau_input_branches(TTree *tree) {
   // tree->SetBranchAddress("j2pt_JetRelativeSampleDown", &j2pt_JetRelativeSampleDown);
   // tree->SetBranchAddress("j2pt_JetRelativeSampleUp", &j2pt_JetRelativeSampleUp);
   tree->SetBranchAddress("deepcsvb1_eta", &jb1eta);
+  tree->SetBranchAddress("deepcsvb1_btagscore", &deepcsvb1_btagscore);
   tree->SetBranchAddress("deepcsvb1_hadronflavour", &jb1hadronflavor);
   tree->SetBranchAddress("deepcsvb1_phi", &jb1phi);
   tree->SetBranchAddress("deepcsvb1_pt", &jb1pt);
   tree->SetBranchAddress("deepcsvb2_eta", &jb2eta);
+  tree->SetBranchAddress("deepcsvb2_btagscore", &deepcsvb2_btagscore);
   tree->SetBranchAddress("deepcsvb2_hadronflavour", &jb2hadronflavor);
   tree->SetBranchAddress("deepcsvb2_phi", &jb2phi);
   tree->SetBranchAddress("deepcsvb2_pt", &jb2pt);
