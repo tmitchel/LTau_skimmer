@@ -190,7 +190,7 @@ void mutau_tree2017::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->bjetDeepCSVVeto20Medium_2017_DR0p5 < 1) {
+        if ((isMC && !isEmbed) || in->bjetDeepCSVVeto20Medium_2017_DR0p5 < 1) {
             cutflow->Fill(12., 1.);
         } else {
             continue;

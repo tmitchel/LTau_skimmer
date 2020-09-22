@@ -39,7 +39,7 @@ def default_farmout(jobName, input_name, output_dir, bash_name, submit_dir, dag_
         submit_dir, dag_dir, output_dir)
     farmoutString += ' --input-files-per-job=%i %s %s ' % (
         filesperjob, jobName, bash_name)
-    farmoutString += ' --memory-requirements=3000 --vsize-limit=8000'
+    farmoutString += '--use-hdfs --memory-requirements=3000 --vsize-limit=8000'
     return farmoutString
 
 
@@ -127,7 +127,7 @@ def submit_command(command, jobName, input_sample_dir, output_sample_name=None, 
     os.system('mkdir -p {}'.format(dag_dir+'inputs'))
 
     # output dir
-    output_dir = 'root://cmsxrootd.hep.wisc.edu:1094//store/user/{}/{}/{}/'.format(
+    output_dir = 'gsiftp://cms-lvs-gridftp.hep.wisc.edu:2811//hdfs/store/user/{}/{}/{}/'.format(
         pwd.getpwuid(os.getuid())[0], jobName, output_sample_name)
 
     # create file list

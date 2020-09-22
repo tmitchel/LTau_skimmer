@@ -174,7 +174,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->bjetDeepCSVVeto20Medium_2016_DR0p5 < 1) {
+        if ((isMC && !isEmbed) || in->bjetDeepCSVVeto20Medium_2016_DR0p5 < 1) {
             cutflow->Fill(12., 1.);
         } else {
             continue;
