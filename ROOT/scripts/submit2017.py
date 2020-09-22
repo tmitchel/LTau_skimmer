@@ -33,10 +33,10 @@ bkg_samples = {
     'WJets_v1': ['WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'W'],
     'WJets_v2': ['WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3', 'W'],
     'WJets_v3': ['WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2', 'W'],
-    'EWKWMinus': ['EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'W'],
-    'EWKWPlus': ['EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'W'],
-    'EWKZ2l': ['EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
-    'EWKZ2nu': ['EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
+    # 'EWKWMinus': ['EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'W'],
+    # 'EWKWPlus': ['EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'W'],
+    # 'EWKZ2l': ['EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
+    # 'EWKZ2nu': ['EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
 
     'Tbar-tchan_v1': ['ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'Tbar-tchan_v2': ['ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', '0'],
@@ -47,10 +47,10 @@ bkg_samples = {
     'TTLep': ['TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1', '0'],
     'TTHad': ['TTToHadronic_TuneCP5_13TeV-powheg-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', '0'],
     'TTSemi': ['TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1', '0'],
-    'WW_v1': ['WW_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
-    'WW_v2': ['WW_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', '0'],
-    'WZ': ['WZ_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
-    'ZZ': ['ZZ_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', '0'],
+    # 'WW_v1': ['WW_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    # 'WW_v2': ['WW_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', '0'],
+    # 'WZ': ['WZ_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    # 'ZZ': ['ZZ_TuneCP5_13TeV-pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', '0'],
 
     'VV': ['VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'WW1l1nu2q': ['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
@@ -62,25 +62,24 @@ bkg_samples = {
     'ZZ2l2q': ['ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'ZZ4l': ['ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
 
+    'ggHtoWW': ['GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    'ggZHtoWW': ['GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    'HWminusJtoWW': ['HWminusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    'HWplusJtoWW': ['HWplusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+    'HZJtoWW': ['HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v4', '0'],
+    'VBFtoWW': ['VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
+
+    'ggh125_powheg': ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
     'vbf125_powheg': ['VBFHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1', 'Z'],
     'wplus125_powheg': ['WplusHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'wminus125_powheg': ['WminusHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
     'zh125_powheg': ['ZHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', '0'],
 }
 
-ggh_samples = {
-    'ggh125_powheg': ['GluGluHToTauTau_M125_13TeV_powheg_pythia8_v2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2', 'Z'],
-}
-
 sig_samples = {
-    # 'ggh125_madgraph_inc_a1-prod_nom-decay': ['GluGluToHToTauTau_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
-    # 'ggh125_madgraph_two_a1-prod_nom-decay_v1': ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1', 'Z'],
-    # 'ggh125_madgraph_two_a1-prod_nom-decay_v2': ['GluGluToHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
-    # 'ggh125_madgraph_two_a3int-prod_nom-decay': ['GluGluToMaxmixHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
-    # 'ggh125_madgraph_two_a3-prod_nom-decay': ['GluGluToPseudoscalarHToTauTauPlusTwoJets_M125_13TeV_amcatnloFXFX_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
-    'ggh125_minlo_CP-down': ['GluGluToHToTauTauPlusTwoJets_M125_TuneCP5Down_PSweights_13TeV_powheg-minlo_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
+    # 'ggh125_minlo_CP-down': ['GluGluToHToTauTauPlusTwoJets_M125_TuneCP5Down_PSweights_13TeV_powheg-minlo_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
     'ggh125_minlo_CP-nom': ['GluGluToHToTauTauPlusTwoJets_M125_TuneCP5_PSweights_13TeV_powheg-minlo_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
-    'ggh125_minlo_CP-up': ['GluGluToHToTauTauPlusTwoJets_M125_TuneCP5Up_PSweights_13TeV_powheg-minlo_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
+    # 'ggh125_minlo_CP-up': ['GluGluToHToTauTauPlusTwoJets_M125_TuneCP5Up_PSweights_13TeV_powheg-minlo_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
     'vbf125_JHU_l1int-prod_nom-decay': ['VBFHiggs0L1f05ph0ToTauTau_M125_13TeV_JHUGenV7011_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
     'vbf125_JHU_l1-prod_nom-decay': ['VBFHiggs0L1ToTauTau_M125_13TeV_JHUGenV7011_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
     'vbf125_JHU_l1zgint-prod_nom-decay': ['VBFHiggs0L1Zgf05ph0ToTauTau_M125_13TeV_JHUGenV7011_pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2', 'Z'],
@@ -118,16 +117,6 @@ mg_samples = {
     'ggh125_madgraph_one_a1_filtered': ['JJH0PMToTauTauPlusOneJets_Filtered_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
     'ggh125_madgraph_two_a1_filtered': ['JJH0PMToTauTauPlusTwoJets_Filtered_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
     'ggh125_madgraph_zero_a1_filtered': ['JJH0PMToTauTauPlusZeroJets_Filtered_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_v2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1', 'Z'],
-
-    # 'ggh125_mdagraph_one_a3int_unfiltered': ['JJH0Mf05ph0ToTauTauPlusOneJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_two_a3int_unfiltered': ['JJH0Mf05ph0ToTauTauPlusTwoJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_zero_a3int_unfiltered': ['JJH0Mf05ph0ToTauTauPlusZeroJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_mdagraph_one_a3_unfiltered': ['JJH0MToTauTauPlusOneJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_two_a3_unfiltered': ['JJH0MToTauTauPlusTwoJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_zero_a3_unfiltered': ['JJH0MToTauTauPlusZeroJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_mdagraph_one_a1_unfiltered': ['JJH0PMToTauTauPlusOneJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_two_a1_unfiltered': ['JJH0PMToTauTauPlusTwoJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
-    # 'ggh125_madgraph_zero_a1_unfiltered': ['JJH0PMToTauTauPlusZeroJets_M125_TuneCP5_13TeV-mcatnloFXFX-pythia8_-102X_upgrade2018_realistic_v15-v1', 'Z'],
 }
 
 data_et_samples = {
@@ -165,29 +154,21 @@ embed_mt_samples = {
 prefix = args.prefix
 jobType = args.job
 
-ggh_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_ggh-only/"
-sig_pref = '/hdfs/store/user/abdollah/FSA_2017_AC_XMass/'
-bkg_mt_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_mt/"
-bkg_et_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mc_v3p2_et/"
-embed_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_embedded_v3/"
-data_pref = "/hdfs/store/user/tmitchel/SMHTT_2017_legacy_data_v3/"
-
-mg_et_pref = '/hdfs/store/user/abdollah/FSA_2017_MadGraph_et/'
-mg_mt_pref = '/hdfs/store/user/abdollah/FSA_2017_MadGraph_mt/'
+sig_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_jhu_v4/'
+mg_pref = '/hdfs/store/user/tmitchel/SMHTT_2017_legacy_mg_v4/'
+bkg_pref = "/hdfs/store/user/caillol/SMHTT_2017_27jul_mc/"
+data_pref = "/hdfs/store/user/caillol/SMHTT_2017_27jul_data/"
+embed_pref = "/hdfs/store/user/caillol/SMHTT_2017_27jul_embedded/"
 
 
 settings = {
-#   'signal_et': [sig_et_pref, sig_samples],
-  'ggh': [ggh_pref, ggh_samples],
   'sig': [sig_pref, sig_samples],
-  'bkg_mt': [bkg_mt_pref, bkg_samples],
-  'bkg_et': [bkg_et_pref, bkg_samples],
+  'mg': [mg_pref, mg_samples],
+  'bkg': [bkg_pref, bkg_samples],
   'dataMu': [data_pref, data_mt_samples],
   'dataEl': [data_pref, data_et_samples],
   'embedMu': [embed_pref, embed_mt_samples],
   'embedEl': [embed_pref, embed_et_samples],
-  'mg_et': [mg_et_pref, mg_samples],
-  'mg_mt': [mg_mt_pref, mg_samples]
 }
 
 pref = settings[args.job][0]
