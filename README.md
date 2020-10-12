@@ -67,7 +67,7 @@ This section is designed so that you can start producing skims by simply copy/pa
         ```
     - finally, download Tau ES files
         ```
-        cd ${CMSSW_BASE}/src/LTau_skimmer
+        cd ${CMSSW_BASE}/src/LTau_skimmer/ROOT
         source setup.sh
         ```
 3. Submit skims to condor for a chosen year/lepton/job type
