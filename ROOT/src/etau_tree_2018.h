@@ -109,7 +109,9 @@ void etau_tree2018::do_skimming(TH1F* cutflow) {
         tau.SetPtEtaPhiM(in->tPt, in->tEta, in->tPhi, in->tMass);
 
         // electron energy scale
-        ele *= in->eCorrectedEt / ele.Energy();
+        if (isMC) {
+            ele *= in->eCorrectedEt / ele.Energy();
+        }
 
         // apply TES
         if (isMC || isEmbed) {
@@ -405,7 +407,9 @@ TTree* etau_tree2018::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
         }
 
         // electron energy scale
-        ele *= in->eCorrectedEt / ele.Energy();
+        if (isMC) {
+            ele *= in->eCorrectedEt / ele.Energy();
+        }
 
         met = MET.Pt();
         metphi = MET.Phi();
