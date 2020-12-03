@@ -154,7 +154,7 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
         else
             continue;
 
-        if (in->tVLooseDeepTau2017v2p1VSmu > 0.5 && in->tTightDeepTau2017v2p1VSe > 0.5)
+        if (in->tVVVLooseDeepTau2017v2p1VSmu > 0.5 && in->tVVVLooseDeepTau2017v2p1VSe > 0.5)
             cutflow->Fill(8., 1.);  // tau against leptons
         else
             continue;
@@ -170,17 +170,17 @@ void etau_tree2016::do_skimming(TH1F* cutflow) {
             continue;
         }
 
-        if (in->eRelPFIsoRho < 0.15) {
-            cutflow->Fill(11., 1.);
-        } else {
-            continue;
-        }
+        // if (in->eRelPFIsoRho < 0.15) {
+        //     cutflow->Fill(11., 1.);
+        // } else {
+        //     continue;
+        // }
 
-        if ((isMC && !isEmbed) || in->bjetDeepCSVVeto20Medium_2016_DR0p5 < 1) {
-            cutflow->Fill(12., 1.);
-        } else {
-            continue;
-        }
+        // if ((isMC && !isEmbed) || in->bjetDeepCSVVeto20Medium_2016_DR0p5 < 1) {
+        //     cutflow->Fill(12., 1.);
+        // } else {
+        //     continue;
+        // }
 
         // implement new sorting per
         // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -254,10 +254,10 @@ TTree* etau_tree2016::fill_tree(RecoilCorrector recoilPFMetCorrector, MEtSys met
     for (auto& ievt : good_events) {
         original->GetEntry(ievt);
 
-        // remove anti-iso region from signal
-        if (isSignal && in->tMediumDeepTau2017v2p1VSjet < 0.5) {
-            continue;
-        }
+        // // remove anti-iso region from signal
+        // if (isSignal && in->tMediumDeepTau2017v2p1VSjet < 0.5) {
+        //     continue;
+        // }
 
         Run = in->run;
         Lumi = in->lumi;
@@ -629,13 +629,13 @@ void etau_tree2016::set_branches() {
     tree->Branch("Ele24LooseHPSTau30TightIDPass", &in->Ele24LooseHPSTau30TightIDPass);
     tree->Branch("Ele24LooseTau30Pass", &in->Ele24LooseTau30Pass);
     tree->Branch("Ele24LooseTau30TightIDPass", &in->Ele24LooseTau30TightIDPass);
-    tree->Branch("Ele27WPTightPass", &in->Ele27WPTightPass);
-    tree->Branch("Ele32WPTightPass", &in->Ele32WPTightPass);
-    tree->Branch("Ele35WPTightPass", &in->Ele35WPTightPass);
-    tree->Branch("Ele38WPTightPass", &in->Ele38WPTightPass);
-    tree->Branch("Ele40WPTightPass", &in->Ele40WPTightPass);
+    // tree->Branch("Ele27WPTightPass", &in->Ele27WPTightPass);
+    // tree->Branch("Ele32WPTightPass", &in->Ele32WPTightPass);
+    // tree->Branch("Ele35WPTightPass", &in->Ele35WPTightPass);
+    // tree->Branch("Ele38WPTightPass", &in->Ele38WPTightPass);
+    // tree->Branch("Ele40WPTightPass", &in->Ele40WPTightPass);
     tree->Branch("EmbPtWeight", &in->EmbPtWeight);
-    tree->Branch("Eta", &in->Eta);
+    // tree->Branch("Eta", &in->Eta);
     tree->Branch("Flag_BadChargedCandidateFilter", &in->Flag_BadChargedCandidateFilter);
     tree->Branch("Flag_BadPFMuonFilter", &in->Flag_BadPFMuonFilter);
     tree->Branch("Flag_EcalDeadCellTriggerPrimitiveFilter", &in->Flag_EcalDeadCellTriggerPrimitiveFilter);
@@ -649,25 +649,25 @@ void etau_tree2016::set_branches() {
     tree->Branch("Flag_globalTightHalo2016Filter", &in->Flag_globalTightHalo2016Filter);
     tree->Branch("Flag_goodVertices", &in->Flag_goodVertices);
     tree->Branch("GenWeight", &in->GenWeight);
-    tree->Branch("Ht", &in->Ht);
-    tree->Branch("IsoMu24Pass", &in->IsoMu24Pass);
-    tree->Branch("IsoMu27Pass", &in->IsoMu27Pass);
-    tree->Branch("LT", &in->LT);
-    tree->Branch("Mass", &in->Mass);
-    tree->Branch("MassError", &in->MassError);
-    tree->Branch("MassErrord1", &in->MassErrord1);
-    tree->Branch("MassErrord2", &in->MassErrord2);
-    tree->Branch("MassErrord3", &in->MassErrord3);
-    tree->Branch("MassErrord4", &in->MassErrord4);
-    tree->Branch("Mt", &in->Mt);
-    tree->Branch("Mu20LooseHPSTau27Pass", &in->Mu20LooseHPSTau27Pass);
-    tree->Branch("Mu20LooseHPSTau27TightIDPass", &in->Mu20LooseHPSTau27TightIDPass);
-    tree->Branch("Mu20LooseTau27Pass", &in->Mu20LooseTau27Pass);
-    tree->Branch("Mu20LooseTau27TightIDPass", &in->Mu20LooseTau27TightIDPass);
-    tree->Branch("Mu50Pass", &in->Mu50Pass);
+    // tree->Branch("Ht", &in->Ht);
+    // tree->Branch("IsoMu24Pass", &in->IsoMu24Pass);
+    // tree->Branch("IsoMu27Pass", &in->IsoMu27Pass);
+    // tree->Branch("LT", &in->LT);
+    // tree->Branch("Mass", &in->Mass);
+    // tree->Branch("MassError", &in->MassError);
+    // tree->Branch("MassErrord1", &in->MassErrord1);
+    // tree->Branch("MassErrord2", &in->MassErrord2);
+    // tree->Branch("MassErrord3", &in->MassErrord3);
+    // tree->Branch("MassErrord4", &in->MassErrord4);
+    // tree->Branch("Mt", &in->Mt);
+    // tree->Branch("Mu20LooseHPSTau27Pass", &in->Mu20LooseHPSTau27Pass);
+    // tree->Branch("Mu20LooseHPSTau27TightIDPass", &in->Mu20LooseHPSTau27TightIDPass);
+    // tree->Branch("Mu20LooseTau27Pass", &in->Mu20LooseTau27Pass);
+    // tree->Branch("Mu20LooseTau27TightIDPass", &in->Mu20LooseTau27TightIDPass);
+    // tree->Branch("Mu50Pass", &in->Mu50Pass);
     tree->Branch("NUP", &in->NUP);
 //    tree->Branch("Phi", &in->Phi);
-    tree->Branch("Pt", &in->Pt);
+    // tree->Branch("Pt", &in->Pt);
     tree->Branch("Rivet_VEta", &in->Rivet_VEta);
     tree->Branch("Rivet_VPt", &in->Rivet_VPt);
     tree->Branch("Rivet_errorCode", &in->Rivet_errorCode);
@@ -683,23 +683,23 @@ void etau_tree2016::set_branches() {
     tree->Branch("Rivet_stage1_cat_pTjet30GeV", &in->Rivet_stage1_cat_pTjet30GeV);
     tree->Branch("Rivet_stage1p1_cat", &in->Rivet_stage1p1_cat);
     tree->Branch("bjetDeepCSVVeto20Loose_2016_DR0p5", &in->bjetDeepCSVVeto20Loose_2016_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Loose_2017_DR0p5", &in->bjetDeepCSVVeto20Loose_2017_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Loose_2018_DR0p5", &in->bjetDeepCSVVeto20Loose_2018_DR0p5);
+    // tree->Branch("bjetDeepCSVVeto20Loose_2017_DR0p5", &in->bjetDeepCSVVeto20Loose_2017_DR0p5);
+    // tree->Branch("bjetDeepCSVVeto20Loose_2018_DR0p5", &in->bjetDeepCSVVeto20Loose_2018_DR0p5);
     tree->Branch("bjetDeepCSVVeto20Medium_2016_DR0", &in->bjetDeepCSVVeto20Medium_2016_DR0);
     tree->Branch("bjetDeepCSVVeto20Medium_2016_DR0p5", &in->bjetDeepCSVVeto20Medium_2016_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Medium_2017_DR0", &in->bjetDeepCSVVeto20Medium_2017_DR0);
-    tree->Branch("bjetDeepCSVVeto20Medium_2017_DR0p5", &in->bjetDeepCSVVeto20Medium_2017_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Medium_2018_DR0", &in->bjetDeepCSVVeto20Medium_2018_DR0);
-    tree->Branch("bjetDeepCSVVeto20Medium_2018_DR0p5", &in->bjetDeepCSVVeto20Medium_2018_DR0p5);
+    // tree->Branch("bjetDeepCSVVeto20Medium_2017_DR0", &in->bjetDeepCSVVeto20Medium_2017_DR0);
+    // tree->Branch("bjetDeepCSVVeto20Medium_2017_DR0p5", &in->bjetDeepCSVVeto20Medium_2017_DR0p5);
+    // tree->Branch("bjetDeepCSVVeto20Medium_2018_DR0", &in->bjetDeepCSVVeto20Medium_2018_DR0);
+    // tree->Branch("bjetDeepCSVVeto20Medium_2018_DR0p5", &in->bjetDeepCSVVeto20Medium_2018_DR0p5);
     tree->Branch("bjetDeepCSVVeto20Tight_2016_DR0p5", &in->bjetDeepCSVVeto20Tight_2016_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Tight_2017_DR0p5", &in->bjetDeepCSVVeto20Tight_2017_DR0p5);
-    tree->Branch("bjetDeepCSVVeto20Tight_2018_DR0p5", &in->bjetDeepCSVVeto20Tight_2018_DR0p5);
-    tree->Branch("bweight_2016", &in->bweight_2016);
-    tree->Branch("bweight_2017", &in->bweight_2017);
-    tree->Branch("bweight_2018", &in->bweight_2018);
+    // tree->Branch("bjetDeepCSVVeto20Tight_2017_DR0p5", &in->bjetDeepCSVVeto20Tight_2017_DR0p5);
+    // tree->Branch("bjetDeepCSVVeto20Tight_2018_DR0p5", &in->bjetDeepCSVVeto20Tight_2018_DR0p5);
+    // tree->Branch("bweight_2016", &in->bweight_2016);
+    // tree->Branch("bweight_2017", &in->bweight_2017);
+    // tree->Branch("bweight_2018", &in->bweight_2018);
     tree->Branch("charge", &in->charge);
     tree->Branch("dielectronVeto", &in->dielectronVeto);
-    tree->Branch("dimu9ele9Pass", &in->dimu9ele9Pass);
+    // tree->Branch("dimu9ele9Pass", &in->dimu9ele9Pass);
     tree->Branch("dimuonVeto", &in->dimuonVeto);
     // tree->Branch("eCBIDLoose", &in->eCBIDLoose);
     // tree->Branch("eCBIDMedium", &in->eCBIDMedium);
@@ -752,7 +752,7 @@ void etau_tree2016::set_branches() {
     // tree->Branch("eHcalIsoDR03", &in->eHcalIsoDR03);
     // tree->Branch("eIP3D", &in->eIP3D);
     // tree->Branch("eIP3DErr", &in->eIP3DErr);
-    tree->Branch("eIsoDB03", &in->eIsoDB03);
+    // tree->Branch("eIsoDB03", &in->eIsoDB03);
     // tree->Branch("eJetArea", &in->eJetArea);
     // tree->Branch("eJetBtag", &in->eJetBtag);
     // tree->Branch("eJetDR", &in->eJetDR);
@@ -767,8 +767,8 @@ void etau_tree2016::set_branches() {
     // tree->Branch("eLowestMll", &in->eLowestMll);
     tree->Branch("eMVAIsoWP80", &in->eMVAIsoWP80);
     tree->Branch("eMVAIsoWP90", &in->eMVAIsoWP90);
-    tree->Branch("eMVAIsoWPHZZ", &in->eMVAIsoWPHZZ);
-    tree->Branch("eMVAIsoWPLoose", &in->eMVAIsoWPLoose);
+    // tree->Branch("eMVAIsoWPHZZ", &in->eMVAIsoWPHZZ);
+    // tree->Branch("eMVAIsoWPLoose", &in->eMVAIsoWPLoose);
     tree->Branch("eMVANoisoWP80", &in->eMVANoisoWP80);
     tree->Branch("eMVANoisoWP90", &in->eMVANoisoWP90);
     tree->Branch("eMVANoisoWPLoose", &in->eMVANoisoWPLoose);
@@ -815,12 +815,12 @@ void etau_tree2016::set_branches() {
     // tree->Branch("eTrkIsoDR03", &in->eTrkIsoDR03);
     // tree->Branch("eVZ", &in->eVZ);
     // tree->Branch("eVetoHZZPt5", &in->eVetoHZZPt5);
-    tree->Branch("eVetoZTTp001dxyz", &in->eVetoZTTp001dxyz);
-    tree->Branch("eVetoZTTp001dxyzR0", &in->eVetoZTTp001dxyzR0);
+    // tree->Branch("eVetoZTTp001dxyz", &in->eVetoZTTp001dxyz);
+    // tree->Branch("eVetoZTTp001dxyzR0", &in->eVetoZTTp001dxyzR0);
     tree->Branch("eZTTGenMatching", &in->eZTTGenMatching);
-    tree->Branch("e_t_DR", &in->e_t_DR);
-    tree->Branch("e_t_Mass", &in->e_t_Mass);
-    tree->Branch("e_t_doubleL1IsoTauMatch", &in->e_t_doubleL1IsoTauMatch);
+    // tree->Branch("e_t_DR", &in->e_t_DR);
+    // tree->Branch("e_t_Mass", &in->e_t_Mass);
+    // tree->Branch("e_t_doubleL1IsoTauMatch", &in->e_t_doubleL1IsoTauMatch);
     // tree->Branch("edeltaEtaSuperClusterTrackAtVtx", &in->edeltaEtaSuperClusterTrackAtVtx);
     // tree->Branch("edeltaPhiSuperClusterTrackAtVtx", &in->edeltaPhiSuperClusterTrackAtVtx);
     // tree->Branch("eeSuperClusterOverP", &in->eeSuperClusterOverP);
@@ -906,8 +906,8 @@ void etau_tree2016::set_branches() {
     // tree->Branch("mu8e23Pass", &in->mu8e23Pass);
     // tree->Branch("muGlbIsoVetoPt10", &in->muGlbIsoVetoPt10);
     // tree->Branch("muVeto5", &in->muVeto5);
-    tree->Branch("muVetoZTTp001dxyz", &in->muVetoZTTp001dxyz);
-    tree->Branch("muVetoZTTp001dxyzR0", &in->muVetoZTTp001dxyzR0);
+    // tree->Branch("muVetoZTTp001dxyz", &in->muVetoZTTp001dxyz);
+    // tree->Branch("muVetoZTTp001dxyzR0", &in->muVetoZTTp001dxyzR0);
     tree->Branch("nTruePU", &in->nTruePU);
     tree->Branch("npNLO", &in->npNLO);
     tree->Branch("numGenJets", &in->numGenJets);
@@ -916,24 +916,24 @@ void etau_tree2016::set_branches() {
     tree->Branch("prefiring_weight_up", &in->prefiring_weight_up);
     tree->Branch("prefiring_weight_down", &in->prefiring_weight_down);
     tree->Branch("processID", &in->processID);
-    tree->Branch("puppiMetEt", &in->puppiMetEt);
-    tree->Branch("puppiMetPhi", &in->puppiMetPhi);
-    tree->Branch("pvChi2", &in->pvChi2);
-    tree->Branch("pvDX", &in->pvDX);
-    tree->Branch("pvDY", &in->pvDY);
-    tree->Branch("pvDZ", &in->pvDZ);
-    tree->Branch("pvIsFake", &in->pvIsFake);
-    tree->Branch("pvIsValid", &in->pvIsValid);
-    tree->Branch("pvNormChi2", &in->pvNormChi2);
-    tree->Branch("pvRho", &in->pvRho);
-    tree->Branch("pvX", &in->pvX);
-    tree->Branch("pvY", &in->pvY);
-    tree->Branch("pvZ", &in->pvZ);
-    tree->Branch("pvndof", &in->pvndof);
+    // tree->Branch("puppiMetEt", &in->puppiMetEt);
+    // tree->Branch("puppiMetPhi", &in->puppiMetPhi);
+    // tree->Branch("pvChi2", &in->pvChi2);
+    // tree->Branch("pvDX", &in->pvDX);
+    // tree->Branch("pvDY", &in->pvDY);
+    // tree->Branch("pvDZ", &in->pvDZ);
+    // tree->Branch("pvIsFake", &in->pvIsFake);
+    // tree->Branch("pvIsValid", &in->pvIsValid);
+    // tree->Branch("pvNormChi2", &in->pvNormChi2);
+    // tree->Branch("pvRho", &in->pvRho);
+    // tree->Branch("pvX", &in->pvX);
+    // tree->Branch("pvY", &in->pvY);
+    // tree->Branch("pvZ", &in->pvZ);
+    // tree->Branch("pvndof", &in->pvndof);
     tree->Branch("raw_pfMetEt", &in->raw_pfMetEt);
     tree->Branch("raw_pfMetPhi", &in->raw_pfMetPhi);
-    tree->Branch("recoilDaught", &in->recoilDaught);
-    tree->Branch("recoilWithMet", &in->recoilWithMet);
+    // tree->Branch("recoilDaught", &in->recoilDaught);
+    // tree->Branch("recoilWithMet", &in->recoilWithMet);
     tree->Branch("rho", &in->rho);
     tree->Branch("run", &in->run);
     tree->Branch("singleE25eta2p1TightPass", &in->singleE25eta2p1TightPass);
@@ -943,22 +943,22 @@ void etau_tree2016::set_branches() {
     tree->Branch("singleIsoTkMu22eta2p1Pass", &in->singleIsoTkMu22eta2p1Pass);
     tree->Branch("singleMu19eta2p1LooseTau20Pass", &in->singleMu19eta2p1LooseTau20Pass);
     tree->Branch("singleMu19eta2p1LooseTau20singleL1Pass", &in->singleMu19eta2p1LooseTau20singleL1Pass);
-    tree->Branch("tAgainstElectronLooseMVA6", &in->tAgainstElectronLooseMVA6);
-    tree->Branch("tAgainstElectronLooseMVA62018", &in->tAgainstElectronLooseMVA62018);
-    tree->Branch("tAgainstElectronMVA6Raw", &in->tAgainstElectronMVA6Raw);
-    tree->Branch("tAgainstElectronMVA6Raw2018", &in->tAgainstElectronMVA6Raw2018);
-    tree->Branch("tAgainstElectronMVA6category", &in->tAgainstElectronMVA6category);
-    tree->Branch("tAgainstElectronMVA6category2018", &in->tAgainstElectronMVA6category2018);
-    tree->Branch("tAgainstElectronMediumMVA6", &in->tAgainstElectronMediumMVA6);
-    tree->Branch("tAgainstElectronMediumMVA62018", &in->tAgainstElectronMediumMVA62018);
-    tree->Branch("tAgainstElectronTightMVA6", &in->tAgainstElectronTightMVA6);
-    tree->Branch("tAgainstElectronTightMVA62018", &in->tAgainstElectronTightMVA62018);
-    tree->Branch("tAgainstElectronVLooseMVA6", &in->tAgainstElectronVLooseMVA6);
-    tree->Branch("tAgainstElectronVLooseMVA62018", &in->tAgainstElectronVLooseMVA62018);
-    tree->Branch("tAgainstElectronVTightMVA6", &in->tAgainstElectronVTightMVA6);
-    tree->Branch("tAgainstElectronVTightMVA62018", &in->tAgainstElectronVTightMVA62018);
-    tree->Branch("tAgainstMuonLoose3", &in->tAgainstMuonLoose3);
-    tree->Branch("tAgainstMuonTight3", &in->tAgainstMuonTight3);
+    // tree->Branch("tAgainstElectronLooseMVA6", &in->tAgainstElectronLooseMVA6);
+    // tree->Branch("tAgainstElectronLooseMVA62018", &in->tAgainstElectronLooseMVA62018);
+    // tree->Branch("tAgainstElectronMVA6Raw", &in->tAgainstElectronMVA6Raw);
+    // tree->Branch("tAgainstElectronMVA6Raw2018", &in->tAgainstElectronMVA6Raw2018);
+    // tree->Branch("tAgainstElectronMVA6category", &in->tAgainstElectronMVA6category);
+    // tree->Branch("tAgainstElectronMVA6category2018", &in->tAgainstElectronMVA6category2018);
+    // tree->Branch("tAgainstElectronMediumMVA6", &in->tAgainstElectronMediumMVA6);
+    // tree->Branch("tAgainstElectronMediumMVA62018", &in->tAgainstElectronMediumMVA62018);
+    // tree->Branch("tAgainstElectronTightMVA6", &in->tAgainstElectronTightMVA6);
+    // tree->Branch("tAgainstElectronTightMVA62018", &in->tAgainstElectronTightMVA62018);
+    // tree->Branch("tAgainstElectronVLooseMVA6", &in->tAgainstElectronVLooseMVA6);
+    // tree->Branch("tAgainstElectronVLooseMVA62018", &in->tAgainstElectronVLooseMVA62018);
+    // tree->Branch("tAgainstElectronVTightMVA6", &in->tAgainstElectronVTightMVA6);
+    // tree->Branch("tAgainstElectronVTightMVA62018", &in->tAgainstElectronVTightMVA62018);
+    // tree->Branch("tAgainstMuonLoose3", &in->tAgainstMuonLoose3);
+    // tree->Branch("tAgainstMuonTight3", &in->tAgainstMuonTight3);
     tree->Branch("tCharge", &in->tCharge);
     // tree->Branch("tChargedIsoPtSum", &in->tChargedIsoPtSum);
     // tree->Branch("tChargedIsoPtSumdR03", &in->tChargedIsoPtSumdR03);
@@ -1010,14 +1010,14 @@ void etau_tree2016::set_branches() {
     tree->Branch("tMatchesEle24HPSTau30Path", &in->tMatchesEle24HPSTau30Path);
     tree->Branch("tMatchesEle24Tau30Filter", &in->tMatchesEle24Tau30Filter);
     tree->Branch("tMatchesEle24Tau30Path", &in->tMatchesEle24Tau30Path);
-    tree->Branch("tMatchesIsoMu19Tau20Filter", &in->tMatchesIsoMu19Tau20Filter);
-    tree->Branch("tMatchesIsoMu19Tau20Path", &in->tMatchesIsoMu19Tau20Path);
-    tree->Branch("tMatchesIsoMu19Tau20SingleL1Filter", &in->tMatchesIsoMu19Tau20SingleL1Filter);
-    tree->Branch("tMatchesIsoMu19Tau20SingleL1Path", &in->tMatchesIsoMu19Tau20SingleL1Path);
-    tree->Branch("tMatchesIsoMu20HPSTau27Filter", &in->tMatchesIsoMu20HPSTau27Filter);
-    tree->Branch("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
-    tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
-    tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
+    // tree->Branch("tMatchesIsoMu19Tau20Filter", &in->tMatchesIsoMu19Tau20Filter);
+    // tree->Branch("tMatchesIsoMu19Tau20Path", &in->tMatchesIsoMu19Tau20Path);
+    // tree->Branch("tMatchesIsoMu19Tau20SingleL1Filter", &in->tMatchesIsoMu19Tau20SingleL1Filter);
+    // tree->Branch("tMatchesIsoMu19Tau20SingleL1Path", &in->tMatchesIsoMu19Tau20SingleL1Path);
+    // tree->Branch("tMatchesIsoMu20HPSTau27Filter", &in->tMatchesIsoMu20HPSTau27Filter);
+    // tree->Branch("tMatchesIsoMu20HPSTau27Path", &in->tMatchesIsoMu20HPSTau27Path);
+    // tree->Branch("tMatchesIsoMu20Tau27Filter", &in->tMatchesIsoMu20Tau27Filter);
+    // tree->Branch("tMatchesIsoMu20Tau27Path", &in->tMatchesIsoMu20Tau27Path);
     tree->Branch("tMediumDeepTau2017v2p1VSe", &in->tMediumDeepTau2017v2p1VSe);
     tree->Branch("tMediumDeepTau2017v2p1VSjet", &in->tMediumDeepTau2017v2p1VSjet);
     tree->Branch("tMediumDeepTau2017v2p1VSmu", &in->tMediumDeepTau2017v2p1VSmu);
@@ -1038,14 +1038,14 @@ void etau_tree2016::set_branches() {
     // tree->Branch("tPhotonPtSumOutsideSignalConedR03", &in->tPhotonPtSumOutsideSignalConedR03);
     tree->Branch("tPt", &in->tPt);
     // tree->Branch("tPuCorrPtSum", &in->tPuCorrPtSum);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose", &in->tRerunMVArun2v2DBoldDMwLTLoose);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium", &in->tRerunMVArun2v2DBoldDMwLTMedium);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose", &in->tRerunMVArun2v2DBoldDMwLTVLoose);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTVVLoose", &in->tRerunMVArun2v2DBoldDMwLTVVLoose);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight);
-    tree->Branch("tRerunMVArun2v2DBoldDMwLTraw", &in->tRerunMVArun2v2DBoldDMwLTraw);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTLoose", &in->tRerunMVArun2v2DBoldDMwLTLoose);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTMedium", &in->tRerunMVArun2v2DBoldDMwLTMedium);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTTight", &in->tRerunMVArun2v2DBoldDMwLTTight);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTVLoose", &in->tRerunMVArun2v2DBoldDMwLTVLoose);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTVTight", &in->tRerunMVArun2v2DBoldDMwLTVTight);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTVVLoose", &in->tRerunMVArun2v2DBoldDMwLTVVLoose);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTVVTight", &in->tRerunMVArun2v2DBoldDMwLTVVTight);
+    // tree->Branch("tRerunMVArun2v2DBoldDMwLTraw", &in->tRerunMVArun2v2DBoldDMwLTraw);
     tree->Branch("tTightDeepTau2017v2p1VSe", &in->tTightDeepTau2017v2p1VSe);
     tree->Branch("tTightDeepTau2017v2p1VSjet", &in->tTightDeepTau2017v2p1VSjet);
     tree->Branch("tTightDeepTau2017v2p1VSmu", &in->tTightDeepTau2017v2p1VSmu);
